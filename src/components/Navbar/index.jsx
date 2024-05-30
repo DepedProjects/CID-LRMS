@@ -36,6 +36,7 @@ export default function Navbar() {
         padding: 2,
         background: "black",
         position: "fixed",
+        
       }}
     >
       <Box sx={{ display: "flex" }}>
@@ -57,13 +58,14 @@ export default function Navbar() {
         </Box>
         <Typography
           sx={{
-            ml: -2,
+            ml: -4,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             fontWeight: "bold",
-            fontFamily: "Fira Sans Condensed",
-            fontSize: 18,
+            fontFamily: "Poppins",
+            fontSize: 24,
+
             color: "white",
           }}
         >
@@ -81,11 +83,12 @@ export default function Navbar() {
       >
         <Typography
           sx={{
-            width: "70px",
+            width: "90px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             fontFamily: "Fira Sans Condensed",
+            fontSize: 21,
             "&:hover": {
               color: "cyan",
               cursor: "pointer",
@@ -101,6 +104,7 @@ export default function Navbar() {
             alignItems: "center",
             justifyContent: "center",
             fontFamily: "Fira Sans Condensed",
+            fontSize: 21,
             "&:hover": {
               color: "cyan",
               cursor: "pointer",
@@ -112,11 +116,12 @@ export default function Navbar() {
         </Typography>
         <Typography
           sx={{
-            width: "160px",
+            width: "190px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             fontFamily: "Fira Sans Condensed",
+            fontSize: 21,
             "&:hover": {
               color: "cyan",
               cursor: "pointer",
@@ -132,6 +137,7 @@ export default function Navbar() {
             alignItems: "center",
             justifyContent: "center",
             fontFamily: "Fira Sans Condensed",
+            fontSize: 21,
             "&:hover": {
               color: "cyan",
               cursor: "pointer",
@@ -143,11 +149,12 @@ export default function Navbar() {
         </Typography>
         <Typography
           sx={{
-            width: "120px",
+            width: "150px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             fontFamily: "Fira Sans Condensed",
+            fontSize: 21,
             "&:hover": {
               color: "cyan",
               cursor: "pointer",

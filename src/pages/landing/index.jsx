@@ -1,9 +1,10 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import darkBackground from "../../assets/images/firstBackground.jpg";
 import awardings from "../../assets/images/Frame 7.png";
 import activities from "../../assets/images/Frame 10.png";
 import image1 from "../../assets/images/pngegg.png";
+import feedackbg from "../../assets/images/Frame 8.jpg";
 import Footer from "../../components/Footer";
 
 export default function Landing() {
@@ -14,19 +15,22 @@ export default function Landing() {
           height: "auto", // Full viewport height
           width: "auto", // Full viewport width
           display: "flex",
+          alignItems: "center",
           backgroundImage: `url(${darkBackground})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
-        <Box sx={{ color: "white" }}>
+        <Box sx={{ color: "white", marginLeft: 10 }}>
           <Box>
             <Typography
               sx={{
-                mt: 20,
+                mt: 24,
                 ml: 8,
                 fontSize: 18,
                 fontFamily: "Fira Sans Condensed",
+                display: "flex",
+                alignItems: "center",
               }}
             >
               <h3>
@@ -111,7 +115,7 @@ export default function Landing() {
               sx={{
                 ml: 8,
                 mt: -3,
-                fontSize: 48,
+                fontSize: 56,
                 fontFamily: "Permanent Marker",
               }}
             >
@@ -143,7 +147,7 @@ export default function Landing() {
                 fontFamily: "Fira Sans Condensed",
               }}
             >
-              <h2>THE SUCCESS OF LEARNING STARTS WITH YOU !</h2>
+              <h2>THE SUCCESS OF LEARNING STARTS WITH YOU!</h2>
             </Typography>
           </Box>
           <Box>
@@ -167,7 +171,7 @@ export default function Landing() {
                 width: "600px",
                 mt: -1,
                 ml: 8,
-                fontSize: 14,
+                fontSize: 18,
                 fontFamily: "Fira Sans Condensed",
               }}
             >
@@ -196,7 +200,7 @@ export default function Landing() {
         <Box
           sx={{
             display: "flex",
-            mt: 15,
+            mt: 20,
             ml: 5,
           }}
         >
@@ -204,8 +208,8 @@ export default function Landing() {
             src={image1}
             alt=""
             style={{
-              width: "90%",
-              height: "90%",
+              width: "80%",
+              height: "100%",
               // display: "flex",
               // justifyContent: "center",
               // alignItems: "center",
@@ -229,7 +233,7 @@ export default function Landing() {
               alignItems: "center",
               justifyContent: "center",
               textAlign: "center",
-              padding: -3,
+              paddingTop: 10,
               fontSize: 36,
               fontWeight: "bold",
               fontFamily: "Fira Sans Condensed",
@@ -252,24 +256,27 @@ export default function Landing() {
             sx={{
               display: "flex",
               color: "white",
-              justifyContent: "center",
-              alignItems: "center",
             }}
           >
-            <Box sx={{ mt: -6 }}>
-              <img src={awardings} alt="" style={{ width: "65%" }} />
+            <Box sx={{ mt: -6, ml: 20 }}>
+              <img src={awardings} alt="" style={{ width: "85%" }} />
             </Box>
             <Box
               sx={{
                 width: "15%",
                 display: "flex",
                 color: "white",
-                justifyContent: "center",
-                alignItems: "center",
-                mt: -10,
+                mt: 20,
+                ml: 25,
               }}
             >
-              <Typography sx={{ ml: -35, fontFamily: "Fira Sans Condensed" }}>
+              <Typography
+                sx={{
+                  ml: -35,
+                  fontFamily: "Fira Sans Condensed",
+                  fontSize: 18,
+                }}
+              >
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Phasellus imperdiet, nulla et dictum interdum, nisi lorem
                 egestas odio, vitae scelerisque enim ligula venenatis dolor.
@@ -309,7 +316,7 @@ export default function Landing() {
               textAlign: "center",
               padding: 3,
               fontSize: 36,
-              fontFamily: "Fira Sans Condensed",
+              fontFamily: "Poppins",
               fontWeight: "bold",
             }}
           >
@@ -330,8 +337,9 @@ export default function Landing() {
               <Typography
                 sx={{
                   textAlign: "left",
-                  ml: 7,
-                  fontFamily: "Fira Sans Condensed",
+                  ml: 20,
+                  fontFamily: "Poppins",
+                  fontSize: 18,
                 }}
               >
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -350,28 +358,65 @@ export default function Landing() {
                 felis id enim tristique scelerisque. Vivamus consectetur urna in
                 nisi efficitur, ut vehicula turpis consequat. Nullam at bibendum
                 ligula, nec facilisis augue.
+                <Box sx={{ width: "170px", mt: 5, zIndex: -5 }}>
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      color: "white",
+                      fontFamily: "Fira Sans Condensed",
+                      width: "170px",
+                      borderColor: "white",
+                      // position: "relative",
+                      transition: "0.3s",
+
+                      "&:hover": {
+                        borderColor: "cyan",
+                        boxShadow: "0 0 5px cyan, 0 0 10px cyan, 0 0 20px cyan",
+                        color: "cyan",
+                      },
+                    }}
+                  >
+                    View Activities
+                  </Button>
+                </Box>
               </Typography>
             </Box>
             <Box sx={{ mt: 3 }}>
               <img
                 src={activities}
                 alt=""
-                style={{ width: "80%", marginRight: -10 }}
+                style={{ width: "80%", marginRight: 25 }}
               />
             </Box>
           </Box>
+          <Box
+            sx={{
+              height: "150px",
+              display: "flex",
+              alignItems: "center",
+              textAlign: "center",
+              justifyContent: "center",
+              gap: 5,
+              background: "white",
+              mt: 18.6,
+            }}
+          >
+            <Typography
+              sx={{
+                color: "black",
+                display: "flex",
+                alignItems: "center",
+                fontWeight: "bold",
+                fontSize: 28,
+              }}
+            >
+              GIVE US A FEEDBACK
+            </Typography>
+            <Button variant="outlined">GIVE US YOUR SUGGESTIONS</Button>
+          </Box>
         </Box>
-        <Box
-          sx={{
-            height: "30vh",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundImage: `url(${darkBackground})`,
-          }}
-        ></Box>
+        <Footer />
       </Box>
-      <Footer />
     </Box>
-    
   );
 }

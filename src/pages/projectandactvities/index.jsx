@@ -3,7 +3,7 @@ import Navbar from "../../components/Navbar"
 // import homeBackground from "../../assets/images/Background-home.png";
 import { Box } from "@mui/material";
 
-export default function AboutUs() {
+export default function ProjectAndActivities() {
   return (
     <Box> 
       <Navbar />
