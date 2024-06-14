@@ -13,14 +13,6 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-// import {
-//   Box,
-//   Drawer,
-//   ListItem,
-//   ListItemButton,
-//   ListItemIcon,
-//   ListItemText,
-// } from "@mui/material";
 
 export default function Navbar() {
   const [openMenu, setOpenMenu] = useState(false);
@@ -64,20 +56,20 @@ export default function Navbar() {
         />
         Imus Learning Resource Navigator
       </div>
-      <div className="navbar-links-container" style={{ gap: "8px" }}>
-        <a href="" style={{ fontSize: "15px" }}>
+      <div className="navbar-links-container" style={{ gap: "5px" }}>
+        <a href="" style={{ fontSize: "15px", marginRight: 18 }}>
           About Us
         </a>
-        <a href="" style={{ fontSize: "15px" }}>
+        <a href="" style={{ fontSize: "15px", marginRight: 18 }}>
           Portal
         </a>
-        <a href="" style={{ fontSize: "15px" }}>
+        <a href="" style={{ fontSize: "15px", color: "white", marginRight: 18 }}>
           Project and Activities
         </a>
-        <a href="" style={{ fontSize: "15px" }}>
+        <a href="" style={{ fontSize: "15px", color: "white", marginRight: 18 }}>
           Library
         </a>
-        <a href="" style={{ fontSize: "15px" }}>
+        <a href="" style={{ fontSize: "15px", color: "white", marginRight: 18 }}>
           Citizen's Charter
         </a>
         <button className="primary-button" style={{ fontSize: "15px" }}>
