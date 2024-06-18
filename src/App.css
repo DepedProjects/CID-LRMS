@@ -79,6 +79,25 @@ nav {
   z-index: -2;
   max-width: 700px;
 }
+
+
+.home-bannerImage-container2 {
+  position: absolute;
+  bottom: -1000px;
+  left: -170px;
+  z-index: -2;
+  max-width: 700px;
+}
+
+.home-bannerImage-container3 {
+  position: absolute;
+  bottom: -1775px;
+  left: 770px;
+  z-index: -3;
+  width: 700px;
+}
+
+
 .home-image-section {
   max-width: 600px;
   flex: 1;
@@ -107,7 +126,7 @@ nav {
   background-color: #fe9e0d;
   outline: none;
   border: none;
-  border-radius: 5rem;
+  border-radius: 1rem 1rem 1rem 1rem ;
   font-size: 1.1rem;
   cursor: pointer;
   font-weight: 600;
