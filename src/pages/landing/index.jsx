@@ -188,7 +188,11 @@ export default function Landing() {
         >
           FEEDBACK IS A GIFT
         </Typography>
-        <a href="http://172.16.0.21" target="_blank" rel="noopener noreferrer">
+        <a
+          href="http://172.16.0.21/feedback"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <Button
             variant="contained"
             error={false}
