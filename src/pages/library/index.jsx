@@ -30,11 +30,7 @@ export default function Library() {
             Main Content Area
           </Typography>
         </Box>
-        <Box>
-          <Typography variant="h5" color="primary">
-            Image
-          </Typography>
-        </Box>
+        <Box></Box>
       </Box>
       <Footer />
     </Box>
