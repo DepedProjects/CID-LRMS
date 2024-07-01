@@ -1,48 +1,56 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
+import React, { useState } from "react";
 import depedLogo from "../../assets/images/deped_logo.png";
-// import { FaUserCircle } from "react-icons/fa";
-// import { MdHome } from "react-icons/md";
-import { Box, Button, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Typography,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import { useMediaQuery } from "@mui/material";
 
 export default function Navbar() {
-  // const [openMenu, setOpenMenu] = useState(false);
-  // const menuOptions = [
-  //   {
-  //     text: "About Us",
-  //   },
-  //   {
-  //     text: "Portal",
-  //   },
-  //   {
-  //     text: "Project and Activities",
-  //   },
-  //   {
-  //     text: "Library",
-  //   },
-  //   {
-  //     text: "Citizen's Charter",
-  //   },
-  //   {
-  //     text: "Sign in",
-  //     icon: <FaUserCircle />,
-  //   },
-  // ];
+  const [openMenu, setOpenMenu] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isMediumScreen = useMediaQuery("(max-width: 1366px)");
+
+  const menuOptions = [
+    "About Us",
+    "Portal",
+    "Project and Activities",
+    "Library",
+    "Citizen's Charter",
+  ];
+
+  const handleDrawerOpen = () => {
+    setOpenMenu(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpenMenu(false);
+  };
 
   return (
     <Box
       sx={{
         display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
         padding: 2,
         background: "black",
         position: "fixed",
-        
+        width: "100%",
+        zIndex: 1000,
       }}
     >
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: "flex", alignItems: "center" }}>
         <Box
           sx={{
-            width: "20%",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -50,142 +58,110 @@ export default function Navbar() {
         >
           <img
             src={depedLogo}
-            alt=""
+            alt="DepEd Logo"
             style={{
-              width: "50%",
+              width: isMediumScreen ? "40px" : "50px",
+              height: isMediumScreen ? "40px" : "50px",
             }}
           />
         </Box>
         <Typography
           sx={{
-            ml: -4,
+            ml: 2,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             fontWeight: "bold",
             fontFamily: "Poppins",
-            fontSize: 24,
-
+            fontSize: isMediumScreen ? 20 : 24,
             color: "white",
           }}
         >
           Imus Learning Resource Navigator
         </Typography>
       </Box>
-      <Box
-        sx={{
-          color: "white",
-          gap: 3,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Typography
-          sx={{
-            width: "90px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontFamily: "Fira Sans Condensed",
-            fontSize: 21,
-            "&:hover": {
-              color: "cyan",
-              cursor: "pointer",
-              textShadow: "0 0 5px cyan, 0 0 10px cyan, 0 0 20px cyan",
-            },
-          }}
-        >
-          About Us
-        </Typography>
-        <Typography
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontFamily: "Fira Sans Condensed",
-            fontSize: 21,
-            "&:hover": {
-              color: "cyan",
-              cursor: "pointer",
-              textShadow: "0 0 5px cyan, 0 0 10px cyan, 0 0 20px cyan",
-            },
-          }}
-        >
-          Portal
-        </Typography>
-        <Typography
-          sx={{
-            width: "190px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontFamily: "Fira Sans Condensed",
-            fontSize: 21,
-            "&:hover": {
-              color: "cyan",
-              cursor: "pointer",
-              textShadow: "0 0 5px cyan, 0 0 10px cyan, 0 0 20px cyan",
-            },
-          }}
-        >
-          Project and Activities
-        </Typography>
-        <Typography
+      {isMobile ? (
+        <>
+          <IconButton onClick={handleDrawerOpen} sx={{ color: "white", mr: 5 }}>
+            <MenuIcon />
+          </IconButton>
+          <Drawer anchor="right" open={openMenu} onClose={handleDrawerClose}>
+            <List sx={{ width: 250 }}>
+              {menuOptions.map((text, index) => (
+                <ListItem button key={index} onClick={handleDrawerClose}>
+                  <ListItemText primary={text} />
+                </ListItem>
+              ))}
+              <ListItem button onClick={handleDrawerClose}>
+                <Button
+                  variant="outlined"
+                  sx={{
+                    width: "100%",
+                    color: "black",
+                    fontFamily: "Fira Sans Condensed",
+                    borderColor: "black",
+                    "&:hover": {
+                      borderColor: "cyan",
+                      color: "cyan",
+                    },
+                  }}
+                >
+                  Sign in
+                </Button>
+              </ListItem>
+            </List>
+          </Drawer>
+        </>
+      ) : (
+        <Box
           sx={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
-            fontFamily: "Fira Sans Condensed",
-            fontSize: 21,
-            "&:hover": {
-              color: "cyan",
-              cursor: "pointer",
-              textShadow: "0 0 5px cyan, 0 0 10px cyan, 0 0 20px cyan",
-            },
+            gap: isMediumScreen ? 2 : 3,
+            color: "white",
+            flexWrap: isMediumScreen ? "wrap" : "nowrap",
           }}
         >
-          Library
-        </Typography>
-        <Typography
-          sx={{
-            width: "150px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontFamily: "Fira Sans Condensed",
-            fontSize: 21,
-            "&:hover": {
-              color: "cyan",
-              cursor: "pointer",
-              textShadow: "0 0 5px cyan, 0 0 10px cyan, 0 0 20px cyan",
-            },
-          }}
-        >
-          Citizen's Charter
-        </Typography>
-        <Box sx={{ width: "150px" }}>
-          <Button
-            variant="outlined"
-            sx={{
-              color: "white",
-              fontFamily: "Fira Sans Condensed",
-              width: "120px",
-              borderColor: "white",
-              position: "relative",
-              transition: "0.3s",
-
-              "&:hover": {
-                borderColor: "cyan",
-                boxShadow: "0 0 5px cyan, 0 0 10px cyan, 0 0 20px cyan",
-                color: "cyan",
-              },
-            }}
-          >
-            Sign in
-          </Button>
+          {menuOptions.map((option, index) => (
+            <Typography
+              key={index}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontFamily: "Fira Sans Condensed",
+                fontSize: isMediumScreen ? 16 : 21,
+                "&:hover": {
+                  color: "cyan",
+                  cursor: "pointer",
+                  textShadow: "0 0 5px cyan, 0 0 10px cyan, 0 0 20px cyan",
+                },
+              }}
+            >
+              {option}
+            </Typography>
+          ))}
+          <Box>
+            <Button
+              variant="outlined"
+              sx={{
+                color: "white",
+                fontFamily: "Fira Sans Condensed",
+                borderColor: "white",
+                transition: "0.3s",
+                mr: 5,
+                "&:hover": {
+                  borderColor: "cyan",
+                  boxShadow: "0 0 5px cyan, 0 0 10px cyan, 0 0 20px cyan",
+                  color: "cyan",
+                },
+              }}
+            >
+              Sign in
+            </Button>
+          </Box>
         </Box>
-      </Box>
+      )}
     </Box>
   );
 }

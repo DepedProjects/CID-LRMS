@@ -4,7 +4,6 @@ import darkBackground from "../../assets/images/firstBackground.jpg";
 import awardings from "../../assets/images/Frame 7.png";
 import activities from "../../assets/images/Frame 10.png";
 import image1 from "../../assets/images/pngegg.png";
-import feedackbg from "../../assets/images/Frame 8.jpg";
 import Footer from "../../components/Footer";
 
 export default function Landing() {
@@ -12,97 +11,57 @@ export default function Landing() {
     <Box>
       <Box
         sx={{
-          height: "auto", // Full viewport height
-          width: "auto", // Full viewport width
+          height: "auto",
+          width: "auto",
           display: "flex",
+          flexDirection: { xs: "column", md: "row" },
           alignItems: "center",
           backgroundImage: `url(${darkBackground})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
+          textAlign: { xs: "center", md: "left" },
         }}
       >
-        <Box sx={{ color: "white", marginLeft: 10 }}>
+        <Box sx={{ color: "white", margin: { xs: 2, md: 10 }, width: { xs: "100%", md: "50%" } }}>
           <Box>
             <Typography
               sx={{
-                mt: 24,
-                ml: 8,
-                fontSize: 18,
+                mt: { xs: 4, md: 24 },
+                ml: { xs: 0, md: 8 },
+                fontSize: { xs: 16, md: 18 },
                 fontFamily: "Fira Sans Condensed",
-                display: "flex",
-                alignItems: "center",
               }}
             >
               <h3>
-                <span
-                  style={{
-                    color: "cyan",
-                    textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan",
-                  }}
-                >
+                <span style={{ color: "cyan", textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan" }}>
                   D
                 </span>
                 epEd{" "}
-                <span
-                  style={{
-                    color: "cyan",
-                    textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan",
-                  }}
-                >
+                <span style={{ color: "cyan", textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan" }}>
                   S
                 </span>
                 chools{" "}
-                <span
-                  style={{
-                    color: "cyan",
-                    textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan",
-                  }}
-                >
+                <span style={{ color: "cyan", textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan" }}>
                   D
                 </span>
                 ivision of{" "}
-                <span
-                  style={{
-                    color: "cyan",
-                    textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan",
-                  }}
-                >
+                <span style={{ color: "cyan", textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan" }}>
                   I
                 </span>
                 mus{" "}
-                <span
-                  style={{
-                    color: "cyan",
-                    textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan",
-                  }}
-                >
+                <span style={{ color: "cyan", textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan" }}>
                   C
                 </span>
                 ity{" "}
-                <span
-                  style={{
-                    color: "cyan",
-                    textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan",
-                  }}
-                >
+                <span style={{ color: "cyan", textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan" }}>
                   L
                 </span>
                 earning{" "}
-                <span
-                  style={{
-                    color: "cyan",
-                    textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan",
-                  }}
-                >
+                <span style={{ color: "cyan", textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan" }}>
                   R
                 </span>
                 esources{" "}
-                <span
-                  style={{
-                    color: "cyan",
-                    textShadow: "0 0 5px cyan, 0 0 200px cyan, 0 0 5px cyan",
-                  }}
-                >
+                <span style={{ color: "cyan", textShadow: "0 0 5px cyan, 0 0 200px cyan, 0 0 5px cyan" }}>
                   N
                 </span>
                 avigator
@@ -113,37 +72,23 @@ export default function Landing() {
             <Typography
               component="div"
               sx={{
-                ml: 8,
+                ml: { xs: 0, md: 8 },
                 mt: -3,
-                fontSize: 56,
+                fontSize: { xs: 40, md: 56 },
                 fontFamily: "Permanent Marker",
               }}
             >
-              <span
-                style={{
-                  color: "cyan",
-                  textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan",
-                }}
-              >
-                I
-              </span>
+              <span style={{ color: "cyan", textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan" }}>I</span>
               Lea
-              <span
-                style={{
-                  color: "cyan",
-                  textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan",
-                }}
-              >
-                RN
-              </span>
+              <span style={{ color: "cyan", textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan" }}>RN</span>
             </Typography>
           </Box>
           <Box>
             <Typography
               sx={{
                 mt: -3,
-                ml: 8,
-                fontSize: 24,
+                ml: { xs: 0, md: 8 },
+                fontSize: { xs: 20, md: 24 },
                 fontFamily: "Fira Sans Condensed",
               }}
             >
@@ -154,44 +99,35 @@ export default function Landing() {
             <Typography
               sx={{
                 mt: -3,
-                ml: 8,
-                fontSize: 18,
+                ml: { xs: 0, md: 8 },
+                fontSize: { xs: 16, md: 18 },
                 fontFamily: "Fira Sans Condensed",
               }}
             >
               <h3>
-                Get started with effective implementation of innovative Learning
-                Resources.
+                Get started with effective implementation of innovative Learning Resources.
               </h3>
             </Typography>
           </Box>
           <Box>
             <Typography
               sx={{
-                width: "600px",
+                width: { xs: "90%", md: "600px" },
                 mt: -1,
-                ml: 8,
-                fontSize: 18,
+                ml: { xs: "5%", md: 8 },
+                fontSize: { xs: 16, md: 18 },
                 fontFamily: "Fira Sans Condensed",
               }}
             >
               <p>
-                <span
-                  style={{
-                    color: "cyan",
-                    textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan",
-                  }}
-                >
+                <span style={{ color: "cyan", textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan" }}>
                   S
                 </span>
-                chools Division Office of Imus City Learning Resource Management
-                System (LRMS) Portal named I LeaRN (Imus Learning Resources
-                Navigator) supports effective implementation of the Learning
-                Resource Management and Development System (LRMDS) to improve
-                access to learning, teaching, and professional development
-                resources by schools. It is a web-based repository of available
-                learning materials in electronic copies, developed and quality
-                assured in the National level, Regional level, and Division
+                chools Division Office of Imus City Learning Resource Management System (LRMS) Portal named I LeaRN
+                (Imus Learning Resources Navigator) supports effective implementation of the Learning Resource
+                Management and Development System (LRMDS) to improve access to learning, teaching, and professional
+                development resources by schools. It is a web-based repository of available learning materials in
+                electronic copies, developed and quality assured in the National level, Regional level, and Division
                 level.
               </p>
             </Typography>
@@ -200,8 +136,10 @@ export default function Landing() {
         <Box
           sx={{
             display: "flex",
-            mt: 20,
-            ml: 5,
+            mt: { xs: 4, md: 20 },
+            ml: { xs: 0, md: 5 },
+            justifyContent: { xs: "center", md: "flex-start" },
+            width: { xs: "100%", md: "50%" },
           }}
         >
           <img
@@ -210,9 +148,6 @@ export default function Landing() {
             style={{
               width: "80%",
               height: "100%",
-              // display: "flex",
-              // justifyContent: "center",
-              // alignItems: "center",
             }}
           />
         </Box>
@@ -255,50 +190,41 @@ export default function Landing() {
           <Box
             sx={{
               display: "flex",
+              flexDirection: { xs: "column", md: "row" },
               color: "white",
             }}
           >
-            <Box sx={{ mt: -6, ml: 20 }}>
+            <Box sx={{ mt: { xs: 0, md: -6 }, ml: { xs: 0, md: 20 } }}>
               <img src={awardings} alt="" style={{ width: "85%" }} />
             </Box>
             <Box
               sx={{
-                width: "15%",
+                width: { xs: "100%", md: "15%" },
                 display: "flex",
                 color: "white",
-                mt: 20,
-                ml: 25,
+                mt: { xs: 2, md: 20 },
+                ml: { xs: 0, md: 25 },
+                textAlign: { xs: "center", md: "left" },
               }}
             >
               <Typography
                 sx={{
-                  ml: -35,
+                  ml: { xs: 0, md: -35 },
                   fontFamily: "Fira Sans Condensed",
                   fontSize: 18,
                 }}
               >
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Phasellus imperdiet, nulla et dictum interdum, nisi lorem
-                egestas odio, vitae scelerisque enim ligula venenatis dolor.
-                Maecenas nisl est, ultrices nec congue eget, auctor vitae massa.
-                Fusce luctus vestibulum augue ut aliquet. Mauris ante ligula,
-                facilisis sed ornare eu, lobortis in odio. Praesent convallis
-                urna a lacus interdum ut hendrerit risus congue. Nunc sagittis
-                dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero
-                sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui
-                eget tellus gravida venenatis. Integer fringilla congue eros non
-                fermentum. Sed dapibus pulvinar nibh tempor porta. Cras ac leo
-                purus. Mauris quis diam velit. Nunc fringilla libero nec
-                ullamcorper venenatis. Sed ac feugiat ante. Donec condimentum
-                felis id enim tristique scelerisque. Vivamus consectetur urna in
-                nisi efficitur, ut vehicula turpis consequat. Nullam at bibendum
-                ligula, nec facilisis augue.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum,
+                nisi lorem egestas odio, vitae scelerisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec
+                congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Mauris ante ligula, facilisis
+                sed ornare eu, lobortis in odio. Praesent convallis urna a lacus interdum ut hendrerit risus congue.
+                Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet
+                sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non
+                fermentum. Sed dapibus pulvinar nibh tempor porta.
               </Typography>
             </Box>
           </Box>
         </Box>
-      </Box>
-      <Box>
         <Box
           sx={{
             height: "100vh",
@@ -314,109 +240,65 @@ export default function Landing() {
               alignItems: "center",
               justifyContent: "center",
               textAlign: "center",
-              padding: 3,
+              paddingTop: 10,
               fontSize: 36,
-              fontFamily: "Poppins",
               fontWeight: "bold",
+              fontFamily: "Fira Sans Condensed",
             }}
           >
-            SDOIC LRMS<p style={{ color: "black" }}>1</p>
+            THE
+            <p style={{ color: "black" }}>1</p>
             <span
               style={{
                 color: "cyan",
-                textShadow: "0 0 5px cyan, 0 0 10px cyan, 0 0 20px cyan",
+                textShadow: "0 0 5px cyan, 0 0 10px cyan, 0 0 10px cyan",
               }}
             >
-              ACTIVITIES
+              DIVISION INITIATIVES
             </span>
+            <p style={{ color: "black" }}>1</p>
+            AIMED FOR THE COMMON GOOD
           </Typography>
           <Box
-            sx={{ display: "flex", alignItems: "center", textAlign: "center" }}
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", md: "row" },
+              color: "white",
+            }}
           >
-            <Box sx={{ color: "white", width: "60%" }}>
+            <Box sx={{ mt: { xs: 0, md: -6 }, ml: { xs: 0, md: 20 } }}>
+              <img src={activities} alt="" style={{ width: "85%" }} />
+            </Box>
+            <Box
+              sx={{
+                width: { xs: "100%", md: "15%" },
+                display: "flex",
+                color: "white",
+                mt: { xs: 2, md: 20 },
+                ml: { xs: 0, md: 25 },
+                textAlign: { xs: "center", md: "left" },
+              }}
+            >
               <Typography
                 sx={{
-                  textAlign: "left",
-                  ml: 20,
-                  fontFamily: "Poppins",
+                  ml: { xs: 0, md: -35 },
+                  fontFamily: "Fira Sans Condensed",
                   fontSize: 18,
                 }}
               >
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Phasellus imperdiet, nulla et dictum interdum, nisi lorem
-                egestas odio, vitae scelerisque enim ligula venenatis dolor.
-                Maecenas nisl est, ultrices nec congue eget, auctor vitae massa.
-                Fusce luctus vestibulum augue ut aliquet. Mauris ante ligula,
-                facilisis sed ornare eu, lobortis in odio. Praesent convallis
-                urna a lacus interdum ut hendrerit risus congue. Nunc sagittis
-                dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero
-                sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui
-                eget tellus gravida venenatis. Integer fringilla congue eros non
-                fermentum. Sed dapibus pulvinar nibh tempor porta. Cras ac leo
-                purus. Mauris quis diam velit. Nunc fringilla libero nec
-                ullamcorper venenatis. Sed ac feugiat ante. Donec condimentum
-                felis id enim tristique scelerisque. Vivamus consectetur urna in
-                nisi efficitur, ut vehicula turpis consequat. Nullam at bibendum
-                ligula, nec facilisis augue.
-                <Box sx={{ width: "170px", mt: 5, zIndex: -5 }}>
-                  <Button
-                    variant="outlined"
-                    sx={{
-                      color: "white",
-                      fontFamily: "Fira Sans Condensed",
-                      width: "170px",
-                      borderColor: "white",
-                      // position: "relative",
-                      transition: "0.3s",
-
-                      "&:hover": {
-                        borderColor: "cyan",
-                        boxShadow: "0 0 5px cyan, 0 0 10px cyan, 0 0 20px cyan",
-                        color: "cyan",
-                      },
-                    }}
-                  >
-                    View Activities
-                  </Button>
-                </Box>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum,
+                nisi lorem egestas odio, vitae scelerisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec
+                congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Mauris ante ligula, facilisis
+                sed ornare eu, lobortis in odio. Praesent convallis urna a lacus interdum ut hendrerit risus congue.
+                Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet
+                sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non
+                fermentum. Sed dapibus pulvinar nibh tempor porta.
               </Typography>
             </Box>
-            <Box sx={{ mt: 3 }}>
-              <img
-                src={activities}
-                alt=""
-                style={{ width: "80%", marginRight: 25 }}
-              />
-            </Box>
-          </Box>
-          <Box
-            sx={{
-              height: "150px",
-              display: "flex",
-              alignItems: "center",
-              textAlign: "center",
-              justifyContent: "center",
-              gap: 5,
-              background: "white",
-              mt: 18.6,
-            }}
-          >
-            <Typography
-              sx={{
-                color: "black",
-                display: "flex",
-                alignItems: "center",
-                fontWeight: "bold",
-                fontSize: 28,
-              }}
-            >
-              GIVE US A FEEDBACK
-            </Typography>
-            <Button variant="outlined">GIVE US YOUR SUGGESTIONS</Button>
           </Box>
         </Box>
-        <Footer />
       </Box>
+      <Footer />
     </Box>
   );
 }
