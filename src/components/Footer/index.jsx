@@ -26,7 +26,7 @@ export default function Footer() {
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
           gap: 5,
-          px: 3,
+          px: 5,
           width: "100%",
           boxSizing: "border-box",
         }}

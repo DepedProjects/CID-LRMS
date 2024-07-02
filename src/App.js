@@ -23,7 +23,7 @@ function App() {
           element={<ProjectAndActivities />}
         />
         <Route path="/Library" element={<Library />} />
-        <Route path="/Citizen's Charter" element={<CitizenCharter />} />
+        <Route path="/CitizensCharter" element={<CitizenCharter />} />
       </Routes>
     </div>
   );
