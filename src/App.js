@@ -2,18 +2,20 @@ import "./App.css";
 import Navbar from "../src/components/Navbar";
 import {
   Landing,
+  LoginPage,
   AboutUs,
   CitizenCharter,
   Library,
   Portal,
   ProjectAndActivities,
 } from "../src/pages";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 
 function App() {
+  const location = useLocation();
   return (
     <div className="App">
-      <Navbar></Navbar>
+      {location.pathname !== "/login" && <Navbar />}
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/AboutUs" element={<AboutUs />} />
@@ -24,6 +26,7 @@ function App() {
         />
         <Route path="/Library" element={<Library />} />
         <Route path="/CitizensCharter" element={<CitizenCharter />} />
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
     </div>
   );
