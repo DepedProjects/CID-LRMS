@@ -65,7 +65,7 @@ export default function LoginHeader() {
             alignItems: "center",
             justifyContent: "center",
             fontWeight: "bold",
-            fontFamily: "Poppins",
+            fontFamily: "Barlow Semi Condensed",
             fontSize: isMediumScreen ? 20 : 24,
             color: "black",
           }}

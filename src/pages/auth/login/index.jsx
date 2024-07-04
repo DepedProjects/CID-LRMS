@@ -1,10 +1,69 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
-import React from "react";
+import {
+  Box,
+  Button,
+  IconButton,
+  TextField,
+  Typography,
+} from "@mui/material";
+import React, { useState } from "react";
 import Header from "../../../components/LoginHeader";
 import loginImage from "../../../assets/images/LoginImage.png";
 import Footer from "../../../components/Footer";
+import accountService from "../../../services/account-service";
+import { string, object } from "yup";
+import { useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import { useStateContext } from "../../../contexts/ContextProvider";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 export default function LoginPage() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const { setAuth } = useStateContext();
+  const navigate = useNavigate();
+
+  const formik = useFormik({
+    initialValues: { username: "", password: "" },
+
+    validationSchema: object().shape({
+      username: string().required("Required"),
+      password: string().required("Required"),
+    }),
+    onSubmit: () => {
+      setLoading(true);
+      setError("");
+
+      accountService
+        .authenticate(formik?.values)
+        .then((res) => {
+          if (res.valid) {
+            setAuth(res?.data);
+            navigate("/");
+          }
+          console.log(res);
+        })
+        .catch((err) => {
+          let message = "";
+          if (err?.response?.status === 404) {
+            message = "Invalid Credentials";
+          } else if (err?.response?.status === 401) {
+            message = err?.response?.data?.error;
+          } else {
+            message = "Internal Server Error";
+          }
+          setError(message || err?.message);
+
+          console.log(err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    },
+  });
+
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <Box
       sx={{
@@ -70,7 +129,7 @@ export default function LoginPage() {
           <Typography
             variant="h4"
             sx={{
-              fontFamily: "Fira Sans Condensed",
+              fontFamily: "Barlow Semi Condensed",
               fontWeight: "bold",
               fontSize: {
                 xs: "1.5rem",
@@ -84,51 +143,103 @@ export default function LoginPage() {
           >
             SIGN IN
           </Typography>
-          <TextField
-            id="standard-basic"
-            label="Username"
-            variant="standard"
-            fullWidth
-            sx={{
-              width: "100%",
-              maxWidth: { lg: 400, xl: 600 },
-              mt: 1,
-              fontSize: {
-                xs: "1rem",
-                sm: "1.2rem",
-                md: "1.5rem",
-                lg: "2rem",
-                xl: "2.5rem",
-              },
-            }}
-          />
-          <TextField
-            id="standard-password-input"
-            label="Password"
-            type="password"
-            autoComplete="current-password"
-            variant="standard"
-            sx={{
-              width: "100%",
-              maxWidth: { lg: 400, xl: 600 },
-              mt: 3,
-              fontSize: { xs: "1rem", sm: "1.2rem", md: "1.5rem" },
-              "& .MuiInputLabel-root": {
-                fontFamily: "Arial, sans-serif",
-              },
-            }}
-          />
-          <Button
-            variant="contained"
-            sx={{
-              width: "100%",
-              maxWidth: { lg: 400, xl: 600 },
-              mt: 5,
-              fontSize: { xs: "1rem", sm: "1.2rem", md: "1.5rem", lg: "1.5rem" },
-            }}
-          >
-            LOG IN
-          </Button>
+          <form onSubmit={formik.handleSubmit}>
+            <TextField
+              id="standard-basic"
+              name="username"
+              label="Username"
+              variant="standard"
+              disabled={loading}
+              value={formik.values.username}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={
+                formik.touched?.username && Boolean(formik.errors?.username)
+              }
+              helperText={formik.touched?.username && formik.errors?.username}
+              fullWidth
+              sx={{
+                width: "100%",
+                height: "100%",
+                maxWidth: { lg: 400, xl: 600 },
+                mt: 1,
+                fontSize: {
+                  xs: "1rem",
+                  sm: "1.2rem",
+                  md: "1.5rem",
+                  lg: "2rem",
+                  xl: "2.5rem",
+                },
+              }}
+            />
+            <TextField
+              id="password"
+              label="password"
+              type={showPassword ? "text" : "password"}
+              variant="standard"
+              disabled={loading}
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={
+                formik.touched?.password && Boolean(formik.errors?.password)
+              }
+              helperText={formik.touched?.password && formik.errors?.password}
+              sx={{
+                width: "100%",
+                maxWidth: { lg: 400, xl: 600 },
+                mt: 3,
+                fontSize: { xs: "1rem", sm: "1.2rem", md: "1.5rem" },
+                "& .MuiInputLabel-root": {
+                  fontFamily: "Arial, sans-serif",
+                },
+              }}
+              InputProps={{
+                style: {
+                  color: "black",
+                },
+                endAdornment: (
+                  <IconButton
+                    onClick={() => setShowPassword(!showPassword)}
+                    onKeyPress={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? (
+                      <VisibilityIcon
+                        size={18}
+                        sx={{
+                          color: "black",
+                        }}
+                      />
+                    ) : (
+                      <VisibilityOffIcon
+                        size={18}
+                        sx={{
+                          color: "black",
+                        }}
+                      />
+                    )}
+                  </IconButton>
+                ),
+              }}
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                width: "100%",
+                maxWidth: { lg: 400, xl: 600 },
+                mt: 5,
+                fontSize: {
+                  xs: "1rem",
+                  sm: "1.2rem",
+                  md: "1.5rem",
+                  lg: "1rem",
+                },
+              }}
+            >
+              LOG IN
+            </Button>
+          </form>
         </Box>
       </Box>
       <Footer />

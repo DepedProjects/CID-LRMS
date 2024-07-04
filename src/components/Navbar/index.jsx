@@ -72,8 +72,8 @@ export default function Navbar() {
             alignItems: "center",
             justifyContent: "center",
             fontWeight: "bold",
-            fontFamily: "Poppins",
-            fontSize: isMediumScreen ? 20 : 24,
+            fontFamily: "Barlow Semi Condensed",
+            fontSize: isMediumScreen ? 26 : 24,
             color: "white",
           }}
         >
@@ -92,23 +92,7 @@ export default function Navbar() {
                   <ListItemText primary={text} />
                 </ListItem>
               ))}
-              <ListItem button onClick={handleDrawerClose}>
-                <Button
-                  variant="outlined"
-                  sx={{
-                    width: "100%",
-                    color: "black",
-                    fontFamily: "Fira Sans Condensed",
-                    borderColor: "black",
-                    "&:hover": {
-                      borderColor: "cyan",
-                      color: "cyan",
-                    },
-                  }}
-                >
-                  Sign in
-                </Button>
-              </ListItem>
+              <ListItem button onClick={handleDrawerClose}></ListItem>
             </List>
           </Drawer>
         </>
@@ -120,6 +104,7 @@ export default function Navbar() {
             gap: isMediumScreen ? 2 : 3,
             color: "white",
             flexWrap: isMediumScreen ? "wrap" : "nowrap",
+            mr: 5,
           }}
         >
           {menuOptions.map((option, index) => (
@@ -141,25 +126,6 @@ export default function Navbar() {
               {option}
             </Typography>
           ))}
-          <Box>
-            <Button
-              variant="outlined"
-              sx={{
-                color: "white",
-                fontFamily: "Fira Sans Condensed",
-                borderColor: "white",
-                transition: "0.3s",
-                mr: 5,
-                "&:hover": {
-                  borderColor: "cyan",
-                  boxShadow: "0 0 5px cyan, 0 0 10px cyan, 0 0 20px cyan",
-                  color: "cyan",
-                },
-              }}
-            >
-              Sign in
-            </Button>
-          </Box>
         </Box>
       )}
     </Box>

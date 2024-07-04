@@ -1,303 +1,326 @@
 import React from "react";
 import { Box, Button, Typography } from "@mui/material";
-import darkBackground from "../../assets/images/firstBackground.jpg";
-import awardings from "../../assets/images/Frame 7.png";
-import activities from "../../assets/images/Frame 10.png";
-import image1 from "../../assets/images/pngegg.png";
 import Footer from "../../components/Footer";
+import Navbar from "../../components/Navbar";
+import firstImage from "../../assets/images/pngegg.png";
+import secondImage from "../../assets/images/Frame 7.png";
+import thirdImage from "../../assets/images/Frame 10.png";
+import feedbackBg from "../../assets/images/Frame 8.jpg";
 
 export default function Landing() {
   return (
-    <Box>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
+      }}
+    >
+      <Navbar />
       <Box
         sx={{
-          height: "auto",
-          width: "auto",
+          flex: 1,
           display: "flex",
-          flexDirection: { xs: "column", md: "row" },
+          flexDirection: "column",
+          justifyContent: "center",
           alignItems: "center",
-          backgroundImage: `url(${darkBackground})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          textAlign: { xs: "center", md: "left" },
+          gap: { xs: 2, sm: 3, md: 4, lg: 5 },
+          paddingTop: { xs: 15, sm: 10, md: 12, lg: 15, xl: 15 },
+          paddingBottom: { xs: 3, sm: 3, md: 4, lg: 5, xl: 4 },
+          background: "#1f211f",
         }}
       >
-        <Box sx={{ color: "white", margin: { xs: 2, md: 10 }, width: { xs: "100%", md: "50%" } }}>
-          <Box>
-            <Typography
-              sx={{
-                mt: { xs: 4, md: 24 },
-                ml: { xs: 0, md: 8 },
-                fontSize: { xs: 16, md: 18 },
-                fontFamily: "Fira Sans Condensed",
-              }}
-            >
-              <h3>
-                <span style={{ color: "cyan", textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan" }}>
-                  D
-                </span>
-                epEd{" "}
-                <span style={{ color: "cyan", textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan" }}>
-                  S
-                </span>
-                chools{" "}
-                <span style={{ color: "cyan", textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan" }}>
-                  D
-                </span>
-                ivision of{" "}
-                <span style={{ color: "cyan", textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan" }}>
-                  I
-                </span>
-                mus{" "}
-                <span style={{ color: "cyan", textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan" }}>
-                  C
-                </span>
-                ity{" "}
-                <span style={{ color: "cyan", textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan" }}>
-                  L
-                </span>
-                earning{" "}
-                <span style={{ color: "cyan", textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan" }}>
-                  R
-                </span>
-                esources{" "}
-                <span style={{ color: "cyan", textShadow: "0 0 5px cyan, 0 0 200px cyan, 0 0 5px cyan" }}>
-                  N
-                </span>
-                avigator
-              </h3>
-            </Typography>
-          </Box>
-          <Box>
-            <Typography
-              component="div"
-              sx={{
-                ml: { xs: 0, md: 8 },
-                mt: -3,
-                fontSize: { xs: 40, md: 56 },
-                fontFamily: "Permanent Marker",
-              }}
-            >
-              <span style={{ color: "cyan", textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan" }}>I</span>
-              Lea
-              <span style={{ color: "cyan", textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan" }}>RN</span>
-            </Typography>
-          </Box>
-          <Box>
-            <Typography
-              sx={{
-                mt: -3,
-                ml: { xs: 0, md: 8 },
-                fontSize: { xs: 20, md: 24 },
-                fontFamily: "Fira Sans Condensed",
-              }}
-            >
-              <h2>THE SUCCESS OF LEARNING STARTS WITH YOU!</h2>
-            </Typography>
-          </Box>
-          <Box>
-            <Typography
-              sx={{
-                mt: -3,
-                ml: { xs: 0, md: 8 },
-                fontSize: { xs: 16, md: 18 },
-                fontFamily: "Fira Sans Condensed",
-              }}
-            >
-              <h3>
-                Get started with effective implementation of innovative Learning Resources.
-              </h3>
-            </Typography>
-          </Box>
-          <Box>
-            <Typography
-              sx={{
-                width: { xs: "90%", md: "600px" },
-                mt: -1,
-                ml: { xs: "5%", md: 8 },
-                fontSize: { xs: 16, md: 18 },
-                fontFamily: "Fira Sans Condensed",
-              }}
-            >
-              <p>
-                <span style={{ color: "cyan", textShadow: "0 0 5px cyan, 0 0 100px cyan, 0 0 5px cyan" }}>
-                  S
-                </span>
-                chools Division Office of Imus City Learning Resource Management System (LRMS) Portal named I LeaRN
-                (Imus Learning Resources Navigator) supports effective implementation of the Learning Resource
-                Management and Development System (LRMDS) to improve access to learning, teaching, and professional
-                development resources by schools. It is a web-based repository of available learning materials in
-                electronic copies, developed and quality assured in the National level, Regional level, and Division
-                level.
-              </p>
-            </Typography>
-          </Box>
-        </Box>
         <Box
           sx={{
             display: "flex",
-            mt: { xs: 4, md: 20 },
-            ml: { xs: 0, md: 5 },
-            justifyContent: { xs: "center", md: "flex-start" },
-            width: { xs: "100%", md: "50%" },
+            flexDirection: { xs: "column", md: "row" },
+            alignItems: "center",
+            gap: { xs: 2, sm: 3, md: 4, lg: 20 },
+            px: { lg: 5, xl: 15 },
           }}
         >
-          <img
-            src={image1}
-            alt=""
-            style={{
-              width: "80%",
-              height: "100%",
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <Typography
+              variant="h1"
+              color="primary"
+              sx={{
+                fontFamily: "Fira Sans Condensed",
+                color: "white",
+                fontWeight: "bold",
+                fontSize: {
+                  xs: "1.7rem",
+                  sm: "2rem",
+                  md: "2.5rem",
+                  lg: "1rem",
+                  xl: "2rem",
+                },
+                textAlign: { xs: "center", md: "left" },
+              }}
+            >
+              DepEd Schools Division of Imus City Learning Resources Navigator
+            </Typography>
+            <Typography
+              variant="h1"
+              color="primary"
+              sx={{
+                fontFamily: "Barlow Semi Condensed",
+                color: "white",
+                fontWeight: "bold",
+                fontSize: {
+                  xs: "1.7rem",
+                  sm: "2rem",
+                  md: "2.5rem",
+                  lg: "5rem",
+                  xl: "8rem",
+                },
+                textAlign: { xs: "center", md: "left" },
+              }}
+            >
+              ILeaRN
+            </Typography>
+            <Typography
+              variant="h1"
+              color="primary"
+              sx={{
+                fontFamily: "Barlow Semi Condensed",
+                color: "white",
+                fontWeight: "bold",
+                fontSize: {
+                  xs: "1.7rem",
+                  sm: "2rem",
+                  md: "2.5rem",
+                  lg: "1rem",
+                  xl: "3rem",
+                },
+                textAlign: { xs: "center", md: "left" },
+              }}
+            >
+              THE SUCCESS OF LEARNING STARTS WITH YOU!
+            </Typography>
+            <Typography
+              variant="h1"
+              color="primary"
+              sx={{
+                fontFamily: "Barlow Semi Condensed",
+                color: "white",
+                fontSize: {
+                  xs: "1.7rem",
+                  sm: "2rem",
+                  md: "2.5rem",
+                  lg: "1rem",
+                  xl: "1rem",
+                },
+                textAlign: { xs: "center", md: "left" },
+              }}
+            >
+              Schools Division Office of Imus City Learning Resource Management
+              System (LRMS) Portal named I LeaRN (Imus Learning Resources
+              Navigator) supports effective implementation of the Learning
+              Resource Management and Development System (LRMDS) to improve
+              access to learning, teaching, and professional development
+              resources by schools. It is a web-based repository of available
+              learning materials in electronic copies, developed and quality
+              assured in the National level, Regional level, and Division level.
+            </Typography>
+          </Box>
+          <Box
+            component="img"
+            src={firstImage}
+            alt="Citizen's Charter"
+            sx={{
+              width: {
+                xs: "100%", // Full width on mobile
+                sm: "80%", // Slightly smaller on small screens
+                md: "60%", // Smaller on medium screens
+                lg: "50%", // Smaller on large screens
+                xl: "100%", // Smaller on extra-large screens
+              },
+              maxWidth: { xs: "300px", md: "500px", xl: "1000px" }, // Set maximum width
+              height: "auto", // Maintain aspect ratio
             }}
           />
         </Box>
       </Box>
-      <Box>
-        <Box
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: { xs: 2, sm: 3, md: 4, lg: 5 },
+          paddingTop: { xs: 15, sm: 10, md: 12, lg: 6, xl: 8 },
+          paddingBottom: { xs: 3, sm: 3, md: 4, lg: 6, xl: 8 },
+          background: "White",
+          color: "black",
+        }}
+      >
+        <Typography
           sx={{
-            height: "100vh",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundImage: `url(${darkBackground})`,
+            fontSize: { lg: 32, xl: 36 },
+            fontWeight: "bold",
+            fontFamily: "Barlow Semi Condensed",
           }}
         >
-          <Typography
-            sx={{
-              color: "white",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              textAlign: "center",
-              paddingTop: 10,
-              fontSize: 36,
-              fontWeight: "bold",
-              fontFamily: "Fira Sans Condensed",
-            }}
-          >
-            OUR
-            <p style={{ color: "black" }}>1</p>
-            <span
-              style={{
-                color: "cyan",
-                textShadow: "0 0 5px cyan, 0 0 10px cyan, 0 0 10px cyan",
-              }}
-            >
-              ACHIEVEMENTS
-            </span>
-            <p style={{ color: "black" }}>1</p>
-            ATTAINED THROUGH OUR COMBINED EFFORT
-          </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: { xs: "column", md: "row" },
-              color: "white",
-            }}
-          >
-            <Box sx={{ mt: { xs: 0, md: -6 }, ml: { xs: 0, md: 20 } }}>
-              <img src={awardings} alt="" style={{ width: "85%" }} />
-            </Box>
-            <Box
-              sx={{
-                width: { xs: "100%", md: "15%" },
-                display: "flex",
-                color: "white",
-                mt: { xs: 2, md: 20 },
-                ml: { xs: 0, md: 25 },
-                textAlign: { xs: "center", md: "left" },
-              }}
-            >
-              <Typography
-                sx={{
-                  ml: { xs: 0, md: -35 },
-                  fontFamily: "Fira Sans Condensed",
-                  fontSize: 18,
-                }}
-              >
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum,
-                nisi lorem egestas odio, vitae scelerisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec
-                congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Mauris ante ligula, facilisis
-                sed ornare eu, lobortis in odio. Praesent convallis urna a lacus interdum ut hendrerit risus congue.
-                Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet
-                sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non
-                fermentum. Sed dapibus pulvinar nibh tempor porta.
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-        <Box
-          sx={{
-            height: "100vh",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundImage: `url(${darkBackground})`,
-          }}
-        >
-          <Typography
-            sx={{
-              color: "white",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              textAlign: "center",
-              paddingTop: 10,
-              fontSize: 36,
-              fontWeight: "bold",
-              fontFamily: "Fira Sans Condensed",
-            }}
-          >
-            THE
-            <p style={{ color: "black" }}>1</p>
-            <span
-              style={{
-                color: "cyan",
-                textShadow: "0 0 5px cyan, 0 0 10px cyan, 0 0 10px cyan",
-              }}
-            >
-              DIVISION INITIATIVES
-            </span>
-            <p style={{ color: "black" }}>1</p>
-            AIMED FOR THE COMMON GOOD
-          </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: { xs: "column", md: "row" },
-              color: "white",
-            }}
-          >
-            <Box sx={{ mt: { xs: 0, md: -6 }, ml: { xs: 0, md: 20 } }}>
-              <img src={activities} alt="" style={{ width: "85%" }} />
-            </Box>
-            <Box
-              sx={{
-                width: { xs: "100%", md: "15%" },
-                display: "flex",
-                color: "white",
-                mt: { xs: 2, md: 20 },
-                ml: { xs: 0, md: 25 },
-                textAlign: { xs: "center", md: "left" },
-              }}
-            >
-              <Typography
-                sx={{
-                  ml: { xs: 0, md: -35 },
-                  fontFamily: "Fira Sans Condensed",
-                  fontSize: 18,
-                }}
-              >
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum,
-                nisi lorem egestas odio, vitae scelerisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec
-                congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Mauris ante ligula, facilisis
-                sed ornare eu, lobortis in odio. Praesent convallis urna a lacus interdum ut hendrerit risus congue.
-                Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet
-                sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non
-                fermentum. Sed dapibus pulvinar nibh tempor porta.
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
+          OUR ACHIEVEMENTS ATTAINED THROUGH OUR COMBINED EFFORT
+        </Typography>
       </Box>
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: { xs: 2, sm: 3, md: 4, lg: 5 },
+          paddingTop: { xs: 15, sm: 10, md: 12, lg: 15, xl: 15 },
+          paddingBottom: { xs: 3, sm: 3, md: 4, lg: 5, xl: 4 },
+          background: "#1f211f",
+          px: { lg: 5, xl: 15 },
+        }}
+      >
+        <Box
+          component="img"
+          src={secondImage}
+          alt="Citizen's Charter"
+          sx={{
+            width: {
+              xs: "100%", // Full width on mobile
+              sm: "80%", // Slightly smaller on small screens
+              md: "60%", // Smaller on medium screens
+              lg: "80%", // Smaller on large screens
+              xl: "200%", // Smaller on extra-large screens
+            },
+            maxWidth: { xs: "300px", md: "700px", xl: "1000px" }, // Set maximum width
+            height: "auto", // Maintain aspect ratio
+            mt: { lg: -10, xl: -10 },
+          }}
+        ></Box>
+        <Typography
+          variant="h1"
+          color="primary"
+          sx={{
+            fontFamily: "Barlow Semi Condensed",
+            color: "white",
+            fontSize: {
+              xs: "1.7rem",
+              sm: "2rem",
+              md: "2.5rem",
+              lg: "1.5rem",
+              xl: "2rem",
+            },
+            textAlign: { xs: "center", md: "left" },
+            mt: { lg: -20, xl: -50 },
+          }}
+        >
+          Photo was taken during the Exhibit of Learning Resources (LRs) last
+          Novermber 25, 2022. All recognition were awarded during the CALABARZON
+          Learning Resources Expo at Tagaytay Century Hotel, Tagaytay City.
+        </Typography>
+      </Box>
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: { xs: 2, sm: 3, md: 4, lg: 5 },
+          paddingTop: { xs: 15, sm: 10, md: 12, lg: 6, xl: 8 },
+          paddingBottom: { xs: 3, sm: 3, md: 4, lg: 6, xl: 8 },
+          background: "White",
+          color: "black",
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: { lg: 32, xl: 36 },
+            fontWeight: "bold",
+            fontFamily: "Barlow Semi Condensed",
+          }}
+        >
+          SDOIC - LRMS ACTIVITIES
+        </Typography>
+      </Box>
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: { xs: 2, sm: 3, md: 4, lg: 5 },
+          paddingTop: { xs: 15, sm: 10, md: 12, lg: 15, xl: 15 },
+          paddingBottom: { xs: 3, sm: 3, md: 4, lg: 5, xl: 4 },
+          background: "#1f211f",
+          px: { lg: 5, xl: 15 },
+        }}
+      >
+        <Typography
+          variant="h1"
+          color="primary"
+          sx={{
+            fontFamily: "Barlow Semi Condensed",
+            color: "white",
+            fontSize: {
+              xs: "1.7rem",
+              sm: "2rem",
+              md: "2.5rem",
+              lg: "1.5rem",
+              xl: "2rem",
+            },
+            textAlign: { xs: "center", md: "left" },
+            mt: { lg: -20, xl: -50 },
+          }}
+        >
+          Photo was taken during the Exhibit of Learning Resources (LRs) last
+          Novermber 25, 2022. All recognition were awarded during the CALABARZON
+          Learning Resources Expo at Tagaytay Century Hotel, Tagaytay City.
+        </Typography>
+        <Box
+          component="img"
+          src={thirdImage}
+          alt="Citizen's Charter"
+          sx={{
+            width: {
+              xs: "100%", // Full width on mobile
+              sm: "80%", // Slightly smaller on small screens
+              md: "60%", // Smaller on medium screens
+              lg: "80%", // Smaller on large screens
+              xl: "200%", // Smaller on extra-large screens
+            },
+            maxWidth: { xs: "300px", md: "700px", xl: "1000px" }, // Set maximum width
+            height: "auto", // Maintain aspect ratio
+            mt: { lg: -10, xl: -10 },
+          }}
+        ></Box>
+      </Box>
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: { xs: 2, sm: 3, md: 4, lg: 3 },
+          paddingTop: { xs: 15, sm: 10, md: 12, lg: 6, xl: 8 },
+          paddingBottom: { xs: 3, sm: 3, md: 4, lg: 6, xl: 8 },
+          color: "black",
+          borderBottom: "8px solid black", // Add a thick bottom border
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: { lg: 32, xl: 36 },
+            fontWeight: "bold",
+            fontFamily: "Barlow Semi Condensed",
+          }}
+        >
+          FEEDBACK IS A GIFT!
+        </Typography>
+        <Button variant="contained">
+          CLICK HERE TO PROVIDE SUGGESTIONS. YOUR GENEROSITY IS APPRECIATED!
+        </Button>
+      </Box>
+
       <Footer />
     </Box>
   );
