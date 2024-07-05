@@ -17,7 +17,7 @@ function App() {
     <div className="App">
       {location.pathname !== "/login" && <Navbar />}
       <Routes>
-        <Route path="/" element={<Landing />} />
+        <Route path="/" element={<LoginPage />} />
         <Route path="/AboutUs" element={<AboutUs />} />
         <Route path="/Portal" element={<Portal />} />
         <Route
@@ -26,7 +26,7 @@ function App() {
         />
         <Route path="/Library" element={<Library />} />
         <Route path="/CitizensCharter" element={<CitizenCharter />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/Homepage" element={<Landing />} />
       </Routes>
     </div>
   );

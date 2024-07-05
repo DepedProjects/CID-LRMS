@@ -39,7 +39,7 @@ export default function LoginPage() {
         .then((res) => {
           if (res.valid) {
             setAuth(res?.data);
-            navigate("/");
+            navigate("/Homepage");
           }
           console.log(res);
         })
