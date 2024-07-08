@@ -1,10 +1,4 @@
-import {
-  Box,
-  Button,
-  IconButton,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import Header from "../../../components/LoginHeader";
 import loginImage from "../../../assets/images/LoginImage.png";
@@ -38,8 +32,12 @@ export default function LoginPage() {
         .authenticate(formik?.values)
         .then((res) => {
           if (res.valid) {
+            if (res?.data.role === "admin") {
+              navigate("/CitizensCharter");
+            } else {
+              navigate("/Homepage");
+            }
             setAuth(res?.data);
-            navigate("/Homepage");
           }
           console.log(res);
         })

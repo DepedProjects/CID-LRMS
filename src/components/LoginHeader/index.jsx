@@ -114,9 +114,7 @@ export default function LoginHeader() {
                 fontSize: isMediumScreen ? 16 : 21,
                 whiteSpace: "nowrap", // Ensure no wrapping
                 "&:hover": {
-                  color: "cyan",
                   cursor: "pointer",
-                  textShadow: "0 0 5px cyan, 0 0 10px cyan, 0 0 20px cyan",
                 },
               }}
             >
