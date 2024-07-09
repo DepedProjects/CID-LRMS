@@ -39,6 +39,7 @@ export default function LoginHeader() {
         width: "100%",
         zIndex: 1000,
         pr: isMobile ? 2 : 5,
+        top: 0, // Ensure it stays at the top of the viewport
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", ml: 1 }}>
@@ -81,7 +82,12 @@ export default function LoginHeader() {
           >
             <MenuIcon />
           </IconButton>
-          <Drawer anchor="right" open={openMenu} onClose={handleDrawerClose}>
+          <Drawer
+            anchor="right"
+            open={openMenu}
+            onClose={handleDrawerClose}
+            sx={{ height: "100%", "& .MuiDrawer-paper": { height: "100%" } }}
+          >
             <List sx={{ width: 250 }}>
               {menuOptions.map((text, index) => (
                 <ListItem button key={index} onClick={handleDrawerClose}>

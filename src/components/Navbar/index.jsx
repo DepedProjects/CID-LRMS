@@ -1,22 +1,18 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from "react";
-import depedLogo from "../../assets/images/deped_logo.png";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { FcSettings } from "react-icons/fc";
-import { FcImport } from "react-icons/fc";
-import { FcReading } from "react-icons/fc";
-import { useStateContext } from "../../contexts/ContextProvider";
 import {
   Box,
-  Button,
   Typography,
   IconButton,
   Drawer,
   List,
   ListItem,
-  ListItemIcon,
   ListItemText,
+  ListItemIcon,
 } from "@mui/material";
+import React, { useState } from "react";
+import depedLogo from "../../assets/images/deped_logo.png";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { FcImport, FcReading } from "react-icons/fc";
+import { useStateContext } from "../../contexts/ContextProvider";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -40,17 +36,22 @@ export default function Navbar() {
     "About Us",
     "Portal",
     "Project and Activities",
-    "Library",
-    "Citizen's Charter",
+    {
+      text: "Library",
+      action: () => navigate("/Library"),
+    },
+    {
+      text: "Citizen's Charter",
+      action: () => navigate("/CitizensCharter"),
+    },
   ];
 
   const profileOptions = [
     {
-      text: "Settings",
-      icon: <FcSettings size={36} />,
+      text: "My Account Details",
+      icon: <FcReading size={36} />,
       action: () => {},
     },
-    { text: "Details", icon: <FcReading size={36} />, action: () => {} },
     {
       text: "Log Out",
       icon: <FcImport size={36} />,
@@ -74,6 +75,10 @@ export default function Navbar() {
     setOpenProfileMenu(false);
   };
 
+  const handleHome = () => {
+    navigate("/Homepage");
+  };
+
   return (
     <Box
       sx={{
@@ -93,7 +98,11 @@ export default function Navbar() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            "&:hover": {
+              cursor: "pointer",
+            },
           }}
+          onClick={handleHome}
         >
           <img
             src={depedLogo}
@@ -126,9 +135,17 @@ export default function Navbar() {
           </IconButton>
           <Drawer anchor="right" open={openMenu} onClose={handleDrawerClose}>
             <List sx={{ width: 250 }}>
-              {menuOptions.map((text, index) => (
-                <ListItem button key={index} onClick={handleDrawerClose}>
-                  <ListItemText primary={text} />
+              {menuOptions.map((option, index) => (
+                <ListItem
+                  button
+                  key={index}
+                  onClick={
+                    typeof option === "string"
+                      ? handleDrawerClose
+                      : option.action
+                  }
+                >
+                  <ListItemText primary={option.text} />
                 </ListItem>
               ))}
               <ListItem button onClick={handleDrawerClose}></ListItem>
@@ -149,6 +166,11 @@ export default function Navbar() {
           {menuOptions.map((option, index) => (
             <Typography
               key={index}
+              onClick={
+                typeof option === "string"
+                  ? () => {} // Handle regular menu items
+                  : option.action
+              }
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -162,22 +184,23 @@ export default function Navbar() {
                 },
               }}
             >
-              {option}
+              {typeof option === "string" ? option : option.text}
             </Typography>
           ))}
           <IconButton sx={{ color: "white" }} onClick={handleProfileOpen}>
             <AccountCircleIcon sx={{ fontSize: 36 }} />
           </IconButton>
           <Drawer
-            anchor="left"
+            anchor="right"
             open={openProfileMenu}
             onClose={handleProfileClose}
           >
-            <List sx={{ width: 250 }}>
+            <List sx={{ width: 350 }}>
               <ListItem
                 sx={{
                   mb: 5,
                   mt: 3,
+                  gap: -1,
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "start",
@@ -185,21 +208,52 @@ export default function Navbar() {
               >
                 <AccountCircleIcon sx={{ fontSize: 48, color: "black" }} />
                 <ListItemText
-                  primary={auth?.username}
+                  primary={`${auth?.username}`}
                   primaryTypographyProps={{
                     fontFamily: "Fira Sans Condensed",
                     fontSize: 20,
                     fontWeight: "bold",
                   }}
                 />
-                <ListItemText
-                  primary={auth?.role === "admin" ? "Administrator" : "Teacher"}
-                  primaryTypographyProps={{
-                    fontFamily: "Fira Sans Condensed",
-                    fontSize: 16,
-                    fontWeight: "bold",
-                  }}
-                />
+                {auth?.role === "admin" ? (
+                  <>
+                    <ListItemText
+                      primary={auth?.officeName}
+                      primaryTypographyProps={{
+                        fontFamily: "Fira Sans Condensed",
+                        fontSize: 16,
+                        fontWeight: "bold",
+                        textAlign: "center",
+                      }}
+                    />
+                    <ListItemText
+                      primary="Administrator"
+                      primaryTypographyProps={{
+                        fontFamily: "Fira Sans Condensed",
+                        fontSize: 14,
+                      }}
+                    />
+                  </>
+                ) : auth?.role === "Teacher" ? (
+                  <>
+                    <ListItemText
+                      primary={auth?.schoolName}
+                      primaryTypographyProps={{
+                        fontFamily: "Fira Sans Condensed",
+                        fontSize: 16,
+                        fontWeight: "bold",
+                        textAlign: "center",
+                      }}
+                    />
+                    <ListItemText
+                      primary="Teacher"
+                      primaryTypographyProps={{
+                        fontFamily: "Fira Sans Condensed",
+                        fontSize: 14,
+                      }}
+                    />
+                  </>
+                ) : null}
               </ListItem>
               {profileOptions.map((option, index) => (
                 <ListItem button key={index} onClick={option.action}>

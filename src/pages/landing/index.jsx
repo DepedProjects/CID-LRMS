@@ -3,11 +3,12 @@ import { Box, Button, Typography } from "@mui/material";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
 import firstImage from "../../assets/images/pngegg.png";
-import secondImage from "../../assets/images/Frame 7.png";
-import thirdImage from "../../assets/images/Frame 10.png";
-import feedbackBg from "../../assets/images/Frame 8.jpg";
 
 export default function Landing() {
+  const openFeedbackPage = () => {
+    window.open("http://172.16.0.21/feedback", "_blank");
+  };
+
   return (
     <Box
       sx={{
@@ -141,158 +142,7 @@ export default function Landing() {
           />
         </Box>
       </Box>
-      <Box
-        sx={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: { xs: 2, sm: 3, md: 4, lg: 5 },
-          paddingTop: { xs: 15, sm: 10, md: 12, lg: 6, xl: 8 },
-          paddingBottom: { xs: 3, sm: 3, md: 4, lg: 6, xl: 8 },
-          background: "White",
-          color: "black",
-        }}
-      >
-        <Typography
-          sx={{
-            fontSize: { lg: 32, xl: 36 },
-            fontWeight: "bold",
-            fontFamily: "Barlow Semi Condensed",
-          }}
-        >
-          OUR ACHIEVEMENTS ATTAINED THROUGH OUR COMBINED EFFORT
-        </Typography>
-      </Box>
-      <Box
-        sx={{
-          flex: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: { xs: 2, sm: 3, md: 4, lg: 5 },
-          paddingTop: { xs: 15, sm: 10, md: 12, lg: 15, xl: 15 },
-          paddingBottom: { xs: 3, sm: 3, md: 4, lg: 5, xl: 4 },
-          background: "#1f211f",
-          px: { lg: 5, xl: 15 },
-        }}
-      >
-        <Box
-          component="img"
-          src={secondImage}
-          alt="Citizen's Charter"
-          sx={{
-            width: {
-              xs: "100%", // Full width on mobile
-              sm: "80%", // Slightly smaller on small screens
-              md: "60%", // Smaller on medium screens
-              lg: "80%", // Smaller on large screens
-              xl: "200%", // Smaller on extra-large screens
-            },
-            maxWidth: { xs: "300px", md: "700px", xl: "1000px" }, // Set maximum width
-            height: "auto", // Maintain aspect ratio
-            mt: { lg: -10, xl: -10 },
-          }}
-        ></Box>
-        <Typography
-          variant="h1"
-          color="primary"
-          sx={{
-            fontFamily: "Barlow Semi Condensed",
-            color: "white",
-            fontSize: {
-              xs: "1.7rem",
-              sm: "2rem",
-              md: "2.5rem",
-              lg: "1.5rem",
-              xl: "2rem",
-            },
-            textAlign: { xs: "center", md: "left" },
-            mt: { lg: -20, xl: -50 },
-          }}
-        >
-          Photo was taken during the Exhibit of Learning Resources (LRs) last
-          Novermber 25, 2022. All recognition were awarded during the CALABARZON
-          Learning Resources Expo at Tagaytay Century Hotel, Tagaytay City.
-        </Typography>
-      </Box>
-      <Box
-        sx={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: { xs: 2, sm: 3, md: 4, lg: 5 },
-          paddingTop: { xs: 15, sm: 10, md: 12, lg: 6, xl: 8 },
-          paddingBottom: { xs: 3, sm: 3, md: 4, lg: 6, xl: 8 },
-          background: "White",
-          color: "black",
-        }}
-      >
-        <Typography
-          sx={{
-            fontSize: { lg: 32, xl: 36 },
-            fontWeight: "bold",
-            fontFamily: "Barlow Semi Condensed",
-          }}
-        >
-          SDOIC - LRMS ACTIVITIES
-        </Typography>
-      </Box>
-      <Box
-        sx={{
-          flex: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: { xs: 2, sm: 3, md: 4, lg: 5 },
-          paddingTop: { xs: 15, sm: 10, md: 12, lg: 15, xl: 15 },
-          paddingBottom: { xs: 3, sm: 3, md: 4, lg: 5, xl: 4 },
-          background: "#1f211f",
-          px: { lg: 5, xl: 15 },
-        }}
-      >
-        <Typography
-          variant="h1"
-          color="primary"
-          sx={{
-            fontFamily: "Barlow Semi Condensed",
-            color: "white",
-            fontSize: {
-              xs: "1.7rem",
-              sm: "2rem",
-              md: "2.5rem",
-              lg: "1.5rem",
-              xl: "2rem",
-            },
-            textAlign: { xs: "center", md: "left" },
-            mt: { lg: -20, xl: -50 },
-          }}
-        >
-          Photo was taken during the Exhibit of Learning Resources (LRs) last
-          Novermber 25, 2022. All recognition were awarded during the CALABARZON
-          Learning Resources Expo at Tagaytay Century Hotel, Tagaytay City.
-        </Typography>
-        <Box
-          component="img"
-          src={thirdImage}
-          alt="Citizen's Charter"
-          sx={{
-            width: {
-              xs: "100%", // Full width on mobile
-              sm: "80%", // Slightly smaller on small screens
-              md: "60%", // Smaller on medium screens
-              lg: "80%", // Smaller on large screens
-              xl: "200%", // Smaller on extra-large screens
-            },
-            maxWidth: { xs: "300px", md: "700px", xl: "1000px" }, // Set maximum width
-            height: "auto", // Maintain aspect ratio
-            mt: { lg: -10, xl: -10 },
-          }}
-        ></Box>
-      </Box>
+
       <Box
         sx={{
           flex: 1,
@@ -316,7 +166,17 @@ export default function Landing() {
         >
           FEEDBACK IS A GIFT!
         </Typography>
-        <Button variant="contained">
+        <Button
+          variant="contained"
+          onClick={openFeedbackPage}
+          sx={{
+            color: "white",
+            backgroundColor: "black",
+            "&:hover": {
+              backgroundColor: "grey",
+            },
+          }}
+        >
           CLICK HERE TO PROVIDE SUGGESTIONS. YOUR GENEROSITY IS APPRECIATED!
         </Button>
       </Box>

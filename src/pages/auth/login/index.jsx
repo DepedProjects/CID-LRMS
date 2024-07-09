@@ -1,5 +1,11 @@
-import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import { Box, IconButton, TextField, Typography } from "@mui/material";
 import Header from "../../../components/LoginHeader";
 import loginImage from "../../../assets/images/LoginImage.png";
 import Footer from "../../../components/Footer";
@@ -14,6 +20,8 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [openPrompt, setOpenPrompt] = useState(false);
+  const [promptMessage, setPromptMessage] = useState("");
   const { setAuth } = useStateContext();
   const navigate = useNavigate();
 
@@ -33,25 +41,29 @@ export default function LoginPage() {
         .then((res) => {
           if (res.valid) {
             if (res?.data.role === "admin") {
-              navigate("/CitizensCharter");
+              navigate("/Admin");
             } else {
               navigate("/Homepage");
             }
             setAuth(res?.data);
+          } else {
+            setPromptMessage(
+              "You provided invalid credentials. Please try again"
+            );
+            setOpenPrompt(true);
           }
-          console.log(res);
         })
         .catch((err) => {
           let message = "";
           if (err?.response?.status === 404) {
-            message = "Invalid Credentials";
+            message = "You provided invalid credentials. Please try again";
           } else if (err?.response?.status === 401) {
             message = err?.response?.data?.error;
           } else {
             message = "Internal Server Error";
           }
-          setError(message || err?.message);
-
+          setPromptMessage(message || err?.message);
+          setOpenPrompt(true);
           console.log(err);
         })
         .finally(() => {
@@ -61,6 +73,10 @@ export default function LoginPage() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+
+  const handleClosePrompt = () => {
+    setOpenPrompt(false);
+  };
 
   return (
     <Box
@@ -237,10 +253,34 @@ export default function LoginPage() {
             >
               LOG IN
             </Button>
+            <Typography sx={{ mt: 2, ml: 5 }}>{error}</Typography>
           </form>
         </Box>
       </Box>
       <Footer />
+      <Dialog
+        open={openPrompt}
+        onClose={handleClosePrompt}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Authentication Failed"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText
+            id="alert-dialog-description"
+            sx={{ color: "black", fontFamily: "Fira Sans Condensed" }} // Set text color to black
+          >
+            {promptMessage}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClosePrompt} autoFocus>
+            TRY AGAIN
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
