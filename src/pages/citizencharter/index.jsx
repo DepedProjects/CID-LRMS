@@ -9,6 +9,9 @@ import qualityAssurance from "../../assets/images/QualityAssurance.png";
 import { Box, Button, Typography } from "@mui/material";
 
 export default function CitizenCharter() {
+  const openFeedbackPage = () => {
+    window.open("http://172.16.0.21/feedback", "_blank");
+  };
   return (
     <Box
       sx={{
@@ -266,12 +269,18 @@ export default function CitizenCharter() {
         </Typography>
         <Button
           variant="contained"
+          onClick={openFeedbackPage}
           sx={{
             px: { xs: 4, sm: 6, md: 8, lg: 9 },
             fontSize: { xs: 16, sm: 20, md: 25, lg: 31 },
             fontFamily: "Fira Sans Condensed",
             fontWeight: "bold",
             mt: { xs: 1, md: 0 }, // Add margin top for small screens
+            "&:hover": {
+              backgroundColor: "cyan",
+              cursor: "pointer",
+              color: "black",
+            },
           }}
         >
           Feedback
