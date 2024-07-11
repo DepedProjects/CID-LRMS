@@ -10,7 +10,7 @@ const links = [
     links: [
       {
         name: "Resources",
-        path: "resources",
+        path: "Admin",
         icon: <DataIcon />,
       },
     ],
@@ -22,7 +22,7 @@ const links = [
     links: [
       {
         name: "Users",
-        path: "users",
+        path: "Users",
         icon: <ManageAccountsIcon />,
       },
     ],
@@ -34,7 +34,7 @@ const links = [
     links: [
       {
         name: "Logs",
-        path: "logs",
+        path: "Logs",
         icon: <BusinessIcon />,
       },
     ],

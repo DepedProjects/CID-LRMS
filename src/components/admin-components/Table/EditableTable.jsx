@@ -253,7 +253,7 @@ export default function EditableTable({
       setSelectedRows([]);
       selectedData([]);
     }
-  }, [reset]);
+  }, [reset, selectedData]);
 
   return (
     <Box

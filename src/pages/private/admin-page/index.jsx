@@ -11,89 +11,120 @@ import {
 // import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 // import CancelIcon from "@mui/icons-material/Cancel";
 import { useStateContext } from "../../../contexts/ContextProvider";
-import ilearnService from "../../../services/account-service";
-import dayjs from "dayjs";
+// import ilearnService from "../../../services/account-service";
+import ilearnDataService from "../../../services/iLearn-services";
+// import dayjs from "dayjs";
 import AdminTable from "./AdminTable";
+import PromptModal from "../../../modals/PromptModal";
 // import DatePickerComponent from "../../../components/Textfields/DatePicker";
 // import StatBox from "../../../components/Statbox";
 
-export default function Feedbacks() {
+export default function Metadatas() {
   const { auth } = useStateContext();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [start, setStart] = useState(null);
-  const [end, setEnd] = useState(null);
+  // const [start, setStart] = useState(null);
+  // const [end, setEnd] = useState(null);
 
-  // const handleGetAll = () => {
-  //   setLoading(true);
-  //   setError("");
+  const [fileName, setFileName] = useState("");
+  const [fileBlob, setFileBlob] = useState(null);
+  const [openPromptModal, setOpenPromptModal] = useState(false);
+  const [promptMssg, setPromptMssg] = useState([]);
 
-  //   ilearnService
-  //     .getFilteredFeedbacksByDate({
-  //       startDate: start ? dayjs(start).format("YYYY-MM-DD") : null,
-  //       endDate: end ? dayjs(end).format("YYYY-MM-DD") : null,
-  //       officeId: auth.officeId,
-  //     })
-  //     .then((response) => {
-  //       const newData = response.map((item) => ({
-  //         ...item,
-  //         created_at: dayjs(item.created_at),
-  //         updated_at: dayjs(item.updated_at),
-  //       }));
-
-  //       setData(newData);
-  //     })
-  //     .catch((err) => {
-  //       setError(err?.message);
-  //     })
-  //     .finally(() => {
-  //       setLoading(false);
-  //     });
-  // };
-
-  const handleExportReport = async () => {
+  const handleGetAllMetadata = () => {
     setLoading(true);
-    setError("");
+    setError(" ");
 
-    try {
-      const response = await ilearnService.exportFilteredFeedbacks({
-        startDate: start ? dayjs(start).format("YYYY-MM-DD") : null,
-        endDate: end ? dayjs(end).format("YYYY-MM-DD") : null,
-        officeId: auth.officeId,
+    ilearnDataService
+      .getAllMetadata()
+      .then((e) => {
+        setData(e);
+      })
+      .catch((err) => {
+        setError(err?.message);
+      })
+      .finally(() => {
+        setLoading(false);
       });
+  };
 
-      const datestamp = dayjs().format("YYYYMMDD");
+  useEffect(() => {
+    handleGetAllMetadata();
+  }, []);
 
-      // Create a blob from the response data
-      const blob = new Blob([response.data], {
-        type: response.headers["content-type"],
-      });
+  const handleMetadataUpload = (event) => {
+    const fileInput = event.target;
 
-      // Create a temporary URL for the blob
-      const url = window.URL.createObjectURL(blob);
+    const files = fileInput.files;
 
-      // Create a link element and click it to trigger the download
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `CSM_Report_${datestamp}.xlsx`);
-      document.body.appendChild(link);
-      link.click();
-
-      // Clean up
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (err) {
-      setError(err?.message);
-    } finally {
-      setLoading(false);
+    if (files.length === 0) {
+      return;
     }
+
+    const selectedFile = files[0];
+
+    const isExcelFile = /\.(xlsx|xls)$/i.test(selectedFile.name);
+
+    if (!isExcelFile) {
+      alert("Please select an Excel file (.xlsx or .xls).");
+      return;
+    }
+
+    const confirmed = window.confirm(
+      "Are you sure you want to upload melcs from this file?"
+    );
+
+    // Proceed only if the user confirms
+    if (confirmed) {
+      setFileName(selectedFile.name);
+
+      // Read the file content as a Blob
+      const reader = new FileReader();
+      reader.onload = () => {
+        const blob = new Blob([reader.result], { type: selectedFile.type });
+
+        setFileBlob(blob);
+      };
+      reader.readAsArrayBuffer(selectedFile);
+    }
+    fileInput.value = "";
   };
 
-  const handleResetDateFilter = () => {
-    setStart(null);
-    setEnd(null);
-  };
+  useEffect(() => {
+    if (fileBlob) {
+      setLoading(true);
+
+      const formData = new FormData();
+
+      formData.append("file", fileBlob);
+
+      ilearnDataService
+        .bulkUploadMetadata(formData)
+        .then((response) => {
+          if (response?.message) {
+            setOpenPromptModal(true);
+            setPromptMssg(response.message);
+            handleGetAllMetadata();
+            console.log(response.message);
+          } else {
+            setError("Unexpected response format");
+          }
+        })
+        .catch((err) => {
+          setError(err?.message);
+        })
+        .finally(() => {
+          setLoading(false);
+          setFileBlob(null);
+        });
+    }
+  }, [fileBlob]);
+
+  // const handleResetDateFilter = () => {
+  //   setStart(null);
+  //   setEnd(null);
+  // };
 
   // useEffect(() => {
   //   handleGetAll();
@@ -106,6 +137,11 @@ export default function Feedbacks() {
         backgroundColor: "black",
       }}
     >
+      <PromptModal
+        handleClose={() => setOpenPromptModal(false)}
+        open={openPromptModal}
+        prompt={promptMssg}
+      />
       <Box>
         <Typography
           sx={{
@@ -159,34 +195,35 @@ export default function Feedbacks() {
             alignItems: "center",
           }}
         >
-          {/* <DatePickerComponent
-            label="Start"
-            value={start}
-            onChange={(newValue) => setStart(dayjs(newValue))}
-          />
-          <Typography sx={{ mx: 2, fontFamily: "Poppins" }}> To </Typography>
-          <DatePickerComponent
-            label="End"
-            value={end}
-            onChange={(newValue) => setEnd(dayjs(newValue))}
-          /> */}
-          <Button
-            onClick={handleResetDateFilter}
-            sx={{
-              fontSize: "0.6rem",
-              padding: "5px 10px",
-              backgroundColor: "#1c1948",
-              color: "white",
-              ml: "1rem",
-              boxShadow: "1px 1px 5px rgba(0, 0, 0, 0.5)",
-              "&:hover": {
-                color: "black",
-                backgroundColor: "#11edd2",
-              },
-            }}
-          >
-            Reset date filter
-          </Button>
+          <label htmlFor="file-upload">
+            <input
+              id="file-upload"
+              type="file"
+              accept=".xlsx, .xls"
+              onChange={handleMetadataUpload}
+              style={{ display: "none" }}
+            />
+            <Button
+              component="span"
+              sx={{
+                fontFamily: "Fira Sans",
+                backgroundColor: "#1c1948",
+                color: "white",
+                fontSize: "12px",
+                fontWeight: "bold",
+                padding: "5px 10px",
+                borderRadius: "5px",
+                mb: "1rem",
+                boxShadow: "1px 1px 5px rgba(0, 0, 0, 0.5)",
+                "&:hover": {
+                  color: "black",
+                  backgroundColor: "#11edd2",
+                },
+              }}
+            >
+              Upload Metadata
+            </Button>
+          </label>
         </Box>
         <Box>
           {error}
@@ -200,29 +237,7 @@ export default function Feedbacks() {
             alignItems: "center",
             p: 2,
           }}
-        >
-          <Box>
-            <Button
-              onClick={handleExportReport}
-              sx={{
-                fontFamily: "Poppins",
-                backgroundColor: "#1c1948",
-                color: "white",
-                fontSize: "14px",
-                fontWeight: "bold",
-                padding: "10px 20px",
-                borderRadius: "5px",
-                boxShadow: "1px 1px 5px rgba(0, 0, 0, 0.5)",
-                "&:hover": {
-                  color: "black",
-                  backgroundColor: "#11edd2",
-                },
-              }}
-            >
-              Upload Metadata
-            </Button>
-          </Box>
-        </Box>
+        ></Box>
       </Box>
     </Box>
   );

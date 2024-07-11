@@ -13,3 +13,5 @@ export { default as ProjectAndActivities } from "./projectandactvities";
 export { default as LoginPage } from "./auth/login";
 
 export { default as AdminPage } from "./private/admin-page";
+
+export { default as Users } from "./private/admin-page/Users";
