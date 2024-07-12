@@ -29,7 +29,6 @@ export default function SelectOffice({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Define handleGetAll function
   const handleGetAll = () => {
     setLoading(true);
     setError("");
@@ -37,10 +36,9 @@ export default function SelectOffice({
     iLearnDataService
       .getAllOffices()
       .then((response) => {
-        setOffices(response); // Make sure offices is always an array
-        setSelectedOffice(
-          response.find((office) => office.id === value) || null
-        );
+        setOffices(response);
+        const selected = response.find((office) => office.id === value) || null;
+        setSelectedOffice(selected);
       })
       .catch((err) => {
         setError(err.message);
@@ -55,7 +53,8 @@ export default function SelectOffice({
   }, []);
 
   useEffect(() => {
-    setSelectedOffice(offices?.find((office) => office.id === value) || null);
+    const selected = offices.find((office) => office.id === value) || null;
+    setSelectedOffice(selected);
   }, [offices, value]);
 
   const handleClick = (event) => {
@@ -65,34 +64,33 @@ export default function SelectOffice({
   const handleClose = (newValue) => {
     setAnchorEl(null);
     if (newValue) {
-      onChange?.(name, newValue.id || "");
+      onChange(name, newValue.id);
       setSelectedOffice(newValue);
     }
   };
 
   const handleClear = () => {
-    onChange?.(name, "");
+    onChange(name, null);
     setSelectedOffice(null);
   };
 
   return (
     <Box>
       <TextField
-        label={error ? `${label} - ${error}` : label}
-        placeholder={error ? `${placeholder} - ${error}` : placeholder}
+        label={errorFormik ? `${label} - ${errorFormik}` : label}
+        placeholder={placeholder}
         name={name}
         variant="outlined"
         size="small"
-        disabled={error || disabled}
-        value={selectedOffice && value ? selectedOffice.title : ""}
+        disabled={disabled}
+        value={selectedOffice ? selectedOffice.title : ""}
         onClick={handleClick}
         onBlur={onBlur}
-        error={errorFormik}
+        error={Boolean(errorFormik)}
         helperText={helperText}
         sx={sx}
         InputProps={{
           endAdornment: (
-            // eslint-disable-next-line react/jsx-no-useless-fragment
             <>
               {loading ? (
                 <CircularProgress color="inherit" size={20} />
@@ -103,7 +101,7 @@ export default function SelectOffice({
                       <CloseIcon />
                     </IconButton>
                   )}
-                  {!disabled && !error && (
+                  {!disabled && (
                     <IconButton edge="end" onClick={handleClick}>
                       <ArrowDropDownIcon />
                     </IconButton>
@@ -120,11 +118,7 @@ export default function SelectOffice({
         onClose={() => handleClose(null)}
       >
         {offices.map((office) => (
-          <MenuItem
-            sx={{ width: "100%" }}
-            key={office.id}
-            onClick={() => handleClose(office)}
-          >
+          <MenuItem key={office.id} onClick={() => handleClose(office)}>
             {office.title}
           </MenuItem>
         ))}

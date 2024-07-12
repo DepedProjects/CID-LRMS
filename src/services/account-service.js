@@ -38,9 +38,14 @@ function getAllUsers() {
 }
 
 function updateUser(id, data) {
+  console.log("Sending data:", data); // Check the data structure
   return axios
     .put(`${BASE_URL}/user/update/${id}`, data)
-    .then((res) => res.data);
+    .then((res) => res.data)
+    .catch((error) => {
+      console.error("Error updating user:", error); // Log errors
+      throw error;
+    });
 }
 
 function deleteUser(id, data) {

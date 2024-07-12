@@ -6,6 +6,7 @@ import AddUserModal from "../../../../modals/AccountDetails/AddUserModal";
 // import UpdateUserModal from "modals/users/UpdateUserModal";
 // import SnackbarComponent from "components/Snackbar";
 import UserTable from "./UserTable";
+import UpdateUserModal from "../../../../modals/AccountDetails/UpdateUserModal";
 
 export default function Users() {
   const [usersData, setUsersData] = useState([]);
@@ -82,7 +83,7 @@ export default function Users() {
           setOpenSuccess(true);
         }}
       />
-      {/* <UpdateUserModal
+      <UpdateUserModal
         handleClose={() => setOpenUpdateModal(false)}
         open={openUpdateModal}
         data={selectedUser && selectedUser[0]}
@@ -92,7 +93,7 @@ export default function Users() {
           setSuccessMessage("User Updated Successfully!!");
           setOpenSuccess(true);
         }}
-      /> */}
+      />
       <Box
         borderRadius="10px"
         boxShadow="3px 2px 15px 3px rgba(100, 100, 100, 0.8)"
