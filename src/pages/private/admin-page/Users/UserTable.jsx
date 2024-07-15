@@ -13,10 +13,10 @@ export default function UserTable({
   const [selectedUser, setSelectedUser] = useState();
   const [rowToDelete, setRowToDelete] = useState();
   const [open, setOpen] = useState(false);
-  const [promptResponse, setPromptResponse] = useState(null);
+  const [promptResponse] = useState(null);
   const [submit, setSubmit] = useState(false);
-  const [submitKind, setSubmitKind] = useState("");
-  const [promptDesc, setPromptDesc] = useState("");
+  const [ setSubmitKind] = useState("");
+  const [ setPromptDesc] = useState("");
 
   const [loading, setLoading] = useState(false);
 
@@ -28,6 +28,7 @@ export default function UserTable({
       setSubmitKind("delete");
       setOpen(true);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rowToDelete]);
 
   useEffect(() => {
@@ -48,7 +49,7 @@ export default function UserTable({
           setLoading(false);
         });
     }
-  }, [submit, promptResponse]);
+  }, [submit, promptResponse, open, rowToDelete, updateTableFunction]);
 
   const columns = [
     // { field: "uid", headerName: "ID", width: 70 },

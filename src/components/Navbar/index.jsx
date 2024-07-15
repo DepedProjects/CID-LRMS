@@ -234,7 +234,7 @@ export default function Navbar() {
                       }}
                     />
                   </>
-                ) : auth?.role === "Teacher" ? (
+                ) : auth?.role === "teacher" ? (
                   <>
                     <ListItemText
                       primary={auth?.schoolName}

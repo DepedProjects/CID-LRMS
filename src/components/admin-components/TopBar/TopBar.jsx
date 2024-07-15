@@ -22,9 +22,7 @@ import { useState } from "react";
 const StyledAppBar = styled(AppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open, width }) => ({
-  background:
-    // "linear-gradient(40deg, rgba(66, 201, 116, 1), rgba(59, 152, 184, 1), rgba(26, 214, 164, 1))",
-    "#AF1763",
+  background: "#AF1763",
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
@@ -50,10 +48,11 @@ function Topbar({
   const { auth, setAuth } = useStateContext();
   const navigate = useNavigate();
 
+  console.log("Auth in Topbar:", auth);
+
   const handleLogout = () => {
     setOpenProfileMenu(false);
     setAuth(null);
-    // Perform redirection manually
     navigate("/"); // Replace with your desired path
   };
 
@@ -69,7 +68,7 @@ function Topbar({
     navigate("/");
   };
 
-  const profileOptionsAdmin = [
+  const profileOptions = [
     {
       text: "My Account Information",
       icon: <FcReading size={36} />,
@@ -108,7 +107,6 @@ function Topbar({
               onClick={openDrawerFunction}
               edge="start"
               sx={{
-                // color: "#434343",
                 marginRight: 5,
                 ...(drawerOpenStatus && { display: "none" }),
               }}
@@ -118,7 +116,6 @@ function Topbar({
             <Box
               onClick={handleNavigate}
               component="img"
-              variant="img"
               src={DepedLogo}
               sx={{
                 mr: 2,
@@ -140,13 +137,7 @@ function Topbar({
             </Typography>
           </Box>
 
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "end",
-              mr: 5,
-            }}
-          >
+          <Box sx={{ display: "flex", justifyContent: "end", mr: 5 }}>
             <IconButton sx={{ color: "white" }} onClick={handleProfileOpen}>
               <AccountCircleIcon sx={{ fontSize: 36 }} />
             </IconButton>
@@ -169,7 +160,7 @@ function Topbar({
                 >
                   <AccountCircleIcon sx={{ fontSize: 48, color: "black" }} />
                   <ListItemText
-                    primary={`${auth?.username}`}
+                    primary={auth?.username}
                     primaryTypographyProps={{
                       fontFamily: "Fira Sans Condensed",
                       fontSize: 20,
@@ -195,7 +186,7 @@ function Topbar({
                         }}
                       />
                     </>
-                  ) : auth?.role === "Teacher" ? (
+                  ) : auth?.role === "teacher" ? (
                     <>
                       <ListItemText
                         primary={auth?.schoolName}
@@ -207,7 +198,7 @@ function Topbar({
                         }}
                       />
                       <ListItemText
-                        primary="Teacher"
+                        primary="teacher"
                         primaryTypographyProps={{
                           fontFamily: "Fira Sans Condensed",
                           fontSize: 14,
@@ -216,7 +207,7 @@ function Topbar({
                     </>
                   ) : null}
                 </ListItem>
-                {profileOptionsAdmin.map((option, index) => (
+                {profileOptions.map((option, index) => (
                   <ListItem button key={index} onClick={option.action}>
                     <ListItemIcon sx={{ color: "black" }}>
                       {option.icon}

@@ -153,7 +153,6 @@ export default function EditableTable({
   };
 
   const columnsAction = [
-    ...columns,
     {
       field: "actions",
       type: "actions",
@@ -240,6 +239,7 @@ export default function EditableTable({
         ];
       },
     },
+    ...columns,
   ];
 
   useEffect(() => {

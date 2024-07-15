@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -22,8 +22,10 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [openPrompt, setOpenPrompt] = useState(false);
   const [promptMessage, setPromptMessage] = useState("");
-  const { setAuth } = useStateContext();
+  const { auth, setAuth } = useStateContext();
   const navigate = useNavigate();
+
+  console.log("Auth in Topbar:", auth); // Log the entire auth object
 
   const formik = useFormik({
     initialValues: { username: "", password: "" },
@@ -77,6 +79,10 @@ export default function LoginPage() {
   const handleClosePrompt = () => {
     setOpenPrompt(false);
   };
+
+  useEffect(() => {
+    console.log("Auth schoolName on render:", auth?.schoolName); // Log schoolName on component render
+  }, [auth]);
 
   return (
     <Box

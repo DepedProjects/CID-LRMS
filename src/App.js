@@ -24,7 +24,7 @@ function App() {
         location.pathname !== "/Users" && <Navbar />}
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route element={<RequireAuth allowedRoles={"Teacher"} />}>
+        <Route element={<RequireAuth allowedRoles={"teacher"} />}>
           <Route path="/AboutUs" element={<AboutUs />} />
           <Route path="/Portal" element={<Portal />} />
           <Route
