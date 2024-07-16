@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Box } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import EditableTable from "../../../../components/admin-components/Table/EditableTable";
@@ -15,8 +16,8 @@ export default function UserTable({
   const [open, setOpen] = useState(false);
   const [promptResponse] = useState(null);
   const [submit, setSubmit] = useState(false);
-  const [ setSubmitKind] = useState("");
-  const [ setPromptDesc] = useState("");
+  const [setSubmitKind] = useState("");
+  const [setPromptDesc] = useState("");
 
   const [loading, setLoading] = useState(false);
 
@@ -28,7 +29,6 @@ export default function UserTable({
       setSubmitKind("delete");
       setOpen(true);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rowToDelete]);
 
   useEffect(() => {

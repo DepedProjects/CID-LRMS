@@ -12,6 +12,7 @@ export default function Footer() {
   return (
     <Box
       sx={{
+        borderTop: "solid 1px black",
         display: "flex",
         flexDirection: "column",
         fontFamily: "Fira Sans Condensed",

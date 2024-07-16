@@ -34,7 +34,7 @@ export default function Navbar() {
 
   const menuOptions = [
     "About Us",
-    "Portal",
+    { text: "Portal", action: () => navigate("/Portal") },
     "Project and Activities",
     {
       text: "Library",
