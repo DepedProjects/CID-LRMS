@@ -1,5 +1,5 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { FcDocument } from "react-icons/fc";
 import { AiFillDatabase } from "react-icons/ai";
 import { CiSearch } from "react-icons/ci";
@@ -14,205 +14,130 @@ import {
   TextField,
   InputAdornment,
 } from "@mui/material";
-
-const materialsTopics = [
-  {
-    topic: "Introduction to Addition",
-    description: "Introduction to Basic Arithmetic Operations",
-    gradeLevel: "Grade 3",
-    subject: "Mathematics",
-    type: "Textbooks",
-  },
-  {
-    topic: "Introduction to Subtraction",
-    description: "Introduction to Basic Arithmetic Operations",
-    gradeLevel: "Grade 3",
-    subject: "Mathematics",
-    type: "Textbooks",
-  },
-  {
-    topic: "Introduction to Multiplication",
-    description: "Introduction to Basic Arithmetic Operations",
-    gradeLevel: "Grade 3",
-    subject: "Mathematics",
-    type: "Textbooks",
-  },
-  {
-    topic: "Introduction to Division",
-    description: "Introduction to Basic Arithmetic Operations",
-    gradeLevel: "Grade 3",
-    subject: "Mathematics",
-    type: "Textbooks",
-  },
-  {
-    topic: "Introduction to Fraction",
-    description: "Introduction to Basic Arithmetic Operations",
-    gradeLevel: "Grade 3",
-    subject: "Mathematics",
-    type: "Textbooks",
-  },
-  {
-    topic: "Introduction to Algebra",
-    description: "Introduction to Basic Arithmetic Operations",
-    gradeLevel: "Grade 3",
-    subject: "Mathematics",
-    type: "Textbooks",
-  },
-  {
-    topic: "Introduction to Algebra",
-    description: "Introduction to Basic Arithmetic Operations",
-    gradeLevel: "Grade 3",
-    subject: "Mathematics",
-    type: "Textbooks",
-  },
-  {
-    topic: "Introduction to Algebra",
-    description: "Introduction to Basic Arithmetic Operations",
-    gradeLevel: "Grade 3",
-    subject: "Mathematics",
-    type: "Textbooks",
-  },
-  {
-    topic: "Introduction to Algebra",
-    description: "Introduction to Basic Arithmetic Operations",
-    gradeLevel: "Grade 3",
-    subject: "Mathematics",
-    type: "Textbooks",
-  },
-  {
-    topic: "Introduction to Algebra",
-    description: "Introduction to Basic Arithmetic Operations",
-    gradeLevel: "Grade 3",
-    subject: "Mathematics",
-    type: "Textbooks",
-  },
-  {
-    topic: "Introduction to Algebra",
-    description: "Introduction to Basic Arithmetic Operations",
-    gradeLevel: "Grade 3",
-    subject: "Mathematics",
-    type: "Textbooks",
-  },
-  {
-    topic: "Introduction to Algebra",
-    description: "Introduction to Basic Arithmetic Operations",
-    gradeLevel: "Grade 3",
-    subject: "Mathematics",
-    type: "Textbooks",
-  },
-  {
-    topic: "Introduction to Polynomials",
-    description: "Introduction to Basic Arithmetic Operations",
-    gradeLevel: "Grade 3",
-    subject: "Mathematics",
-    type: "Textbooks",
-  },
-  {
-    topic: "Introduction to Binomials",
-    description: "Introduction to Basic Arithmetic Operations",
-    gradeLevel: "Grade 3",
-    subject: "Mathematics",
-    type: "Textbooks",
-  },
-  {
-    topic: "Introduction to Trinomials",
-    description: "Introduction to Basic Arithmetic Operations",
-    gradeLevel: "Grade 3",
-    subject: "Mathematics",
-    type: "Textbooks",
-  },
-  {
-    topic: "Introduction to FOIL method",
-    description: "Introduction to Basic Arithmetic Operations",
-    gradeLevel: "Grade 3",
-    subject: "Mathematics",
-    type: "Videos",
-  },
-  {
-    topic: "Introduction to SMILE method",
-    description: "Introduction to Basic Arithmetic Operations",
-    gradeLevel: "Grade 3",
-    subject: "Mathematics",
-    type: "Videos",
-  },
-  {
-    topic: "Introduction to SMILE method",
-    description: "Introduction to Basic Arithmetic Operations",
-    gradeLevel: "Grade 3",
-    subject: "Mathematics",
-    type: "Videos",
-  },
-  {
-    topic: "Introduction to SMILE method",
-    description: "Introduction to Basic Arithmetic Operations",
-    gradeLevel: "Grade 3",
-    subject: "Mathematics",
-    type: "Videos",
-  },
-  {
-    topic: "Plant Biology",
-    description: "Study of plant structure and function",
-    gradeLevel: "Grade 3",
-    subject: "Science",
-    type: "Textbooks",
-  },
-  {
-    topic: "English Grammar",
-    description: "Fundamentals of English grammar",
-    gradeLevel: "Grade 3",
-    subject: "English",
-    type: "Textbooks",
-  },
-  // Add details for other grades similarly...
-];
+import iLeaRNService from "../../services/iLearn-services"; // Adjust the import path based on your structure
 
 export default function Materials() {
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const grade = queryParams.get("grade");
-  const subject = queryParams.get("subject");
-  const type = queryParams.get("type");
+  const [searchParams] = useSearchParams();
+  const gradeLevel = searchParams.get("gradeLevel");
+  const learningArea = searchParams.get("learningArea");
+  const resourceType = searchParams.get("resourceType");
 
-  console.log("Grade:", grade);
-  console.log("Subject:", subject);
-  console.log("Type:", type);
+  const [materials, setMaterials] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredMaterials = materialsTopics.filter(
-    (material) =>
-      material.gradeLevel === grade &&
-      material.subject === subject &&
-      material.type === type
-  );
+  useEffect(() => {
+    const fetchMaterials = async () => {
+      try {
+        const response = await iLeaRNService.getFilteredMetadata({
+          gradeLevel,
+          learningArea,
+          resourceType,
+        });
+        const allMaterials = response.data || []; // Ensure there's data
+        setMaterials(allMaterials);
+        console.log("Fetched Materials:", allMaterials); // Log fetched materials
+      } catch (error) {
+        console.error("Error fetching materials", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  console.log("Filtered Materials:", filteredMaterials);
+    fetchMaterials();
+  }, [gradeLevel, learningArea, resourceType]);
+
+  // Log filtered materials
+  useEffect(() => {
+    console.log("Filtered Materials:", materials);
+  }, [materials]);
+
+  if (loading) {
+    return <div>Loading...</div>; // Optional loading state
+  }
+
+  // Filter materials based on selected parameters
+  const filteredMaterials = materials.filter((material) => {
+    return (
+      (gradeLevel ? material.gradeLevel === Number(gradeLevel) : true) &&
+      (learningArea ? material.learningArea === learningArea : true) &&
+      (resourceType ? material.resourceType === resourceType : true)
+    );
+  });
 
   return (
     <Box sx={{ overflow: "auto" }}>
-      <Box>
+      <Box sx={{ backgroundColor: "#383838" }}>
         <Breadcrumbs
           aria-label="breadcrumb"
-          separator=">"
-          sx={{ paddingTop: 3, paddingBottom: 3, paddingLeft: 2.5 }}
+          separator="/"
+          sx={{
+            paddingTop: 3,
+            paddingBottom: 3,
+            paddingLeft: 2.5,
+            color: "white",
+          }}
         >
-          <Typography color="inherit" href="/portal">
+          <Typography
+            sx={{
+              fontFamily: "Fira Sans Condensed",
+              fontWeight: "bold",
+              color: "white",
+            }}
+            href="/portal"
+          >
             Portal
           </Typography>
-          <Typography color="inherit" href={`/portal/grade/${grade}`}>
-            {grade}
+          <Typography
+            sx={{
+              fontFamily: "Fira Sans Condensed",
+              fontWeight: "bold",
+              color: "white",
+            }}
+            href={`/portal/grade/${gradeLevel}`}
+          >
+            {`Grade ${gradeLevel}`}
           </Typography>
-          <Typography color="inherit" href={`/portal/subject/${subject}`}>
-            {subject}
+          <Typography
+            sx={{
+              fontFamily: "Fira Sans Condensed",
+              fontWeight: "bold",
+              color: "white",
+            }}
+            href={`/portal/subject/${learningArea}`}
+          >
+            {learningArea}
           </Typography>
-          <Typography color="textPrimary">{type}</Typography>
+          <Typography
+            sx={{
+              fontFamily: "Fira Sans Condensed",
+              fontWeight: "bold",
+              color: "white",
+            }}
+            href={`/portal/type/${resourceType || "any type"}`}
+          >
+            {resourceType || "Other Materials"}
+          </Typography>
         </Breadcrumbs>
       </Box>
 
-      <Box sx={{ display: "flex", alignItems: "center", paddingLeft: 2.5 }}>
-        <AiFillDatabase style={{ fontSize: 21 }} />
-        <Box sx={{ display: "flex", gap: 68 }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          paddingLeft: 2.5,
+          backgroundColor: "#383838",
+        }}
+      >
+        <AiFillDatabase style={{ fontSize: 21, color: "white" }} />
+        <Box sx={{ display: "flex", gap: { lg: 68, xl: 120 } }}>
           <Typography
             variant="h6"
-            sx={{ paddingLeft: 1, display: "flex", alignItems: "center" }}
+            sx={{
+              paddingLeft: 1,
+              display: "flex",
+              alignItems: "center",
+              color: "white",
+            }}
           >
             Materials
           </Typography>
@@ -220,43 +145,48 @@ export default function Materials() {
             variant="outlined"
             InputProps={{
               endAdornment: (
-                <InputAdornment>
+                <InputAdornment position="end">
                   <CiSearch style={{ fontSize: 21 }} />
                 </InputAdornment>
               ),
             }}
             size="small"
             sx={{
+              padding: 1,
               "& .MuiOutlinedInput-root": {
-                bgcolor: "#white", // Darker background color
+                bgcolor: "white",
                 "& fieldset": {
-                  borderColor: "#555", // Darker border color
+                  borderColor: "#555",
                 },
                 "&:hover fieldset": {
-                  borderColor: "#777", // Darker border on hover
+                  borderColor: "#777",
                 },
                 "&.Mui-focused fieldset": {
-                  borderColor: "#999", // Darker border when focused
+                  borderColor: "#999",
                 },
               },
-              color: "white", // Change text color
+              color: "white",
             }}
           />
         </Box>
       </Box>
 
-      <List sx={{ paddingLeft: 3 }}>
-        {filteredMaterials.map((material, index) => (
-          <ListItem key={index} sx={{ borderTop: "solid 1px black" }}>
+      <List>
+        {filteredMaterials.map((material) => (
+          <ListItem key={material.id} sx={{ borderBottom: "solid 1px black" }}>
             <FcDocument style={{ fontSize: "40", paddingRight: 10 }} />
             <ListItemText>
               <Typography
-                sx={{ fontFamily: "Fira Sans Condensed", fontWeight: "bold" }}
+                sx={{
+                  fontFamily: "Fira Sans Condensed",
+                  fontWeight: "bold",
+                  fontSize: 21,
+                }}
               >
-                {material.topic}
+                {material.title}
               </Typography>
               <Typography sx={{ fontFamily: "Fira Sans Condensed" }}>
-                {material.description}
+                {material.topicContent}
               </Typography>
               <Typography
                 sx={{
@@ -266,8 +196,22 @@ export default function Materials() {
                   gap: 3,
                 }}
               >
-                <Typography>{material.gradeLevel}</Typography>
-                <Typography>{material.subject}</Typography>
+                <Typography>{`Grade ${material.gradeLevel}`}</Typography>
+                <Typography sx={{ fontFamily: "Fira Sans Condensed" }}>
+                  {material.learningArea}
+                </Typography>
+              </Typography>
+              <Typography
+                sx={{
+                  fontFamily: "Fira Sans Condensed",
+                  fontWeight: "bold",
+                  color: "black",
+                  display: "flex",
+                  gap: 3,
+                  fontSize: 11,
+                }}
+              >
+                {`Published at ${material.uploaded_at}`}
               </Typography>
             </ListItemText>
             <Box

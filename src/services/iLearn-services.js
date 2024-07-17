@@ -24,9 +24,22 @@ function getAllSchools() {
   return axios.get(`${BASE_URL}/iLeaRN/getAllSchools`).then((res) => res.data);
 }
 
+function getFilteredMetadata(gradeLevel, learningArea, resourceType, search) {
+  const params = new URLSearchParams();
+  if (gradeLevel) params.append("gradeLevel", gradeLevel);
+  if (learningArea) params.append("learningArea", learningArea);
+  if (resourceType) params.append("resourceType", resourceType);
+  if (search) params.append("search", search);
+
+  return axios
+    .get(`${BASE_URL}/iLeaRN/getFilteredMetadata`, { params })
+    .then((res) => res.data);
+}
+
 export default {
   getAllMetadata,
   bulkUploadMetadata,
+  getFilteredMetadata,
   getAllOffices,
   getAllSchools,
 };

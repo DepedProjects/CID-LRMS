@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import {
@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+import { GiPerspectiveDiceSixFacesRandom } from "react-icons/gi";
 import { FcList } from "react-icons/fc";
 import { SiOpslevel } from "react-icons/si";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -19,50 +20,70 @@ import { FaBook } from "react-icons/fa";
 import { FaVideo } from "react-icons/fa6";
 import { PiPresentationChartFill } from "react-icons/pi";
 import { RiBook3Fill } from "react-icons/ri";
-
-const gradeLevels = [
-  { name: "Grade 1", subjects: ["Mathematics", "Science", "English"] },
-  { name: "Grade 2", subjects: ["Mathematics", "Science", "English"] },
-  { name: "Grade 3", subjects: ["Mathematics", "Science", "English"] },
-  { name: "Grade 4", subjects: ["Mathematics", "Science", "English"] },
-  { name: "Grade 5", subjects: ["Mathematics", "Science", "English"] },
-  { name: "Grade 6", subjects: ["Mathematics", "Science", "English"] },
-  { name: "Grade 7", subjects: ["Mathematics", "Science", "English"] },
-  { name: "Grade 8", subjects: ["Mathematics", "Science", "English"] },
-  { name: "Grade 9", subjects: ["Mathematics", "Science", "English"] },
-  { name: "Grade 10", subjects: ["Mathematics", "Science", "English"] },
-];
-
-const materialsData = {
-  Mathematics: { Textbooks: 5, Videos: 3, Presentations: 2 },
-  Science: { Textbooks: 4, Videos: 4, Presentations: 1 },
-  English: { Textbooks: 6, Videos: 2, Presentations: 3 },
-};
+import iLeaRNService from "../../services/iLearn-services"; // Adjust the import path based on your structure
 
 export default function Portal() {
   const [openGrades, setOpenGrades] = useState({});
-  const [openSubjects, setOpenSubjects] = useState({});
+  const [openLearningAreas, setOpenLearningAreas] = useState({});
+  const [gradeLevels, setGradeLevels] = useState([]);
+  const [materialsData, setMaterialsData] = useState({});
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const handleGradeClick = (grade) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await iLeaRNService.getFilteredMetadata(); // Fetch all metadata or adjust as necessary
+        console.log("Response from backend:", response.data); // Log the response data
+        const fetchedGradeLevels = [
+          ...new Set(response.data.map((item) => item.gradeLevel)),
+        ]; // Extract unique grade levels
+        const fetchedMaterialsData = {}; // Initialize materials data object
+
+        response.data.forEach((item) => {
+          if (!fetchedMaterialsData[item.learningArea]) {
+            fetchedMaterialsData[item.learningArea] = {};
+          }
+          const resourceType = item.resourceType || "Other"; // Default to 'Other' if not provided
+          fetchedMaterialsData[item.learningArea][resourceType] =
+            (fetchedMaterialsData[item.learningArea][resourceType] || 0) + 1;
+        });
+
+        setGradeLevels(fetchedGradeLevels);
+        setMaterialsData(fetchedMaterialsData);
+      } catch (error) {
+        console.error("Error fetching data", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleGradeClick = (gradeLevel) => {
     setOpenGrades((prevState) => ({
       ...prevState,
-      [grade]: !prevState[grade],
+      [gradeLevel]: !prevState[gradeLevel],
     }));
   };
 
-  const handleSubjectClick = (subject) => {
-    setOpenSubjects((prevState) => ({
+  const handleLearningAreaClick = (learningArea) => {
+    setOpenLearningAreas((prevState) => ({
       ...prevState,
-      [subject]: !prevState[subject],
+      [learningArea]: !prevState[learningArea],
     }));
   };
 
-  const handleMaterialClick = (grade, subject, materialType) => {
+  const handleMaterialClick = (gradeLevel, learningArea, resourceType) => {
     navigate(
-      `/Portal/materials?grade=${grade}&subject=${subject}&type=${materialType}`
+      `/Portal/materials?gradeLevel=${gradeLevel}&learningArea=${learningArea}&type=${resourceType}`
     );
   };
+
+  if (loading) {
+    return <div>Loading...</div>; // Optional loading state
+  }
 
   return (
     <Box
@@ -75,13 +96,11 @@ export default function Portal() {
       <Navbar />
       <Box
         sx={{
-          // flex: 1,
           display: "flex",
-          flexDirection: "row", // Changed to row for side-by-side layout
+          flexDirection: "row",
           paddingTop: { xs: 15, sm: 10, md: 12, lg: 10.5, xl: 11 },
           paddingBottom: { xs: 3, sm: 3, md: 4, lg: 0, xl: 0 },
           fontFamily: "Fira Sans Condensed, sans-serif",
-          gap: 0, // Remove gap between side selections and outlet
         }}
       >
         <Box
@@ -94,16 +113,19 @@ export default function Portal() {
             borderRight: "solid 1px black",
           }}
         >
-          <Typography
-            variant="h6"
-            sx={{ padding: 3, display: "flex", alignItems: "center" }}
-          >
-            <FcList style={{ paddingRight: 10, color: "#027ebd" }} />K to 12
-          </Typography>
+          <Box sx={{ background: "#033485" }}>
+            <Typography
+              variant="h6"
+              sx={{ padding: 3, display: "flex", alignItems: "center" }}
+            >
+              <FcList style={{ paddingRight: 10, color: "#027ebd" }} />K to 12
+            </Typography>
+          </Box>
+
           <List>
-            {gradeLevels.map((grade) => (
-              <React.Fragment key={grade.name}>
-                <ListItemButton onClick={() => handleGradeClick(grade.name)}>
+            {gradeLevels.map((gradeLevel) => (
+              <React.Fragment key={gradeLevel}>
+                <ListItemButton onClick={() => handleGradeClick(gradeLevel)}>
                   <ListItemAvatar>
                     <SiOpslevel
                       style={{ color: "#027ebd", fontSize: 21, paddingLeft: 7 }}
@@ -111,22 +133,22 @@ export default function Portal() {
                   </ListItemAvatar>
                   <ListItemText>
                     <Typography sx={{ fontFamily: "Fira Sans Condensed" }}>
-                      {grade.name}
+                      {`Grade ${gradeLevel}`}
                     </Typography>
                   </ListItemText>
-                  {openGrades[grade.name] ? <ExpandLess /> : <ExpandMore />}
+                  {openGrades[gradeLevel] ? <ExpandLess /> : <ExpandMore />}
                 </ListItemButton>
                 <Collapse
-                  in={openGrades[grade.name]}
+                  in={openGrades[gradeLevel]}
                   timeout="auto"
                   unmountOnExit
                 >
                   <List component="div" disablePadding>
-                    {grade.subjects.map((subject) => (
-                      <React.Fragment key={subject}>
+                    {Object.keys(materialsData).map((learningArea) => (
+                      <React.Fragment key={learningArea}>
                         <ListItemButton
                           sx={{ pl: 4 }}
-                          onClick={() => handleSubjectClick(subject)}
+                          onClick={() => handleLearningAreaClick(learningArea)}
                         >
                           <ListItemAvatar>
                             <RiBook3Fill
@@ -141,36 +163,36 @@ export default function Portal() {
                                 fontWeight: "bold",
                               }}
                             >
-                              {subject}
+                              {learningArea}
                             </Typography>
                           </ListItemText>
-                          {openSubjects[subject] ? (
+                          {openLearningAreas[learningArea] ? (
                             <ExpandLess />
                           ) : (
                             <ExpandMore />
                           )}
                         </ListItemButton>
                         <Collapse
-                          in={openSubjects[subject]}
+                          in={openLearningAreas[learningArea]}
                           timeout="auto"
                           unmountOnExit
                         >
                           <List component="div" disablePadding>
-                            {Object.keys(materialsData[subject]).map(
-                              (materialType) => (
+                            {Object.keys(materialsData[learningArea]).map(
+                              (resourceType) => (
                                 <ListItemButton
-                                  key={materialType}
+                                  key={resourceType}
                                   sx={{ pl: 8 }}
                                   onClick={() =>
                                     handleMaterialClick(
-                                      grade.name,
-                                      subject,
-                                      materialType
+                                      gradeLevel,
+                                      learningArea,
+                                      resourceType
                                     )
                                   }
                                 >
                                   <ListItemAvatar>
-                                    {materialType === "Textbooks" && (
+                                    {resourceType === "Learning Material" && (
                                       <FaBook
                                         style={{
                                           fontSize: 24,
@@ -178,7 +200,7 @@ export default function Portal() {
                                         }}
                                       />
                                     )}
-                                    {materialType === "Videos" && (
+                                    {resourceType === "Modules" && (
                                       <FaVideo
                                         style={{
                                           fontSize: 24,
@@ -186,8 +208,17 @@ export default function Portal() {
                                         }}
                                       />
                                     )}
-                                    {materialType === "Presentations" && (
+                                    {resourceType ===
+                                      "Self-Learning Modules" && (
                                       <PiPresentationChartFill
+                                        style={{
+                                          fontSize: 24,
+                                          color: "#e68405",
+                                        }}
+                                      />
+                                    )}
+                                    {resourceType === "Other Materials" && (
+                                      <GiPerspectiveDiceSixFacesRandom
                                         style={{
                                           fontSize: 24,
                                           color: "#e68405",
@@ -204,15 +235,21 @@ export default function Portal() {
                                           width: "90px",
                                         }}
                                       >
-                                        {materialType}
+                                        {resourceType}
                                       </Typography>
                                       <Typography
                                         sx={{
                                           fontFamily: "Fira Sans Condensed",
                                           fontSize: 14,
                                           fontWeight: "bold",
+                                          display: "flex",
+                                          alignItems: "center",
                                         }}
-                                      >{`${materialsData[subject][materialType]}`}</Typography>
+                                      >{`${
+                                        materialsData[learningArea][
+                                          resourceType
+                                        ] || 0
+                                      }`}</Typography>
                                     </Box>
                                   </ListItemText>
                                 </ListItemButton>
@@ -232,7 +269,7 @@ export default function Portal() {
           sx={{
             display: "flex",
             flexDirection: "column",
-            width: "70%", // Adjusted width for better layout
+            width: "70%",
             overflow: "auto",
             height: "100vh",
           }}
@@ -240,8 +277,7 @@ export default function Portal() {
           <Outlet />
         </Box>
       </Box>
-      <Footer sx={{ marginTop: 0 }} />{" "}
-      {/* Ensure no margin at the top of the footer */}
+      <Footer sx={{ marginTop: 0 }} />
     </Box>
   );
 }
