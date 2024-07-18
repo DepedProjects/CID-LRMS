@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import SelectImage from "../../assets/images/achievements.jpg";
 import {
   Box,
   Typography,
@@ -33,18 +34,18 @@ export default function Portal() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await iLeaRNService.getFilteredMetadata(); // Fetch all metadata or adjust as necessary
-        console.log("Response from backend:", response.data); // Log the response data
+        const response = await iLeaRNService.getFilteredMetadata();
+        console.log("Response from backend:", response.data);
         const fetchedGradeLevels = [
           ...new Set(response.data.map((item) => item.gradeLevel)),
-        ]; // Extract unique grade levels
-        const fetchedMaterialsData = {}; // Initialize materials data object
+        ];
+        const fetchedMaterialsData = {};
 
         response.data.forEach((item) => {
           if (!fetchedMaterialsData[item.learningArea]) {
             fetchedMaterialsData[item.learningArea] = {};
           }
-          const resourceType = item.resourceType || "Other"; // Default to 'Other' if not provided
+          const resourceType = item.resourceType || "Other";
           fetchedMaterialsData[item.learningArea][resourceType] =
             (fetchedMaterialsData[item.learningArea][resourceType] || 0) + 1;
         });
@@ -75,11 +76,41 @@ export default function Portal() {
     }));
   };
 
-  const handleMaterialClick = (gradeLevel, learningArea, resourceType) => {
-    navigate(
-      `/Portal/materials?gradeLevel=${gradeLevel}&learningArea=${learningArea}&type=${resourceType}`
-    );
+  const handleMaterialClick = async (
+    gradeLevel,
+    learningArea,
+    resourceType
+  ) => {
+    // navigate(
+    //   `/Portal/materials?gradeLevel=${gradeLevel}&learningArea=${learningArea}&type=${resourceType}`
+    // );
+    try {
+      const response = await iLeaRNService.getFilteredMetadata({
+        gradeLevel,
+        learningArea,
+        resourceType,
+      });
+      const allMaterials = response.data || []; // Ensure there's data
+      console.log("Fetched Materials:", allMaterials); // Log fetched materials
+
+      navigate(`/Portal/materials`, {
+        state: {
+          gradeLevel,
+          learningArea,
+          resourceType,
+          allMaterials,
+        },
+      });
+    } catch (error) {
+      console.error("Error fetching materials", error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  useEffect(() => {
+    handleMaterialClick();
+  }, []);
 
   if (loading) {
     return <div>Loading...</div>; // Optional loading state
@@ -113,12 +144,25 @@ export default function Portal() {
             borderRight: "solid 1px black",
           }}
         >
-          <Box sx={{ background: "#033485" }}>
+          <Box
+            sx={{
+              background: `url(${SelectImage})`,
+              backgroundSize: "cover", // Ensures the background image covers the container
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat", // Prevent repeating
+              // backgroundAttachment: "fixed",
+            }}
+          >
             <Typography
               variant="h6"
-              sx={{ padding: 3, display: "flex", alignItems: "center" }}
+              sx={{
+                padding: 3,
+                display: "flex",
+                alignItems: "center",
+                color: "white",
+              }}
             >
-              <FcList style={{ paddingRight: 10, color: "#027ebd" }} />K to 12
+              <FcList style={{ paddingRight: 10, color: "white" }} />K to 12
             </Typography>
           </Box>
 

@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import React, { useEffect, useState, useMemo } from "react";
+import { useLocation, useSearchParams } from "react-router-dom";
+import debounce from "lodash/debounce";
 import { FcDocument } from "react-icons/fc";
 import { AiFillDatabase } from "react-icons/ai";
 import { CiSearch } from "react-icons/ci";
@@ -14,112 +15,55 @@ import {
   TextField,
   InputAdornment,
 } from "@mui/material";
-import iLeaRNService from "../../services/iLearn-services"; // Adjust the import path based on your structure
+// import iLeaRNService from "../../services/iLearn-services"; // Adjust the import path based on your structure
 
 export default function Materials() {
-  const [searchParams] = useSearchParams();
-  const gradeLevel = searchParams.get("gradeLevel");
-  const learningArea = searchParams.get("learningArea");
-  const resourceType = searchParams.get("resourceType");
+  const location = useLocation();
+  const { gradeLevel, learningArea, resourceType, allMaterials } =
+    location.state || {};
 
-  const [materials, setMaterials] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const materials = allMaterials || [];
+  const [search, setSearch] = useState("");
+  const [result, setResult] = useState([]);
+
+  // Debounce the search input to improve performance
+  const debouncedSearch = useMemo(
+    () => debounce((query) => setSearch(query), 300),
+    []
+  );
 
   useEffect(() => {
-    const fetchMaterials = async () => {
-      try {
-        const response = await iLeaRNService.getFilteredMetadata({
-          gradeLevel,
-          learningArea,
-          resourceType,
-        });
-        const allMaterials = response.data || []; // Ensure there's data
-        setMaterials(allMaterials);
-        console.log("Fetched Materials:", allMaterials); // Log fetched materials
-      } catch (error) {
-        console.error("Error fetching materials", error);
-      } finally {
-        setLoading(false);
-      }
+    // Cleanup function for debouncing
+    return () => {
+      debouncedSearch.cancel();
     };
+  }, [debouncedSearch]);
 
-    fetchMaterials();
-  }, [gradeLevel, learningArea, resourceType]);
-
-  // Log filtered materials
   useEffect(() => {
-    console.log("Filtered Materials:", materials);
-  }, [materials]);
+    const searchTerm = search.trim().toLowerCase();
 
-  if (loading) {
-    return <div>Loading...</div>; // Optional loading state
-  }
+    if (searchTerm) {
+      setResult(
+        materials.filter((material) =>
+          material.title.toLowerCase().includes(searchTerm)
+        )
+      );
+    } else {
+      setResult(materials);
+    }
+  }, [search, materials]);
 
   // Filter materials based on selected parameters
-  const filteredMaterials = materials.filter((material) => {
-    return (
-      (gradeLevel ? material.gradeLevel === Number(gradeLevel) : true) &&
-      (learningArea ? material.learningArea === learningArea : true) &&
-      (resourceType ? material.resourceType === resourceType : true)
-    );
-  });
+  // const filteredMaterials = materials.filter((material) => {
+  //   return (
+  //     (gradeLevel ? material.gradeLevel === Number(gradeLevel) : true) &&
+  //     (learningArea ? material.learningArea === learningArea : true) &&
+  //     (resourceType ? material.resourceType === resourceType : true)
+  //   );
+  // });
 
   return (
     <Box sx={{ overflow: "auto" }}>
-      <Box sx={{ backgroundColor: "#383838" }}>
-        <Breadcrumbs
-          aria-label="breadcrumb"
-          separator="/"
-          sx={{
-            paddingTop: 3,
-            paddingBottom: 3,
-            paddingLeft: 2.5,
-            color: "white",
-          }}
-        >
-          <Typography
-            sx={{
-              fontFamily: "Fira Sans Condensed",
-              fontWeight: "bold",
-              color: "white",
-            }}
-            href="/portal"
-          >
-            Portal
-          </Typography>
-          <Typography
-            sx={{
-              fontFamily: "Fira Sans Condensed",
-              fontWeight: "bold",
-              color: "white",
-            }}
-            href={`/portal/grade/${gradeLevel}`}
-          >
-            {`Grade ${gradeLevel}`}
-          </Typography>
-          <Typography
-            sx={{
-              fontFamily: "Fira Sans Condensed",
-              fontWeight: "bold",
-              color: "white",
-            }}
-            href={`/portal/subject/${learningArea}`}
-          >
-            {learningArea}
-          </Typography>
-          <Typography
-            sx={{
-              fontFamily: "Fira Sans Condensed",
-              fontWeight: "bold",
-              color: "white",
-            }}
-            href={`/portal/type/${resourceType || "any type"}`}
-          >
-            {resourceType || "Other Materials"}
-          </Typography>
-        </Breadcrumbs>
-      </Box>
-
       <Box
         sx={{
           display: "flex",
@@ -150,6 +94,8 @@ export default function Materials() {
                 </InputAdornment>
               ),
             }}
+            onChange={(evt) => setSearch(evt.target.value)}
+            value={search}
             size="small"
             sx={{
               padding: 1,
@@ -172,7 +118,7 @@ export default function Materials() {
       </Box>
 
       <List>
-        {filteredMaterials.map((material) => (
+        {result.map((material) => (
           <ListItem key={material.id} sx={{ borderBottom: "solid 1px black" }}>
             <FcDocument style={{ fontSize: "40", paddingRight: 10 }} />
             <ListItemText>

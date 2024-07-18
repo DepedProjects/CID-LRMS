@@ -5,31 +5,17 @@ const StateContext = createContext();
 
 export function ContextProvider({ children }) {
   const [auth, setAuth] = useState(null);
-  const [isMainLanding, setIsMainLanding] = useState(false);
-  const [closeMenus, setCloseMenus] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("");
+
+  const [page, setPage] = useState("");
 
   const contextValue = useMemo(
     () => ({
       auth,
       setAuth,
-      isMainLanding,
-      setIsMainLanding,
-      closeMenus,
-      setCloseMenus,
-      selectedCategory,
-      setSelectedCategory,
+      page,
+      setPage,
     }),
-    [
-      auth,
-      setAuth,
-      isMainLanding,
-      setIsMainLanding,
-      closeMenus,
-      setCloseMenus,
-      selectedCategory,
-      setSelectedCategory,
-    ]
+    [auth, setAuth, page, setPage]
   );
 
   return (
