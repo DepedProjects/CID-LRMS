@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
-import dayjs from "dayjs";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import debounce from "lodash/debounce";
 import { FcDocument } from "react-icons/fc";
 import { AiFillDatabase } from "react-icons/ai";
@@ -11,6 +10,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Breadcrumbs,
   Button,
   TextField,
   InputAdornment,
@@ -25,10 +25,6 @@ export default function Materials() {
   const materials = allMaterials || [];
   const [search, setSearch] = useState("");
   const [result, setResult] = useState([]);
-
-  const formattedDate = dayjs(materials.uploaded_at).format(
-    "YYYY-MM-DD hh:mm A"
-  );
 
   // Debounce the search input to improve performance
   const debouncedSearch = useMemo(
@@ -161,7 +157,7 @@ export default function Materials() {
                   fontSize: 11,
                 }}
               >
-                {`Published at ${formattedDate}`}
+                {`Published at ${material.uploaded_at}`}
               </Typography>
             </ListItemText>
             <Box

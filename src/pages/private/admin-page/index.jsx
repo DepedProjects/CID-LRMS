@@ -10,7 +10,7 @@ import {
 
 // import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 // import CancelIcon from "@mui/icons-material/Cancel";
-import { useStateContext } from "../../../contexts/ContextProvider";
+// import { useStateContext } from "../../../contexts/ContextProvider";
 // import ilearnService from "../../../services/account-service";
 import ilearnDataService from "../../../services/iLearn-services";
 // import dayjs from "dayjs";
@@ -20,14 +20,13 @@ import PromptModal from "../../../modals/PromptModal";
 // import StatBox from "../../../components/Statbox";
 
 export default function Metadatas() {
-  const { auth } = useStateContext();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   // const [start, setStart] = useState(null);
   // const [end, setEnd] = useState(null);
 
-  const [fileName, setFileName] = useState("");
+  const [setFileName] = useState("");
   const [fileBlob, setFileBlob] = useState(null);
   const [openPromptModal, setOpenPromptModal] = useState(false);
   const [promptMssg, setPromptMssg] = useState([]);
@@ -142,32 +141,6 @@ export default function Metadatas() {
         open={openPromptModal}
         prompt={promptMssg}
       />
-      <Box>
-        <Typography
-          sx={{
-            textAlign: "left",
-            fontSize: "20px",
-            fontWeight: "bold",
-            color: "white",
-          }}
-        >
-          {auth?.role === "admin"
-            ? "Welcome to the SDOIC - Learning Resource Data Management System!"
-            : "Welcome to the SDOIC-CSM Data and Report Generation System!"}
-        </Typography>
-        <Typography
-          sx={{
-            textAlign: "left",
-            fontSize: "15px",
-
-            color: "white",
-            mt: 2,
-            mb: 2,
-          }}
-        >
-          {auth?.role === "admin" ? "Administrator" : auth?.officeName}
-        </Typography>
-      </Box>
       <Box
         borderRadius="10px"
         boxShadow="3px 2px 15px 3px rgba(100, 100, 100, 0.8)"
