@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 export default function Navbar() {
   const [openMenu, setOpenMenu] = useState(false);
   const [openProfileMenu, setOpenProfileMenu] = useState(false);
+  const [openPortalMenu, setOpenPortalMenu] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isMediumScreen = useMediaQuery("(max-width: 1366px)");
   const { auth, setAuth } = useStateContext();
@@ -32,9 +33,26 @@ export default function Navbar() {
     navigate("/"); // Replace with your desired path
   };
 
+  const handleopenKTO12 = () => {
+    navigate("/Portal");
+  };
+
+  const handleopenALS = () => {
+    navigate("/ALS");
+  };
+
+  const portalOptions = [
+    { text: "ALS", action: handleopenALS },
+    { text: "K TO 12", action: handleopenKTO12 },
+  ];
+
   const menuOptions = [
     "About Us",
-    { text: "Portal", action: () => navigate("/Portal") },
+    {
+      text: "Portal",
+      action: () => setOpenPortalMenu(!openPortalMenu),
+      hasDropdown: true,
+    },
     "Project and Activities",
     {
       text: "Library",
@@ -136,17 +154,35 @@ export default function Navbar() {
           <Drawer anchor="right" open={openMenu} onClose={handleDrawerClose}>
             <List sx={{ width: 250 }}>
               {menuOptions.map((option, index) => (
-                <ListItem
-                  button
-                  key={index}
-                  onClick={
-                    typeof option === "string"
-                      ? handleDrawerClose
-                      : option.action
-                  }
-                >
-                  <ListItemText primary={option.text} />
-                </ListItem>
+                <React.Fragment key={index}>
+                  <ListItem
+                    button
+                    onClick={
+                      typeof option === "string"
+                        ? handleDrawerClose
+                        : option.action
+                    }
+                  >
+                    <ListItemText primary={option.text} />
+                  </ListItem>
+                  {option.hasDropdown && openPortalMenu && (
+                    <List component="div" disablePadding>
+                      {portalOptions.map((portalOption, portalIndex) => (
+                        <ListItem
+                          button
+                          key={portalIndex}
+                          onClick={() => {
+                            portalOption.action();
+                            setOpenPortalMenu(false);
+                          }}
+                          sx={{ pl: 4 }}
+                        >
+                          <ListItemText primary={portalOption.text} />
+                        </ListItem>
+                      ))}
+                    </List>
+                  )}
+                </React.Fragment>
               ))}
               <ListItem button onClick={handleDrawerClose}></ListItem>
             </List>
@@ -164,28 +200,63 @@ export default function Navbar() {
           }}
         >
           {menuOptions.map((option, index) => (
-            <Typography
-              key={index}
-              onClick={
-                typeof option === "string"
-                  ? () => {} // Handle regular menu items
-                  : option.action
-              }
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontFamily: "Fira Sans Condensed",
-                fontSize: isMediumScreen ? 16 : 21,
-                "&:hover": {
-                  color: "cyan",
-                  cursor: "pointer",
-                  textShadow: "0 0 5px cyan, 0 0 10px cyan, 0 0 20px cyan",
-                },
-              }}
-            >
-              {typeof option === "string" ? option : option.text}
-            </Typography>
+            <Box key={index} sx={{ position: "relative" }}>
+              <Typography
+                onClick={
+                  typeof option === "string"
+                    ? () => {} // Handle regular menu items
+                    : option.action
+                }
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontFamily: "Fira Sans Condensed",
+                  fontSize: isMediumScreen ? 16 : 21,
+                  "&:hover": {
+                    color: "cyan",
+                    cursor: "pointer",
+                    textShadow: "0 0 5px cyan, 0 0 10px cyan, 0 0 20px cyan",
+                  },
+                }}
+              >
+                {typeof option === "string" ? option : option.text}
+              </Typography>
+              {option.hasDropdown && openPortalMenu && (
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: "100%",
+                    left: 0,
+                    backgroundColor: "white",
+                    boxShadow: 3,
+                    zIndex: 1000,
+                    color: "black",
+                  }}
+                >
+                  {portalOptions.map((portalOption, portalIndex) => (
+                    <Typography
+                      key={portalIndex}
+                      onClick={() => {
+                        portalOption.action();
+                        setOpenPortalMenu(false);
+                      }}
+                      sx={{
+                        padding: "8px 16px",
+                        color: "black",
+                        width: "100px",
+                        "&:hover": {
+                          backgroundColor: "lightgray",
+                          cursor: "pointer",
+                        },
+                      }}
+                    >
+                      {portalOption.text}
+                    </Typography>
+                  ))}
+                </Box>
+              )}
+            </Box>
           ))}
           <IconButton sx={{ color: "white" }} onClick={handleProfileOpen}>
             <AccountCircleIcon sx={{ fontSize: 36 }} />

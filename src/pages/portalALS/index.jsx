@@ -23,7 +23,7 @@ import { PiPresentationChartFill } from "react-icons/pi";
 import { RiBook3Fill } from "react-icons/ri";
 import iLeaRNService from "../../services/iLearn-services"; // Adjust the import path based on your structure
 
-export default function Portal() {
+export default function PortalALS() {
   const [openGrades, setOpenGrades] = useState({});
   const [openLearningAreas, setOpenLearningAreas] = useState({});
   const [gradeLevels, setGradeLevels] = useState([]);

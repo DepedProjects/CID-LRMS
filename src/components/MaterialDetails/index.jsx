@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState, useMemo } from "react";
 import dayjs from "dayjs";
 import { useLocation } from "react-router-dom";
@@ -25,6 +27,8 @@ export default function Materials() {
   const materials = allMaterials || [];
   const [search, setSearch] = useState("");
   const [result, setResult] = useState([]);
+
+  // console.log("materials:", materials);
 
   const formattedDate = dayjs(materials.uploaded_at).format(
     "YYYY-MM-DD hh:mm A"

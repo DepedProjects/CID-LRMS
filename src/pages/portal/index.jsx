@@ -16,7 +16,7 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import { GiPerspectiveDiceSixFacesRandom } from "react-icons/gi";
 import { FcList } from "react-icons/fc";
 import { SiOpslevel } from "react-icons/si";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { FaBook } from "react-icons/fa";
 import { FaVideo } from "react-icons/fa6";
 import { PiPresentationChartFill } from "react-icons/pi";
@@ -30,6 +30,7 @@ export default function Portal() {
   const [materialsData, setMaterialsData] = useState({});
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -85,13 +86,16 @@ export default function Portal() {
     //   `/Portal/materials?gradeLevel=${gradeLevel}&learningArea=${learningArea}&type=${resourceType}`
     // );
     try {
-      const response = await iLeaRNService.getFilteredMetadata({
+      const response = await iLeaRNService.getFilteredMetadata(
         gradeLevel,
         learningArea,
-        resourceType,
-      });
+        resourceType
+      );
       const allMaterials = response.data || []; // Ensure there's data
       console.log("Fetched Materials:", allMaterials); // Log fetched materials
+      console.log("grade level:", gradeLevel);
+      console.log("learning area:", learningArea);
+      console.log("resource type:", resourceType);
 
       navigate(`/Portal/materials`, {
         state: {
@@ -110,7 +114,8 @@ export default function Portal() {
 
   useEffect(() => {
     handleMaterialClick();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname]);
 
   if (loading) {
     return <div>Loading...</div>; // Optional loading state
