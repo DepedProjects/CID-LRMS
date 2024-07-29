@@ -3,21 +3,23 @@ import { Box } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import EditableTable from "../../../../components/admin-components/Table/EditableTable";
 import accountService from "../../../../services/account-service";
-// import ConfirmationModal from "modals/miscellaneous/ConfirmationModal";
+import ConfirmationModal from "../../../../modals/ConfirmationModal";
 
 export default function UserTable({
   data,
   setSelectedData,
   loadingState,
   updateTableFunction,
+  setOpenUpdateModal,
 }) {
   const [selectedUser, setSelectedUser] = useState();
   const [rowToDelete, setRowToDelete] = useState();
+  const [rowToUpdate, setRowToUpdate] = useState();
   const [open, setOpen] = useState(false);
-  const [promptResponse] = useState(null);
+  const [promptResponse, setPromptResponse] = useState(null);
   const [submit, setSubmit] = useState(false);
-  const [setSubmitKind] = useState("");
-  const [setPromptDesc] = useState("");
+  const [submitKind, setSubmitKind] = useState("");
+  const [promptDesc, setPromptDesc] = useState("");
 
   const [loading, setLoading] = useState(false);
 
@@ -135,14 +137,14 @@ export default function UserTable({
         marginTop: "5px",
       }}
     >
-      {/* <ConfirmationModal
+      <ConfirmationModal
         open={open}
         handleClose={() => setOpen(false)}
         setPromptResponse={setPromptResponse}
         setSubmit={setSubmit}
         submitKind={submitKind}
         promptDesc={promptDesc}
-      /> */}
+      />
       <EditableTable
         data={data}
         columns={columns}
@@ -151,8 +153,11 @@ export default function UserTable({
         singleSelect
         selectedData={setSelectedUser}
         rowToDelete={setRowToDelete}
+        rowToUpdate={setRowToUpdate}
+        setOpenUpdateModal={setOpenUpdateModal}
         height="60vh"
         remove
+        edit
       />
     </Box>
   );

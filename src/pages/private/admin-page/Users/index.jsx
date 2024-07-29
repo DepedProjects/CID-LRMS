@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
-// import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import { Box, Button, Divider, Typography } from "@mui/material";
 import accountService from "../../../../services/account-service";
 import AddUserModal from "../../../../modals/AccountDetails/AddUserModal";
-// import UpdateUserModal from "modals/users/UpdateUserModal";
-// import SnackbarComponent from "components/Snackbar";
 import UserTable from "./UserTable";
 import UpdateUserModal from "../../../../modals/AccountDetails/UpdateUserModal";
 
@@ -123,6 +120,7 @@ export default function Users() {
               setSuccessMessage("User Deleted Successfully!!");
               setOpenSuccess(true);
             }}
+            setOpenUpdateModal={setOpenUpdateModal}
           />
         </Box>
 
@@ -181,12 +179,6 @@ export default function Users() {
           </Box>
         </Box>
       </Box>
-      {/* <SnackbarComponent
-        open={openSuccess}
-        onClose={handleCloseSuccess}
-        severity="success"
-        message={successMessage}
-      /> */}
     </Box>
   );
 }

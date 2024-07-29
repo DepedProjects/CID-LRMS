@@ -32,6 +32,7 @@ export default function EditableTable({
   remove,
   view,
   form,
+  setOpenUpdateModal,
 }) {
   const [rows, setRows] = useState(data);
   const [rowModesModel, setRowModesModel] = useState({});
@@ -114,6 +115,18 @@ export default function EditableTable({
       // setRows(rows.filter((row) => row.id !== id));
       rowToDelete(rows.filter((row) => row.id === id));
     }
+  };
+
+  const handleUpdateClick = (id) => () => {
+    if (rows[0].uid) {
+      // setRows(rows.filter((row) => row.uid !== id));
+      rowToUpdate(rows.filter((row) => row.uid === id));
+    } else if (rows[0].id) {
+      // setRows(rows.filter((row) => row.id !== id));
+      rowToUpdate(rows.filter((row) => row.id === id));
+    }
+
+    setOpenUpdateModal(true);
   };
 
   const handleCancelClick = (id) => () => {
@@ -217,7 +230,7 @@ export default function EditableTable({
                 icon={<EditIcon />}
                 label="Edit"
                 className="textPrimary"
-                onClick={handleEditClick(id)}
+                onClick={handleUpdateClick(id)}
                 color="inherit"
               />
             </Tooltip>

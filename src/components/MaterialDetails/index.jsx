@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState, useMemo } from "react";
 import dayjs from "dayjs";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import debounce from "lodash/debounce";
 import { FcDocument } from "react-icons/fc";
 import { AiFillDatabase } from "react-icons/ai";
@@ -17,10 +17,11 @@ import {
   TextField,
   InputAdornment,
 } from "@mui/material";
-// import iLeaRNService from "../../services/iLearn-services"; // Adjust the import path based on your structure
+import DataNotFound from "../../pages/miscelleaneous/NoData";
 
 export default function Materials() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { gradeLevel, learningArea, resourceType, allMaterials } =
     location.state || {};
 
@@ -60,15 +61,6 @@ export default function Materials() {
       setResult(materials);
     }
   }, [search, materials]);
-
-  // Filter materials based on selected parameters
-  // const filteredMaterials = materials.filter((material) => {
-  //   return (
-  //     (gradeLevel ? material.gradeLevel === Number(gradeLevel) : true) &&
-  //     (learningArea ? material.learningArea === learningArea : true) &&
-  //     (resourceType ? material.resourceType === resourceType : true)
-  //   );
-  // });
 
   return (
     <Box sx={{ overflow: "auto" }}>
@@ -125,80 +117,87 @@ export default function Materials() {
         </Box>
       </Box>
 
-      <List>
-        {result.map((material) => (
-          <ListItem key={material.id} sx={{ borderBottom: "solid 1px black" }}>
-            <FcDocument style={{ fontSize: "40", paddingRight: 10 }} />
-            <ListItemText>
-              <Typography
-                sx={{
-                  fontFamily: "Fira Sans Condensed",
-                  fontWeight: "bold",
-                  fontSize: 21,
-                }}
-              >
-                {material.title}
-              </Typography>
-              <Typography sx={{ fontFamily: "Fira Sans Condensed" }}>
-                {material.topicContent}
-              </Typography>
-              <Typography
-                sx={{
-                  fontFamily: "Fira Sans Condensed",
-                  color: "#014963",
-                  display: "flex",
-                  gap: 3,
-                }}
-              >
-                <Typography>{`Grade ${material.gradeLevel}`}</Typography>
-                <Typography sx={{ fontFamily: "Fira Sans Condensed" }}>
-                  {material.learningArea}
-                </Typography>
-              </Typography>
-              <Typography
-                sx={{
-                  fontFamily: "Fira Sans Condensed",
-                  fontWeight: "bold",
-                  color: "black",
-                  display: "flex",
-                  gap: 3,
-                  fontSize: 11,
-                }}
-              >
-                {`Published at ${formattedDate}`}
-              </Typography>
-            </ListItemText>
-            <Box
-              sx={{ display: "flex", flexDirection: "column", gap: 1, pr: 5 }}
+      {result.length === 0 ? (
+        <DataNotFound />
+      ) : (
+        <List>
+          {result.map((material) => (
+            <ListItem
+              key={material.id}
+              sx={{ borderBottom: "solid 1px black" }}
             >
-              <Button sx={{ backgroundColor: "#83dcfc" }}>
+              <FcDocument style={{ fontSize: "40", paddingRight: 10 }} />
+              <ListItemText>
                 <Typography
                   sx={{
-                    fontSize: 12,
-                    color: "black",
                     fontFamily: "Fira Sans Condensed",
                     fontWeight: "bold",
+                    fontSize: 21,
                   }}
                 >
-                  VIEW DETAILS
+                  {material.title}
                 </Typography>
-              </Button>
-              <Button sx={{ backgroundColor: "#8cfab0" }}>
+                <Typography sx={{ fontFamily: "Fira Sans Condensed" }}>
+                  {material.topicContent}
+                </Typography>
                 <Typography
                   sx={{
-                    fontSize: 12,
-                    color: "black",
                     fontFamily: "Fira Sans Condensed",
-                    fontWeight: "bold",
+                    color: "#014963",
+                    display: "flex",
+                    gap: 3,
                   }}
                 >
-                  DOWNLOAD
+                  <Typography>{`Grade ${material.gradeLevel}`}</Typography>
+                  <Typography sx={{ fontFamily: "Fira Sans Condensed" }}>
+                    {material.learningArea}
+                  </Typography>
                 </Typography>
-              </Button>
-            </Box>
-          </ListItem>
-        ))}
-      </List>
+                <Typography
+                  sx={{
+                    fontFamily: "Fira Sans Condensed",
+                    fontWeight: "bold",
+                    color: "black",
+                    display: "flex",
+                    gap: 3,
+                    fontSize: 11,
+                  }}
+                >
+                  {`Published at ${formattedDate}`}
+                </Typography>
+              </ListItemText>
+              <Box
+                sx={{ display: "flex", flexDirection: "column", gap: 1, pr: 5 }}
+              >
+                <Button sx={{ backgroundColor: "#83dcfc" }}>
+                  <Typography
+                    sx={{
+                      fontSize: 12,
+                      color: "black",
+                      fontFamily: "Fira Sans Condensed",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    VIEW DETAILS
+                  </Typography>
+                </Button>
+                <Button sx={{ backgroundColor: "#8cfab0" }}>
+                  <Typography
+                    sx={{
+                      fontSize: 12,
+                      color: "black",
+                      fontFamily: "Fira Sans Condensed",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    DOWNLOAD
+                  </Typography>
+                </Button>
+              </Box>
+            </ListItem>
+          ))}
+        </List>
+      )}
     </Box>
   );
 }
