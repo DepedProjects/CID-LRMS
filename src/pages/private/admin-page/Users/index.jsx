@@ -26,12 +26,12 @@ export default function Users() {
     }
   };
 
-  const handleCloseSuccess = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpenSuccess(false);
-  };
+  // const handleCloseSuccess = (event, reason) => {
+  //   if (reason === "clickaway") {
+  //     return;
+  //   }
+  //   setOpenSuccess(false);
+  // };
 
   const handleGetAll = () => {
     setLoading(true);
@@ -152,29 +152,6 @@ export default function Users() {
               }}
             >
               Add
-            </Button>
-          </Box>
-          <Box>
-            <Button
-              onClick={() => handleOpen("update")}
-              disabled={disabled}
-              sx={{
-                width: "10rem",
-                fontFamily: "Poppins",
-                backgroundColor: "#564ee2",
-                color: "white",
-                "&:hover": {
-                  color: "black",
-                  backgroundColor: "#11edd2",
-                },
-                fontSize: "14px",
-                fontWeight: "bold",
-                padding: "10px 20px",
-                borderRadius: "5px",
-                boxShadow: "1px 1px 5px rgba(0, 0, 0, 0.5)",
-              }}
-            >
-              Update
             </Button>
           </Box>
         </Box>

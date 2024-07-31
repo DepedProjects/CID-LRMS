@@ -148,7 +148,6 @@ export default function UserTable({
       <EditableTable
         data={data}
         columns={columns}
-        checkbox
         loading={loadingState || loading}
         singleSelect
         selectedData={setSelectedUser}

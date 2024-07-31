@@ -14,6 +14,8 @@ import {
   GridToolbar,
 } from "@mui/x-data-grid";
 import { Tooltip } from "@mui/material";
+import { AiFillDelete } from "react-icons/ai";
+import { AiFillEdit } from "react-icons/ai";
 
 export default function EditableTable({
   data,
@@ -227,11 +229,13 @@ export default function EditableTable({
           edit ? (
             <Tooltip title="Edit" placement="top">
               <GridActionsCellItem
-                icon={<EditIcon />}
+                icon={<AiFillEdit style={{ fontSize: 21, color: "#037296" }} />}
                 label="Edit"
                 className="textPrimary"
                 onClick={handleUpdateClick(id)}
-                color="inherit"
+                sx={{
+                  color: "green",
+                }}
               />
             </Tooltip>
           ) : (
@@ -240,7 +244,9 @@ export default function EditableTable({
           remove ? (
             <Tooltip title="Remove" placement="top">
               <GridActionsCellItem
-                icon={<DeleteIcon />}
+                icon={
+                  <AiFillDelete style={{ fontSize: 21, color: "#ff4545" }} />
+                }
                 label="Delete"
                 onClick={handleDeleteClick(id)}
                 color="inherit"
