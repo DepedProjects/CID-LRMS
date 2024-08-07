@@ -45,6 +45,9 @@ export default function AdminTable({ data, loadingState }) {
       width: 200,
       valueGetter: (params) => dayjs(params.value).format("YYYY-MM-DD hh:mm A"),
     },
+    { field: "fileSize", headerName: "File Size", width: 150 },
+    { field: "fileType", headerName: "File Type", width: 150 },
+    { field: "fileId", headerName: "File Id", width: 150 },
   ];
 
   return (

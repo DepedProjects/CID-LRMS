@@ -6,6 +6,25 @@ const BASE_URL = "http://localhost:5000";
 const customError = new Error("Network error or no response");
 // const BASE_URL = "https://synergy.depedimuscity.com:8021";
 
+async function logout(uid, username) {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/user/logout`,
+      { uid, username },
+      {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (err) {
+    if (err.response) {
+      throw err;
+    }
+    throw customError;
+  }
+}
+
 function authenticate(account) {
   return new Promise((resolve, reject) => {
     axios
@@ -38,7 +57,6 @@ function getAllUsers() {
 }
 
 function updateUser(id, data) {
-  console.log("Sending data:", data); // Check the data structure
   return axios
     .put(`${BASE_URL}/user/update/${id}`, data)
     .then((res) => res.data)
@@ -54,6 +72,10 @@ function deleteUser(id, data) {
     .then((res) => res.data);
 }
 
+function getAllLogs() {
+  return axios.get(`${BASE_URL}/user/getLogs`).then((res) => res.data);
+}
+
 export default {
   authenticate,
   register,
@@ -61,4 +83,6 @@ export default {
   getAllUsers,
   updateUser,
   deleteUser,
+  getAllLogs,
+  logout
 };

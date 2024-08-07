@@ -18,6 +18,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { FcImport, FcReading, FcSupport } from "react-icons/fc";
 import { useStateContext } from "../../../contexts/ContextProvider";
 import { useState } from "react";
+import accountService from "../../../services/account-service";
 
 const StyledAppBar = styled(AppBar, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -48,14 +49,21 @@ function Topbar({
   const { auth, setAuth } = useStateContext();
   const navigate = useNavigate();
 
-  console.log("Auth in Topbar:", auth);
-
-  const handleLogout = () => {
-    setOpenProfileMenu(false);
-    setAuth(null);
-    navigate("/"); // Replace with your desired path
+  const handleLogout = async () => {
+    if (auth?.uid) {
+      try {
+        console.log('Logging out UID:', auth.uid); // Check the UID
+        await accountService.logout(auth.uid, auth.username); // Call the logout function
+        setAuth(null); // Clear auth state
+        navigate("/"); // Navigate to the desired path
+      } catch (error) {
+        console.error('Logout failed:', error);
+      }
+    } else {
+      console.error('No UID found');
+    }
   };
-
+  
   const handleProfileOpen = () => {
     setOpenProfileMenu(true);
   };

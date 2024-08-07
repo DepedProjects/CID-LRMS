@@ -14,8 +14,6 @@ import {
   GridToolbar,
 } from "@mui/x-data-grid";
 import { Tooltip } from "@mui/material";
-import { AiFillDelete } from "react-icons/ai";
-import { AiFillEdit } from "react-icons/ai";
 
 export default function EditableTable({
   data,
@@ -34,7 +32,6 @@ export default function EditableTable({
   remove,
   view,
   form,
-  setOpenUpdateModal,
 }) {
   const [rows, setRows] = useState(data);
   const [rowModesModel, setRowModesModel] = useState({});
@@ -117,18 +114,6 @@ export default function EditableTable({
       // setRows(rows.filter((row) => row.id !== id));
       rowToDelete(rows.filter((row) => row.id === id));
     }
-  };
-
-  const handleUpdateClick = (id) => () => {
-    if (rows[0].uid) {
-      // setRows(rows.filter((row) => row.uid !== id));
-      rowToUpdate(rows.filter((row) => row.uid === id));
-    } else if (rows[0].id) {
-      // setRows(rows.filter((row) => row.id !== id));
-      rowToUpdate(rows.filter((row) => row.id === id));
-    }
-
-    setOpenUpdateModal(true);
   };
 
   const handleCancelClick = (id) => () => {
@@ -229,13 +214,11 @@ export default function EditableTable({
           edit ? (
             <Tooltip title="Edit" placement="top">
               <GridActionsCellItem
-                icon={<AiFillEdit style={{ fontSize: 21, color: "#037296" }} />}
+                icon={<EditIcon />}
                 label="Edit"
                 className="textPrimary"
-                onClick={handleUpdateClick(id)}
-                sx={{
-                  color: "green",
-                }}
+                onClick={handleEditClick(id)}
+                color="inherit"
               />
             </Tooltip>
           ) : (
@@ -244,9 +227,7 @@ export default function EditableTable({
           remove ? (
             <Tooltip title="Remove" placement="top">
               <GridActionsCellItem
-                icon={
-                  <AiFillDelete style={{ fontSize: 21, color: "#ff4545" }} />
-                }
+                icon={<DeleteIcon />}
                 label="Delete"
                 onClick={handleDeleteClick(id)}
                 color="inherit"

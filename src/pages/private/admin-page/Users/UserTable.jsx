@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Box } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import EditableTable from "../../../../components/admin-components/Table/EditableTable";
@@ -10,11 +9,9 @@ export default function UserTable({
   setSelectedData,
   loadingState,
   updateTableFunction,
-  setOpenUpdateModal,
 }) {
   const [selectedUser, setSelectedUser] = useState();
   const [rowToDelete, setRowToDelete] = useState();
-  const [rowToUpdate, setRowToUpdate] = useState();
   const [open, setOpen] = useState(false);
   const [promptResponse, setPromptResponse] = useState(null);
   const [submit, setSubmit] = useState(false);
@@ -51,7 +48,7 @@ export default function UserTable({
           setLoading(false);
         });
     }
-  }, [submit, promptResponse, open, rowToDelete, updateTableFunction]);
+  }, [submit, promptResponse]);
 
   const columns = [
     // { field: "uid", headerName: "ID", width: 70 },
@@ -144,19 +141,17 @@ export default function UserTable({
         setSubmit={setSubmit}
         submitKind={submitKind}
         promptDesc={promptDesc}
-      />
+       />
       <EditableTable
         data={data}
         columns={columns}
+        checkbox
         loading={loadingState || loading}
         singleSelect
         selectedData={setSelectedUser}
         rowToDelete={setRowToDelete}
-        rowToUpdate={setRowToUpdate}
-        setOpenUpdateModal={setOpenUpdateModal}
         height="60vh"
         remove
-        edit
       />
     </Box>
   );

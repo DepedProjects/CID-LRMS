@@ -11,6 +11,7 @@ import {
   ProjectAndActivities,
   AdminPage,
   Users,
+  Logs,
 } from "../src/pages";
 import { Route, Routes, useLocation } from "react-router-dom";
 import MaterialDetails from "../src/components/MaterialDetails";
@@ -22,7 +23,8 @@ function App() {
     <div className="App">
       {location.pathname !== "/login" &&
         location.pathname !== "/Admin" &&
-        location.pathname !== "/Users" && <Navbar />}
+        location.pathname !== "/Users" &&
+        location.pathname !== "/Logs" && <Navbar />}
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route element={<RequireAuth allowedRoles={"teacher"} />}>
@@ -43,6 +45,7 @@ function App() {
           <Route path="/" element={<AdminLayout />}>
             <Route path="/Admin" element={<AdminPage />} />
             <Route path="/Users" element={<Users />} />
+            <Route path="/Logs" element={<Logs />} />
           </Route>
         </Route>
       </Routes>

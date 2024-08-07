@@ -25,8 +25,6 @@ export default function LoginPage() {
   const { auth, setAuth } = useStateContext();
   const navigate = useNavigate();
 
-  console.log("Auth in Topbar:", auth); // Log the entire auth object
-
   const formik = useFormik({
     initialValues: { username: "", password: "" },
 
@@ -80,9 +78,9 @@ export default function LoginPage() {
     setOpenPrompt(false);
   };
 
-  useEffect(() => {
-    console.log("Auth schoolName on render:", auth?.schoolName); // Log schoolName on component render
-  }, [auth]);
+  // useEffect(() => {
+  //   console.log("Auth schoolName on render:", auth?.schoolName); // Log schoolName on component render
+  // }, [auth]);
 
   return (
     <Box

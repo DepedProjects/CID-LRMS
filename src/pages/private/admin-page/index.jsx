@@ -26,10 +26,45 @@ export default function Metadatas() {
   // const [start, setStart] = useState(null);
   // const [end, setEnd] = useState(null);
 
-  const [setFileName] = useState("");
+  const [fileName, setFileName] = useState(""); // Correctly define state for fileName
   const [fileBlob, setFileBlob] = useState(null);
   const [openPromptModal, setOpenPromptModal] = useState(false);
   const [promptMssg, setPromptMssg] = useState([]);
+
+  const handleMetadataUpload = (event) => {
+    const fileInput = event.target;
+    const files = fileInput.files;
+
+    if (files.length === 0) {
+      return;
+    }
+
+    const selectedFile = files[0];
+    const isExcelFile = /\.(xlsx|xls)$/i.test(selectedFile.name);
+
+    if (!isExcelFile) {
+      alert("Please select an Excel file (.xlsx or .xls).");
+      return;
+    }
+
+    const confirmed = window.confirm(
+      "Are you sure you want to upload melcs from this file?"
+    );
+
+    // Proceed only if the user confirms
+    if (confirmed) {
+      setFileName(selectedFile.name);
+
+      // Read the file content as a Blob
+      const reader = new FileReader();
+      reader.onload = () => {
+        const blob = new Blob([reader.result], { type: selectedFile.type });
+        setFileBlob(blob);
+      };
+      reader.readAsArrayBuffer(selectedFile);
+    }
+    fileInput.value = "";
+  };
 
   const handleGetAllMetadata = () => {
     setLoading(true);
@@ -51,44 +86,6 @@ export default function Metadatas() {
   useEffect(() => {
     handleGetAllMetadata();
   }, []);
-
-  const handleMetadataUpload = (event) => {
-    const fileInput = event.target;
-
-    const files = fileInput.files;
-
-    if (files.length === 0) {
-      return;
-    }
-
-    const selectedFile = files[0];
-
-    const isExcelFile = /\.(xlsx|xls)$/i.test(selectedFile.name);
-
-    if (!isExcelFile) {
-      alert("Please select an Excel file (.xlsx or .xls).");
-      return;
-    }
-
-    const confirmed = window.confirm(
-      "Are you sure you want to upload melcs from this file?"
-    );
-
-    // Proceed only if the user confirms
-    if (confirmed) {
-      setFileName(selectedFile.name);
-
-      // Read the file content as a Blob
-      const reader = new FileReader();
-      reader.onload = () => {
-        const blob = new Blob([reader.result], { type: selectedFile.type });
-
-        setFileBlob(blob);
-      };
-      reader.readAsArrayBuffer(selectedFile);
-    }
-    fileInput.value = "";
-  };
 
   useEffect(() => {
     if (fileBlob) {
@@ -162,7 +159,7 @@ export default function Metadatas() {
         <Box
           sx={{
             width: "98%",
-            mt: 5,
+            mt: { lg: 2, xl: 2 },
             mb: 2,
             display: "flex",
             alignItems: "center",

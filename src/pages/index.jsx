@@ -16,4 +16,6 @@ export { default as AdminPage } from "./private/admin-page";
 
 export { default as Users } from "./private/admin-page/Users";
 
+export { default as Logs }  from "./private/admin-page/Logs";
+
 export { default as NoData } from "./miscelleaneous/NoData";
