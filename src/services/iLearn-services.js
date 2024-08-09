@@ -38,7 +38,33 @@ function getFilteredMetadata(gradeLevel, learningArea, resourceType, search) {
     .then((res) => res.data);
 }
 
+// New function to upload files and log metadata
+function uploadFile(metadataId, file, progressCallback) {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  return axios.post(`${BASE_URL}/iLearn/admin/uploadFile/${metadataId}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    onUploadProgress: (progressEvent) => {
+      if (progressCallback) {
+        progressCallback(progressEvent);
+      }
+    },
+  })
+  .then((response) => {
+    console.log("File uploaded successfully:", response.data.data); // Log the 'data' object
+    return response.data.data; // Return the data object
+  })
+  .catch((error) => {
+    console.error("Error uploading file:", error);
+    throw error;
+  });
+}
+
 export default {
+  uploadFile,
   getAllMetadata,
   bulkUploadMetadata,
   getFilteredMetadata,

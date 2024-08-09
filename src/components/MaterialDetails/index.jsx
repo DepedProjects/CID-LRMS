@@ -29,12 +29,6 @@ export default function Materials() {
   const [search, setSearch] = useState("");
   const [result, setResult] = useState([]);
 
-  // console.log("materials:", materials);
-
-  const formattedDate = dayjs(materials.uploaded_at).format(
-    "YYYY-MM-DD hh:mm A"
-  );
-
   // Debounce the search input to improve performance
   const debouncedSearch = useMemo(
     () => debounce((query) => setSearch(query), 300),
@@ -121,81 +115,92 @@ export default function Materials() {
         <DataNotFound />
       ) : (
         <List>
-          {result.map((material) => (
-            <ListItem
-              key={material.id}
-              sx={{ borderBottom: "solid 1px black" }}
-            >
-              <FcDocument style={{ fontSize: "40", paddingRight: 10 }} />
-              <ListItemText>
-                <Typography
-                  sx={{
-                    fontFamily: "Fira Sans Condensed",
-                    fontWeight: "bold",
-                    fontSize: 21,
-                  }}
-                >
-                  {material.title}
-                </Typography>
-                <Typography sx={{ fontFamily: "Fira Sans Condensed" }}>
-                  {material.topicContent}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontFamily: "Fira Sans Condensed",
-                    color: "#014963",
-                    display: "flex",
-                    gap: 3,
-                  }}
-                >
-                  <Typography>{`Grade ${material.gradeLevel}`}</Typography>
-                  <Typography sx={{ fontFamily: "Fira Sans Condensed" }}>
-                    {material.learningArea}
-                  </Typography>
-                </Typography>
-                <Typography
-                  sx={{
-                    fontFamily: "Fira Sans Condensed",
-                    fontWeight: "bold",
-                    color: "black",
-                    display: "flex",
-                    gap: 3,
-                    fontSize: 11,
-                  }}
-                >
-                  {`Published at ${formattedDate}`}
-                </Typography>
-              </ListItemText>
-              <Box
-                sx={{ display: "flex", flexDirection: "column", gap: 1, pr: 5 }}
+          {result.map((material) => {
+            const formattedDate = dayjs(material.uploaded_at).format(
+              "YYYY-MM-DD hh:mm A"
+            );
+
+            return (
+              <ListItem
+                key={material.id}
+                sx={{ borderBottom: "solid 1px black" }}
               >
-                <Button sx={{ backgroundColor: "#83dcfc" }}>
+                <FcDocument style={{ fontSize: 40, paddingRight: 10 }} />
+                <ListItemText>
                   <Typography
                     sx={{
-                      fontSize: 12,
-                      color: "black",
                       fontFamily: "Fira Sans Condensed",
                       fontWeight: "bold",
+                      fontSize: 21,
                     }}
                   >
-                    VIEW DETAILS
+                    {material.title}
                   </Typography>
-                </Button>
-                <Button sx={{ backgroundColor: "#8cfab0" }}>
+                  <Typography sx={{ fontFamily: "Fira Sans Condensed" }}>
+                    {material.topicContent}
+                  </Typography>
                   <Typography
                     sx={{
-                      fontSize: 12,
-                      color: "black",
                       fontFamily: "Fira Sans Condensed",
-                      fontWeight: "bold",
+                      color: "#014963",
+                      display: "flex",
+                      gap: 3,
                     }}
                   >
-                    DOWNLOAD
+                    <Typography>{`Grade ${material.gradeLevel}`}</Typography>
+                    <Typography sx={{ fontFamily: "Fira Sans Condensed" }}>
+                      {material.learningArea}
+                    </Typography>
                   </Typography>
-                </Button>
-              </Box>
-            </ListItem>
-          ))}
+                  <Typography
+                    sx={{
+                      fontFamily: "Fira Sans Condensed",
+                      fontWeight: "bold",
+                      color: "black",
+                      display: "flex",
+                      gap: 3,
+                      fontSize: 11,
+                    }}
+                  >
+                    {`Published at ${formattedDate}`}
+                  </Typography>
+                </ListItemText>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 1,
+                    pr: 5,
+                  }}
+                >
+                  <Button sx={{ backgroundColor: "#83dcfc" }}>
+                    <Typography
+                      sx={{
+                        fontSize: 12,
+                        color: "black",
+                        fontFamily: "Fira Sans Condensed",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      VIEW DETAILS
+                    </Typography>
+                  </Button>
+                  <Button sx={{ backgroundColor: "#8cfab0" }}>
+                    <Typography
+                      sx={{
+                        fontSize: 12,
+                        color: "black",
+                        fontFamily: "Fira Sans Condensed",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      DOWNLOAD
+                    </Typography>
+                  </Button>
+                </Box>
+              </ListItem>
+            );
+          })}
         </List>
       )}
     </Box>

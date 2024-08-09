@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Box } from "@mui/material";
 import React, { useState } from "react";
+import dayjs from "dayjs";
 import EditableTable from "../../../../components/admin-components/Table/EditableTable";
 
 export default function UserTable({ data, loadingState, setOpenUpdateModal }) {
@@ -19,6 +20,7 @@ export default function UserTable({ data, loadingState, setOpenUpdateModal }) {
       field: "timestamp",
       headerName: "Timestamp",
       width: 200,
+      valueGetter: (params) => dayjs(params.value).format("YYYY-MM-DD hh:mm A"),
     },
   ];
 

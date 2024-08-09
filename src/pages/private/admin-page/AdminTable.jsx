@@ -1,27 +1,51 @@
 import { Box, Button } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import EditableTable from "../../../components/admin-components/Table/EditableTable";
 import dayjs from "dayjs";
+import UploadModal from "../../../modals/Materials/UploadMaterialModal";
 
 export default function AdminTable({ data, loadingState }) {
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedRowData, setSelectedRowData] = useState(null);
+  const [uploadedRows, setUploadedRows] = useState([]);
+
+  const handleOpenModal = (rowData) => {
+    setSelectedRowData(rowData);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setSelectedRowData(null);
+  };
+
+  const handleFileUploaded = (metadataId) => {
+    setUploadedRows((prev) => [...prev, metadataId]);
+  };
+
   const columns = [
     {
       field: "actions",
       headerName: " ",
       width: 100,
-      renderCell: (params) => (
-        <Button
-          sx={{
-            backgroundColor: "#1976d2",
-            fontFamily: "Poppins",
-          }}
-          variant="contained"
-          // color="#1976d2"
-          // onClick={() => handleButtonClick(params.row)}
-        >
-          UPLOAD
-        </Button>
-      ),
+      renderCell: (params) => {
+        const { fileSize, fileType, fileId } = params.row;
+        const isDisabled = fileSize || fileType || fileId;
+
+        return (
+          <Button
+            sx={{
+              backgroundColor: "#1976d2",
+              fontFamily: "Poppins",
+            }}
+            variant="contained"
+            disabled={isDisabled}
+            onClick={() => handleOpenModal(params.row)}
+          >
+            {isDisabled ? "UPLOADED" : "UPLOAD"}
+          </Button>
+        );
+      },
     },
     { field: "title", headerName: "Title", width: 250 },
     { field: "language", headerName: "Language", width: 150 },
@@ -90,6 +114,12 @@ export default function AdminTable({ data, loadingState }) {
         marginTop: "5px",
       }}
     >
+      <UploadModal
+        open={openModal}
+        handleClose={handleCloseModal}
+        onFileUploaded={handleFileUploaded}
+        rowData={selectedRowData}
+      />
       <EditableTable
         data={data}
         columns={columns}
