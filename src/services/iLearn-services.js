@@ -43,28 +43,55 @@ function uploadFile(metadataId, file, progressCallback) {
   const formData = new FormData();
   formData.append("file", file);
 
-  return axios.post(`${BASE_URL}/iLearn/admin/uploadFile/${metadataId}`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-    onUploadProgress: (progressEvent) => {
-      if (progressCallback) {
-        progressCallback(progressEvent);
-      }
-    },
+  return axios
+    .post(`${BASE_URL}/iLearn/admin/uploadFile/${metadataId}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      onUploadProgress: (progressEvent) => {
+        if (progressCallback) {
+          progressCallback(progressEvent);
+        }
+      },
+    })
+    .then((response) => {
+      console.log("File uploaded successfully:", response.data.data); // Log the 'data' object
+      return response.data.data; // Return the data object
+    })
+    .catch((error) => {
+      console.error("Error uploading file:", error);
+      throw error;
+    });
+}
+
+function downloadFile(metadataId, title) {
+  console.log("Title:", title); // Debugging: check if title is passed correctly
+  return axios({
+    url: `${BASE_URL}/iLeaRN/admin/downloadFile/${metadataId}`,
+    method: "GET",
+    responseType: "blob", // Important for handling binary data
   })
-  .then((response) => {
-    console.log("File uploaded successfully:", response.data.data); // Log the 'data' object
-    return response.data.data; // Return the data object
-  })
-  .catch((error) => {
-    console.error("Error uploading file:", error);
-    throw error;
-  });
+    .then((response) => {
+      const filename = title ? `${title}.pdf` : "downloaded-file.pdf"; // Use title for the filename
+
+      // Create a link element, use it to create a download link and simulate a click to trigger the download
+      const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers["content-type"] }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", filename);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    })
+    .catch((error) => {
+      console.error("Error downloading file:", error);
+      throw error;
+    });
 }
 
 export default {
   uploadFile,
+  downloadFile,
   getAllMetadata,
   bulkUploadMetadata,
   getFilteredMetadata,
