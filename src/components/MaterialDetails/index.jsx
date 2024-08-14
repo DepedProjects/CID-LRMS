@@ -20,13 +20,19 @@ import {
   DialogContentText,
   DialogActions,
 } from "@mui/material";
+
 import DataNotFound from "../../pages/miscelleaneous/NoData";
 import iLearnService from "../../../src/services/iLearn-services";
+import ViewMaterialsModal from "../../modals/Materials/viewMaterialsModal";
+
 
 export default function Materials() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const [downloading, setDownloading] = useState(false);
+
+  const [modalOpen, setModalOpen] = useState(false); // State for controlling modal open/close
+  const [selectedMaterial, setSelectedMaterial] = useState(null);
 
   const location = useLocation();
   const { allMaterials } = location.state || {};
@@ -82,6 +88,16 @@ export default function Materials() {
         handleDialogClose();
       }, 2000);
     }
+  };
+
+  const handleViewDetails = (material) => {
+    setSelectedMaterial(material); // Set the selected material details
+    setModalOpen(true); // Open the modal
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false); // Close the modal
+    setSelectedMaterial(null); // Clear the selected material details
   };
 
   return (
@@ -213,7 +229,10 @@ export default function Materials() {
                         pr: 5,
                       }}
                     >
-                      <Button sx={{ backgroundColor: "#83dcfc" }}>
+                      <Button
+                        onClick={() => handleViewDetails(material)}
+                        sx={{ backgroundColor: "#83dcfc" }}
+                      >
                         <Typography
                           sx={{
                             fontSize: 12,
@@ -269,25 +288,31 @@ export default function Materials() {
             textAlign: "center",
             alignItems: "center",
             flexDirection: "column",
-            py: 10,
-            paddingBottom: 5,
+            // py: 10,
+            // paddingBottom: 5,
           }}
         >
           {downloading ? (
             <>
-              <DialogContentText>Downloading...</DialogContentText>
+              <DialogContentText>Downloading</DialogContentText>
               <CircularProgress sx={{ color: "grey", mt: 2 }} />
             </>
           ) : (
             <DialogContentText>{dialogMessage}</DialogContentText>
           )}
-          <DialogActions sx={{ m: 5 }}>
+          <DialogActions sx={{ mt: 2 }}>
             <Button onClick={handleDialogClose} color="primary">
               Close
             </Button>
           </DialogActions>
         </DialogContent>
       </Dialog>
+
+      <ViewMaterialsModal
+        open={modalOpen}
+        onClose={handleCloseModal}
+        material={selectedMaterial} // Pass the selected material details to the modal
+      />
     </>
   );
 }

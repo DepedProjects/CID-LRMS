@@ -1,49 +1,76 @@
-import { Box, Button } from "@mui/material";
+import { Box, IconButton, Tooltip } from "@mui/material";
 import React, { useState } from "react";
 import EditableTable from "../../../components/admin-components/Table/EditableTable";
+import {
+  Upload as UploadIcon,
+  CheckCircle as CheckCircleIcon,
+  Refresh as RefreshIcon,
+} from "@mui/icons-material";
 import dayjs from "dayjs";
 import UploadModal from "../../../modals/Materials/UploadMaterialModal";
+import UpdateMaterialModal from "../../../modals/Materials/UpdateMaterialModal";
 
 export default function AdminTable({ data, loadingState }) {
   const [openModal, setOpenModal] = useState(false);
+  const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
-  const [uploadedRows, setUploadedRows] = useState([]);
 
-  const handleOpenModal = (rowData) => {
+  const handleOpenModal = (rowData, isUpdate = false) => {
+    console.log("Opening modal with data:", rowData, "isUpdate:", isUpdate);
     setSelectedRowData(rowData);
-    setOpenModal(true);
+    if (isUpdate) {
+      setOpenUpdateModal(true);
+    } else {
+      setOpenModal(true);
+    }
   };
 
   const handleCloseModal = () => {
     setOpenModal(false);
+    setOpenUpdateModal(false);
     setSelectedRowData(null);
-  };
-
-  const handleFileUploaded = (metadataId) => {
-    setUploadedRows((prev) => [...prev, metadataId]);
   };
 
   const columns = [
     {
       field: "actions",
-      headerName: " ",
-      width: 100,
+      headerName: "Actions",
+      width: 150,
       renderCell: (params) => {
         const { fileSize, fileType, fileId } = params.row;
         const isDisabled = fileSize || fileType || fileId;
+        const isUploaded = !!fileSize;
 
         return (
-          <Button
-            sx={{
-              backgroundColor: "#1976d2",
-              fontFamily: "Poppins",
-            }}
-            variant="contained"
-            disabled={isDisabled}
-            onClick={() => handleOpenModal(params.row)}
-          >
-            {isDisabled ? "UPLOADED" : "UPLOAD"}
-          </Button>
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <Tooltip title={isDisabled ? "File Uploaded" : "Upload File"}>
+              <span>
+                <IconButton
+                  sx={{ color: "#1976d2" }}
+                  disabled={isDisabled}
+                  onClick={() => handleOpenModal(params.row)}
+                >
+                  {isDisabled ? (
+                    <CheckCircleIcon style={{ color: "green" }} />
+                  ) : (
+                    <UploadIcon />
+                  )}
+                </IconButton>
+              </span>
+            </Tooltip>
+            {isUploaded && (
+              <Tooltip title="Re-upload File">
+                <span>
+                  <IconButton
+                    sx={{ color: "#ff5722" }}
+                    onClick={() => handleOpenModal(params.row, true)}
+                  >
+                    <RefreshIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
+            )}
+          </Box>
         );
       },
     },
@@ -56,11 +83,7 @@ export default function AdminTable({ data, loadingState }) {
     { field: "educationType", headerName: "Education Type", width: 150 },
     { field: "gradeLevel", headerName: "Grade Level", width: 150 },
     { field: "learningArea", headerName: "Learning Area", width: 150 },
-    {
-      field: "topicContent",
-      headerName: "Content/ Topic",
-      width: 150,
-    },
+    { field: "topicContent", headerName: "Content/ Topic", width: 150 },
     { field: "intendedUsers", headerName: "Intended Users", width: 120 },
     { field: "competencies", headerName: "Competencies", width: 150 },
     {
@@ -72,6 +95,7 @@ export default function AdminTable({ data, loadingState }) {
     { field: "fileSize", headerName: "File Size", width: 150 },
     { field: "fileType", headerName: "File Type", width: 150 },
     { field: "fileId", headerName: "File Id", width: 150 },
+    { field: "folderId", headerName: "Folder Id", width: 150 },
   ];
 
   return (
@@ -117,8 +141,12 @@ export default function AdminTable({ data, loadingState }) {
       <UploadModal
         open={openModal}
         handleClose={handleCloseModal}
-        onFileUploaded={handleFileUploaded}
         rowData={selectedRowData}
+      />
+      <UpdateMaterialModal
+        open={openUpdateModal}
+        onClose={() => setOpenUpdateModal(false)}
+        material={selectedRowData}
       />
       <EditableTable
         data={data}

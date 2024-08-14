@@ -47,13 +47,12 @@ export default function Navbar() {
   ];
 
   const menuOptions = [
-    "About Us",
+    { text: "About Us", action: () => navigate("/AboutUs") },
     {
       text: "Portal",
       action: () => setOpenPortalMenu(!openPortalMenu),
       hasDropdown: true,
     },
-    "Project and Activities",
     {
       text: "Library",
       action: () => navigate("/Library"),

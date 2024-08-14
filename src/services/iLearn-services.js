@@ -75,7 +75,9 @@ function downloadFile(metadataId, title) {
       const filename = title ? `${title}.pdf` : "downloaded-file.pdf"; // Use title for the filename
 
       // Create a link element, use it to create a download link and simulate a click to trigger the download
-      const url = window.URL.createObjectURL(new Blob([response.data], { type: response.headers["content-type"] }));
+      const url = window.URL.createObjectURL(
+        new Blob([response.data], { type: response.headers["content-type"] })
+      );
       const link = document.createElement("a");
       link.href = url;
       link.setAttribute("download", filename);
@@ -89,6 +91,28 @@ function downloadFile(metadataId, title) {
     });
 }
 
+// New function to update material details and handle file upload
+function updateMaterial(metadataId, formData, file) {
+  const data = new FormData();
+  Object.keys(formData).forEach((key) => data.append(key, formData[key]));
+  if (file) data.append("file", file);
+
+  return axios
+    .put(`${BASE_URL}/iLearn/admin/update-material/${metadataId}`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((response) => {
+      console.log("Material updated successfully:", response.data.data); // Log the 'data' object
+      return response.data.data; // Return the data object
+    })
+    .catch((error) => {
+      console.error("Error updating material:", error);
+      throw error;
+    });
+}
+
 export default {
   uploadFile,
   downloadFile,
@@ -97,4 +121,5 @@ export default {
   getFilteredMetadata,
   getAllOffices,
   getAllSchools,
+  updateMaterial,
 };

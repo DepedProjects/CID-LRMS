@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Divider,
   IconButton,
   Modal,
   Typography,
@@ -18,13 +19,12 @@ import CancelIcon from "@mui/icons-material/Close";
 export default function UploadMaterialModal({
   open,
   handleClose,
-  onFileUploaded,
+  // onFileUploaded,
   rowData,
 }) {
   const [file, setFile] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
-  // const [progress, setProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
 
   const handleFileChange = (e) => {
@@ -36,22 +36,13 @@ export default function UploadMaterialModal({
       setUploading(true);
       setDialogOpen(true);
       try {
-        const response = await iLearnServices.uploadFile(
-          rowData.id,
-          file
-          // (progressEvent) => {
-          //   const percentCompleted = Math.round(
-          //     (progressEvent.loaded * 100) / progressEvent.total
-          //   );
-          //   setProgress(percentCompleted);
-          // }
-        );
+        const response = await iLearnServices.uploadFile(rowData.id, file);
 
         console.log("File uploaded successfully:", response);
         setDialogMessage("Successfully Uploaded");
         setUploading(false);
 
-        onFileUploaded(rowData.id); // Notify parent component that the file has been uploaded
+        // onFileUploaded(rowData.id); // Notify parent component that the file has been uploaded
 
         setDialogOpen(true);
       } catch (error) {
@@ -92,47 +83,231 @@ export default function UploadMaterialModal({
               <CancelIcon />
             </IconButton>
           </Box>
-          <Typography variant="h6">Upload Material</Typography>
+          <Divider sx={{ paddingBottom: 5, paddingTop: 2 }}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontFamily: "Fira Sans Condensed",
+                textAlign: "center",
+              }}
+            >
+              UPLOAD MATERIAL
+            </Typography>
+          </Divider>
+
           {rowData && (
             <>
-              <Typography variant="body1">Title: {rowData.title}</Typography>
-              <Typography variant="body1">
-                Language: {rowData.language}
-              </Typography>
-              <Typography variant="body1">
-                Resource Type: {rowData.resourceType}
-              </Typography>
-              <Typography variant="body1">Domain: {rowData.domain}</Typography>
-              <Typography variant="body1">
-                Description: {rowData.description}
-              </Typography>
-              <Typography variant="body1">
-                Objective: {rowData.objective}
-              </Typography>
-              <Typography variant="body1">
-                Education Type: {rowData.educationType}
-              </Typography>
-              <Typography variant="body1">
-                Grade Level: {rowData.gradeLevel}
-              </Typography>
-              <Typography variant="body1">
-                Learning Area: {rowData.learningArea}
-              </Typography>
-              <Typography variant="body1">
-                Topic Content: {rowData.topicContent}
-              </Typography>
-              <Typography variant="body1">
-                Intended Users: {rowData.intendedUsers}
-              </Typography>
-              <Typography variant="body1">
-                Competencies: {rowData.competencies}
-              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 10,
+                  alignItems: "center",
+                  textAlign: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Box sx={{ pr: 6 }}>
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontFamily: "Fira Sans Condensed",
+                      fontWeight: "bold",
+                      display: "flex",
+                      gap: 4,
+                    }}
+                  >
+                    Title:{" "}
+                    <Typography sx={{ fontFamily: "Fira Sans Condensed" }}>
+                      {rowData.title || "undefined"}
+                    </Typography>
+                  </Typography>
+
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontFamily: "Fira Sans Condensed",
+                      fontWeight: "bold",
+                      display: "flex",
+                      gap: 4,
+                    }}
+                  >
+                    Language:{" "}
+                    <Typography sx={{ fontFamily: "Fira Sans Condensed" }}>
+                      {rowData.language || "undefined"}
+                    </Typography>
+                  </Typography>
+
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontFamily: "Fira Sans Condensed",
+                      fontWeight: "bold",
+                      display: "flex",
+                      gap: 4,
+                    }}
+                  >
+                    Resource Type:{" "}
+                    <Typography sx={{ fontFamily: "Fira Sans Condensed" }}>
+                      {rowData.resourceType || "undefined"}
+                    </Typography>
+                  </Typography>
+
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontFamily: "Fira Sans Condensed",
+                      fontWeight: "bold",
+                      display: "flex",
+                      gap: 4,
+                    }}
+                  >
+                    Domain:{" "}
+                    <Typography sx={{ fontFamily: "Fira Sans Condensed" }}>
+                      {rowData.domain || "undefined"}
+                    </Typography>
+                  </Typography>
+
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontFamily: "Fira Sans Condensed",
+                      fontWeight: "bold",
+                      display: "flex",
+                      gap: 4,
+                    }}
+                  >
+                    Description:{" "}
+                    <Typography sx={{ fontFamily: "Fira Sans Condensed" }}>
+                      {rowData.description || "undefined"}
+                    </Typography>
+                  </Typography>
+
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontFamily: "Fira Sans Condensed",
+                      fontWeight: "bold",
+                      display: "flex",
+                      gap: 4,
+                    }}
+                  >
+                    Objective:{" "}
+                    <Typography sx={{ fontFamily: "Fira Sans Condensed" }}>
+                      {rowData.objective || "undefined"}
+                    </Typography>
+                  </Typography>
+                </Box>
+
+                <Box sx={{ pr: 7 }}>
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontFamily: "Fira Sans Condensed",
+                      fontWeight: "bold",
+                      display: "flex",
+                      gap: 4,
+                    }}
+                  >
+                    Education Type:{" "}
+                    <Typography sx={{ fontFamily: "Fira Sans Condensed" }}>
+                      {rowData.educationType || "undefined"}
+                    </Typography>
+                  </Typography>
+
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontFamily: "Fira Sans Condensed",
+                      fontWeight: "bold",
+                      display: "flex",
+                      gap: 4,
+                    }}
+                  >
+                    Grade Level:{" "}
+                    <Typography sx={{ fontFamily: "Fira Sans Condensed" }}>
+                      {rowData.gradeLevel || "undefined"}
+                    </Typography>
+                  </Typography>
+
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontFamily: "Fira Sans Condensed",
+                      fontWeight: "bold",
+                      display: "flex",
+                      gap: 4,
+                    }}
+                  >
+                    Learning Area:{" "}
+                    <Typography sx={{ fontFamily: "Fira Sans Condensed" }}>
+                      {rowData.learningArea || "undefined"}
+                    </Typography>
+                  </Typography>
+
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontFamily: "Fira Sans Condensed",
+                      fontWeight: "bold",
+                      display: "flex",
+                      gap: 4,
+                    }}
+                  >
+                    Topic Content:{" "}
+                    <Typography sx={{ fontFamily: "Fira Sans Condensed" }}>
+                      {rowData.topicContent || "undefined"}
+                    </Typography>
+                  </Typography>
+
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontFamily: "Fira Sans Condensed",
+                      fontWeight: "bold",
+                      display: "flex",
+                      gap: 4,
+                    }}
+                  >
+                    Intended Users:{" "}
+                    <Typography sx={{ fontFamily: "Fira Sans Condensed" }}>
+                      {rowData.intendedUsers || "undefined"}
+                    </Typography>
+                  </Typography>
+
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontFamily: "Fira Sans Condensed",
+                      fontWeight: "bold",
+                      display: "flex",
+                      gap: 4,
+                    }}
+                  >
+                    Competencies:
+                    <Typography sx={{ fontFamily: "Fira Sans Condensed" }}>
+                      {rowData.competencies || "undefined"}
+                    </Typography>
+                  </Typography>
+                </Box>
+              </Box>
             </>
           )}
-          <input type="file" onChange={handleFileChange} />
-          <Button onClick={handleUpload} sx={{ marginTop: 2 }}>
-            Upload File
-          </Button>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              gap: 5,
+              marginTop: 5,
+            }}
+          >
+            <input type="file" onChange={handleFileChange} />
+
+            <Button variant="contained" onClick={handleUpload}>
+              Upload File
+            </Button>
+          </Box>
         </Box>
       </Modal>
 
@@ -154,8 +329,8 @@ export default function UploadMaterialModal({
             textAlign: "center",
             alignItems: "center",
             flexDirection: "column",
-            py: 10,
-            paddingBottom: 5,
+            // py: 10,
+            // paddingBottom: 5,
           }}
         >
           {uploading ? (
@@ -166,7 +341,7 @@ export default function UploadMaterialModal({
           ) : (
             <DialogContentText>{dialogMessage}</DialogContentText>
           )}
-          <DialogActions sx={{ m: 5 }}>
+          <DialogActions sx={{ mt: 2}}>
             <Button onClick={handleDialogClose} color="primary">
               Close
             </Button>
@@ -182,7 +357,7 @@ const modalStyle = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 800,
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
