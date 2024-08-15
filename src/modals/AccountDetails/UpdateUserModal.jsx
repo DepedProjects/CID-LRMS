@@ -47,7 +47,7 @@ export default function UpdateUserModal({
   const formik = useFormik({
     initialValues: {
       username: data?.username || "",
-      password: "",
+      password: data?.password || "",
       role: data?.role || "",
       officeId: data?.officeId || null,
       schoolId: data?.schoolId || null,

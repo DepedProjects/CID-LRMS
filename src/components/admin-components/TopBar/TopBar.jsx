@@ -52,18 +52,17 @@ function Topbar({
   const handleLogout = async () => {
     if (auth?.uid) {
       try {
-        console.log('Logging out UID:', auth.uid); // Check the UID
         await accountService.logout(auth.uid, auth.username); // Call the logout function
         setAuth(null); // Clear auth state
         navigate("/"); // Navigate to the desired path
       } catch (error) {
-        console.error('Logout failed:', error);
+        console.error("Logout failed:", error);
       }
     } else {
-      console.error('No UID found');
+      console.error("No UID found");
     }
   };
-  
+
   const handleProfileOpen = () => {
     setOpenProfileMenu(true);
   };
@@ -175,7 +174,7 @@ function Topbar({
                       fontWeight: "bold",
                     }}
                   />
-                  {auth?.role === "admin" ? (
+                  {auth?.role === "admin" || auth?.role === "superadmin" ? (
                     <>
                       <ListItemText
                         primary={auth?.officeName}
@@ -187,7 +186,11 @@ function Topbar({
                         }}
                       />
                       <ListItemText
-                        primary="Administrator"
+                        primary={
+                          auth?.role === "admin"
+                            ? "Administrator"
+                            : "Super Administrator"
+                        }
                         primaryTypographyProps={{
                           fontFamily: "Fira Sans Condensed",
                           fontSize: 14,

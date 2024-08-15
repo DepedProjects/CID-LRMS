@@ -42,6 +42,8 @@ export default function LoginPage() {
           if (res.valid) {
             if (res?.data.role === "admin") {
               navigate("/Admin");
+            } else if (res?.data.role === "superadmin") {
+              navigate("/Users");
             } else {
               navigate("/Homepage");
             }

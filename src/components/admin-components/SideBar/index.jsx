@@ -104,6 +104,17 @@ function SideBar({
   const navigate = useNavigate();
   const { auth } = useStateContext();
 
+  // Filter out "Users" and "Logs" if the role is "admin"
+  const filteredLinks = links.filter((item) => {
+    if (auth.role === "admin" && ["Users", "Logs"].includes(item.title)) {
+      return false; // Exclude "Users" and "Logs" for "admin"
+    }
+    if (auth.role === "superadmin" && item.title === "Resources") {
+      return false; // Exclude "Resources" for "superadmin"
+    }
+    return true; // Include other links
+  });
+
   const handleNavigate = (link) => {
     navigate(`/${link}`);
   };
@@ -153,7 +164,7 @@ function SideBar({
             },
           }}
         >
-          {links.map((item) => {
+          {filteredLinks.map((item) => {
             if (
               auth.role === "sdo - personnel" &&
               ["Services", "Offices", "Users"].includes(item.title)

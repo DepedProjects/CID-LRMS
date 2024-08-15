@@ -150,7 +150,7 @@ export default function UserTable({
         singleSelect
         selectedData={setSelectedUser}
         rowToDelete={setRowToDelete}
-        height="60vh"
+        height="80vh"
         remove
       />
     </Box>

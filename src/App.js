@@ -27,7 +27,7 @@ function App() {
         location.pathname !== "/Logs" && <Navbar />}
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route element={<RequireAuth allowedRoles={"teacher"} />}>
+        <Route element={<RequireAuth allowedRoles="teacher" />}>
           <Route path="/AboutUs" element={<AboutUs />} />
           <Route path="/Portal" element={<Portal />}>
             <Route path="materials" element={<MaterialDetails />} />
@@ -41,9 +41,14 @@ function App() {
           <Route path="/Homepage" element={<Landing />} />
         </Route>
 
-        <Route element={<RequireAuth allowedRoles={"admin"} />}>
+        <Route element={<RequireAuth allowedRoles="admin" />}>
           <Route path="/" element={<AdminLayout />}>
             <Route path="/Admin" element={<AdminPage />} />
+          </Route>
+        </Route>
+
+        <Route element={<RequireAuth allowedRoles="superadmin" />}>
+          <Route path="/" element={<AdminLayout />}>
             <Route path="/Users" element={<Users />} />
             <Route path="/Logs" element={<Logs />} />
           </Route>

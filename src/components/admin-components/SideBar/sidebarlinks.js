@@ -18,7 +18,7 @@ const links = [
 
   {
     title: "Users",
-    role: "admin",
+    role: "superadmin",
     links: [
       {
         name: "Users",
@@ -30,7 +30,7 @@ const links = [
 
   {
     title: "Logs",
-    role: "admin",
+    role: "superadmin",
     links: [
       {
         name: "Logs",

@@ -7,11 +7,13 @@ import AddUserModal from "../../../../modals/AccountDetails/AddUserModal";
 // import SnackbarComponent from "components/Snackbar";
 import UserTable from "./UserTable";
 import UpdateUserModal from "../../../../modals/AccountDetails/UpdateUserModal";
+import { useStateContext } from "../../../../contexts/ContextProvider";
 
 export default function Users() {
   const [usersData, setUsersData] = useState([]);
   const [selectedUser, setSelectedUser] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
+  const { auth } = useStateContext();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -134,51 +136,56 @@ export default function Users() {
             p: 2,
           }}
         >
-          <Box>
-            <Button
-              onClick={() => handleOpen("add")}
-              sx={{
-                fontFamily: "Poppins",
-                backgroundColor: "#1c1948",
-                color: "white",
-                width: "10rem",
-                "&:hover": {
-                  color: "black",
-                  backgroundColor: "#11edd2",
-                },
-                fontSize: "14px",
-                fontWeight: "bold",
-                padding: "10px 20px",
-                borderRadius: "5px",
-                boxShadow: "1px 1px 5px rgba(0, 0, 0, 0.5)",
-              }}
-            >
-              Add
-            </Button>
-          </Box>
-          <Box>
-            <Button
-              onClick={() => handleOpen("update")}
-              disabled={disabled}
-              sx={{
-                width: "10rem",
-                fontFamily: "Poppins",
-                backgroundColor: "#564ee2",
-                color: "white",
-                "&:hover": {
-                  color: "black",
-                  backgroundColor: "#11edd2",
-                },
-                fontSize: "14px",
-                fontWeight: "bold",
-                padding: "10px 20px",
-                borderRadius: "5px",
-                boxShadow: "1px 1px 5px rgba(0, 0, 0, 0.5)",
-              }}
-            >
-              Update
-            </Button>
-          </Box>
+          {auth.role === "superadmin" && (
+            <Box>
+              <Button
+                onClick={() => handleOpen("add")}
+                sx={{
+                  fontFamily: "Poppins",
+                  backgroundColor: "#1c1948",
+                  color: "white",
+                  width: "10rem",
+                  "&:hover": {
+                    color: "black",
+                    backgroundColor: "#11edd2",
+                  },
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                  padding: "10px 20px",
+                  borderRadius: "5px",
+                  boxShadow: "1px 1px 5px rgba(0, 0, 0, 0.5)",
+                }}
+              >
+                Add
+              </Button>
+            </Box>
+          )}
+
+          {auth.role === "superadmin" && (
+            <Box>
+              <Button
+                onClick={() => handleOpen("update")}
+                disabled={disabled}
+                sx={{
+                  width: "10rem",
+                  fontFamily: "Poppins",
+                  backgroundColor: "#564ee2",
+                  color: "white",
+                  "&:hover": {
+                    color: "black",
+                    backgroundColor: "#11edd2",
+                  },
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                  padding: "10px 20px",
+                  borderRadius: "5px",
+                  boxShadow: "1px 1px 5px rgba(0, 0, 0, 0.5)",
+                }}
+              >
+                Update
+              </Button>
+            </Box>
+          )}
         </Box>
       </Box>
       {/* <SnackbarComponent
