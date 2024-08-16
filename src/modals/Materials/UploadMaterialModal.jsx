@@ -26,6 +26,8 @@ export default function UploadMaterialModal({
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
+  // const [statusDialogOpen, setStatusDialogOpen] = useState(false);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -65,6 +67,10 @@ export default function UploadMaterialModal({
   const handleDialogClose = () => {
     setDialogOpen(false);
     handleClose(); // Close the modal after the dialog is closed
+  };
+
+  const handleConfirmationDialogClose = () => {
+    setConfirmationDialogOpen(false);
   };
 
   return (
@@ -311,6 +317,26 @@ export default function UploadMaterialModal({
         </Box>
       </Modal>
 
+      <Dialog
+        open={confirmationDialogOpen}
+        onClose={handleConfirmationDialogClose}
+      >
+        <DialogTitle>Confirm Upload</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Do you really want to upload the file?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleConfirmationDialogClose} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleUpload} color="primary">
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Dialog open={dialogOpen} onClose={handleDialogClose}>
         <DialogTitle
           sx={{
@@ -341,7 +367,7 @@ export default function UploadMaterialModal({
           ) : (
             <DialogContentText>{dialogMessage}</DialogContentText>
           )}
-          <DialogActions sx={{ mt: 2}}>
+          <DialogActions sx={{ mt: 2 }}>
             <Button onClick={handleDialogClose} color="primary">
               Close
             </Button>

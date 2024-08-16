@@ -5,7 +5,11 @@ import {
   IconButton,
   Modal,
   TextField,
+  Switch,
   Typography,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -31,6 +35,30 @@ const style = {
   transform: "translate(-50%, -50%)",
   p: 2,
   overflow: "auto",
+  "@media (min-width: 10px)": {
+    height: "90vh",
+    width: "85vw",
+  },
+  "@media (min-width: 480px)": {
+    height: "85vh",
+    width: "80vw",
+  },
+  "@media (min-width: 640px)": {
+    height: "75vh",
+    width: "70vw",
+  },
+  "@media (min-width: 768px)": {
+    height: "75vh",
+    width: "70vw",
+  },
+  "@media (min-width: 1024px)": {
+    height: "80vh",
+    width: "70vw",
+  },
+  "@media (min-width: 1082px)": {
+    height: "90vh",
+    width: "50vw",
+  },
 };
 
 export default function UpdateUserModal({
@@ -43,6 +71,7 @@ export default function UpdateUserModal({
   const [disabled, setDisabled] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [gender, setGender] = useState(""); // State for gender toggle
 
   const formik = useFormik({
     initialValues: {
@@ -54,22 +83,27 @@ export default function UpdateUserModal({
       firstName: data?.firstName || "",
       middleName: data?.middleName || "",
       lastName: data?.lastName || "",
-      birthdate: data?.birthdate || "",
+      email: data?.email || "",
+      gender: data?.gender || "",
       age: null,
       address: data?.address || "",
+      status: data?.status ||"",
     },
+
     validationSchema: object().shape({
       username: string().required("Required"),
       password: string().required("Required"),
       role: string().required("Required"),
       officeId: number().nullable(),
       schoolId: number().nullable(),
-      firstName: string().nullable(),
+      firstName: string().required("Required"),
       middleName: string().nullable(),
-      lastName: string().nullable(),
-      birthdate: string().nullable(),
+      lastName: string().required("Required"),
+      email: string().required("Required"),
+      gender: string().nullable(),
       age: number().nullable(),
       address: string().nullable(),
+      status: string().nullable(), // Validation for status string
     }),
     onSubmit: (values) => {
       setLoading(true);
@@ -77,11 +111,13 @@ export default function UpdateUserModal({
 
       const formikValues = {
         ...values,
-        ...(values.password ? { newPassword: values.password } : {}), // Only include newPassword if it has a value
-        editor: "admin",
+        newPassword: values.password ? values.password : undefined, // Only include newPassword if it has a value
+        status: values.status, // Include status
+        editor: "superadmin",
       };
 
       console.log("Submitting values:", formikValues); // Log before sending
+      console.log("User Status: ", values.status); // Log user status// Log before sending
 
       accountService
         .updateUser(data?.uid, formikValues)
@@ -103,17 +139,20 @@ export default function UpdateUserModal({
     if (data) {
       const initialValues = {
         username: data?.username || "",
-        password: "",
+        password: data?.password || "",
         role: data?.role || "",
         officeId: data?.officeId || null,
         schoolId: data?.schoolId || null,
         firstName: data?.firstName || "",
         middleName: data?.middleName || "",
         lastName: data?.lastName || "",
-        birthdate: data?.birthdate || "",
+        gender: data?.gender || "",
+        email: data?.email || "",
         age: null,
         address: data?.address || "",
+        status: data?.status || "" , // Add status
       };
+      console.log("Initial Formik Values: ", initialValues);
       formik.setValues(initialValues);
     }
   }, [data]);
@@ -121,7 +160,14 @@ export default function UpdateUserModal({
   useEffect(() => {
     const { username, password, role } = formik.values;
     setDisabled(!(username && password && role));
-  }, [formik.values.username, formik.values.password, formik.values.role]);
+  }, [
+    formik.values.username,
+    formik.values.password,
+    formik.values.role,
+    formik.values.firstName,
+    formik.values.lastName,
+    formik.values.email,
+  ]);
 
   useEffect(() => {
     console.log("Updated Formik Values: ", formik.values);
@@ -144,61 +190,63 @@ export default function UpdateUserModal({
   }, [formik.values.role]);
 
   return (
-    <Modal open={open} onClose={handleClose}>
-      <Box
-        variant="form"
-        component="form"
-        onSubmit={formik.handleSubmit}
-        autoComplete="off"
-        sx={style}
+    <>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        disableBackdropTransition
+        disableAutoFocus
       >
         <Box
-          sx={{
-            position: "absolute",
-            right: 20,
-            cursor: "pointer",
-            zIndex: 100,
-          }}
+          variant="form"
+          component="form"
+          onSubmit={formik.handleSubmit}
+          autoComplete="off"
+          sx={style}
         >
-          <IconButton onClick={handleClose} sx={{ p: 0 }}>
-            <CancelIcon />
-          </IconButton>
-        </Box>
-        <Box>
           <Box
             sx={{
-              backgroundColor: "#564ee2",
-              borderRadius: "10px",
-              width: "70%",
-              p: 2,
-              mb: 2,
-              ml: 4,
+              position: "absolute",
+              right: 20,
+              cursor: "pointer",
+              zIndex: 100,
             }}
           >
-            <Typography
+            <IconButton onClick={handleClose} sx={{ p: 0 }}>
+              <CancelIcon />
+            </IconButton>
+          </Box>
+          <Box>
+            <Box
               sx={{
-                ml: 3,
-                fontSize: 25,
-                fontWeight: "500",
-                color: "#fff",
-                fontFamily: "Poppins",
+                display: "flex",
+                justifyContent: "center",
+                flexDirection: "column",
+                padding: 5,
               }}
             >
-              UPDATE USER
-            </Typography>
-          </Box>
-          {error && <Typography color="error">{error}</Typography>}
-          <Box
-            sx={{
-              backgroundColor: "rgba(255, 255, 255, 1)",
-              boxShadow: "8px 8px 15px 3px rgba(0, 0, 0, 0.3)",
-              borderRadius: "10px",
-              p: 4,
-              mx: 4,
-            }}
-          >
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
+              <Typography
+                sx={{
+                  fontFamily: "Fira Sans Condensed",
+                  fontWeight: "bold",
+                  fontSize: 30,
+                  // paddingBottom: 5,
+                }}
+              >
+                UPDATE USER
+              </Typography>
+            </Box>
+            {error && <Typography color="error">{error}</Typography>}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                flexDirection: "column",
+                gap: 3,
+                px: 5,
+              }}
+            >
+              <Box sx={{ display: "flex", gap: 1 }}>
                 <TextField
                   name="username"
                   label={`Username ${formik?.values?.username ? "" : "*"}`}
@@ -218,11 +266,9 @@ export default function UpdateUserModal({
                     formik?.touched?.username && formik?.errors?.username
                   }
                   variant="outlined"
-                  sx={{ pr: 5 }}
+                  // sx={{ pr: 5 }}
                   fullWidth
                 />
-              </Grid>
-              <Grid item xs={6}>
                 <TextField
                   id="password"
                   label="Password"
@@ -244,7 +290,7 @@ export default function UpdateUserModal({
                     formik?.touched?.password && formik?.errors?.password
                   }
                   fullWidth
-                  sx={{ pr: 5 }}
+                  // sx={{ pr: 5 }}
                   InputProps={{
                     endAdornment: (
                       <IconButton
@@ -265,8 +311,8 @@ export default function UpdateUserModal({
                     },
                   }}
                 />
-              </Grid>
-              <Grid item xs={6}>
+              </Box>
+              <Box>
                 <SelectRole
                   label={`Role ${formik?.values?.role ? "" : "*"}`}
                   name="role"
@@ -281,7 +327,7 @@ export default function UpdateUserModal({
                   helperText={formik?.touched?.role && formik?.errors?.role}
                   sx={{
                     width: "100%",
-                    pr: 5,
+                    pr: 1,
                     "&:hover": {
                       "& .MuiOutlinedInput-notchedOutline": {
                         borderColor: "black !important",
@@ -289,8 +335,8 @@ export default function UpdateUserModal({
                     },
                   }}
                 />
-              </Grid>
-              <Grid item xs={6}>
+              </Box>
+              <Box>
                 <SelectOffice
                   label={`Office ${formik?.values?.officeId ? "" : "*"}`}
                   name="office"
@@ -312,9 +358,9 @@ export default function UpdateUserModal({
                   disabled={formik.values.role.toLowerCase() === "teacher"}
                   sx={{ width: "100%" }}
                 />
-              </Grid>
+              </Box>
 
-              <Grid item xs={6}>
+              <Box>
                 <SelectSchool
                   label={`School ${formik?.values?.schoolId ? "" : "*"}`}
                   name="school"
@@ -336,8 +382,28 @@ export default function UpdateUserModal({
                   disabled={formik.values.role.toLowerCase() === "admin"}
                   sx={{ width: "100%" }}
                 />
-              </Grid>
-              <Grid item xs={6}>
+              </Box>
+              <Box>
+                <TextField
+                  name="email"
+                  label="Email"
+                  size="small"
+                  disabled={loading}
+                  value={formik?.values?.email}
+                  onChange={(e) => {
+                    formik.handleChange(e);
+                    console.log("Updated Email: ", e.target.value);
+                  }}
+                  onBlur={formik?.handleBlur}
+                  error={
+                    formik?.touched?.email && Boolean(formik?.errors?.email)
+                  }
+                  helperText={formik?.touched?.email && formik?.errors?.email}
+                  variant="outlined"
+                  fullWidth
+                />
+              </Box>
+              <Box>
                 <TextField
                   name="firstName"
                   label="First Name"
@@ -359,8 +425,8 @@ export default function UpdateUserModal({
                   variant="outlined"
                   fullWidth
                 />
-              </Grid>
-              <Grid item xs={6}>
+              </Box>
+              <Box>
                 <TextField
                   name="middleName"
                   label="Middle Name"
@@ -382,8 +448,8 @@ export default function UpdateUserModal({
                   variant="outlined"
                   fullWidth
                 />
-              </Grid>
-              <Grid item xs={6}>
+              </Box>
+              <Box>
                 <TextField
                   name="lastName"
                   label="Last Name"
@@ -405,52 +471,54 @@ export default function UpdateUserModal({
                   variant="outlined"
                   fullWidth
                 />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  name="birthdate"
-                  label="Birthdate"
-                  size="small"
-                  type="date"
-                  InputLabelProps={{ shrink: true }}
-                  disabled={loading}
-                  value={formik?.values?.birthdate}
-                  onChange={(e) => {
-                    formik.handleChange(e);
-                    console.log("Updated birthdate: ", e.target.value);
-                  }}
-                  onBlur={formik?.handleBlur}
-                  error={
-                    formik?.touched?.birthdate &&
-                    Boolean(formik?.errors?.birthdate)
-                  }
-                  helperText={
-                    formik?.touched?.birthdate && formik?.errors?.birthdate
-                  }
-                  variant="outlined"
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  name="age"
-                  label="Age"
-                  size="small"
-                  type="number"
-                  disabled={loading}
-                  value={formik?.values?.age}
-                  onChange={(e) => {
-                    formik.handleChange(e);
-                    console.log("Updated age: ", e.target.value);
-                  }}
-                  onBlur={formik?.handleBlur}
-                  error={formik?.touched?.age && Boolean(formik?.errors?.age)}
-                  helperText={formik?.touched?.age && formik?.errors?.age}
-                  variant="outlined"
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={6}>
+              </Box>
+              <Box sx={{ display: "flex", gap: 6 }}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <Typography>Gender:</Typography>
+                  <RadioGroup
+                    sx={{ px: { lg: 5, xl: 5 } }}
+                    row
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
+                  >
+                    <FormControlLabel
+                      value="Female"
+                      control={<Radio />}
+                      label="Female"
+                    />
+                    <FormControlLabel
+                      value="Male"
+                      control={<Radio />}
+                      label="Male"
+                    />
+                    <FormControlLabel
+                      value="Prefer not to say"
+                      control={<Radio />}
+                      label="Prefer not to say"
+                    />
+                  </RadioGroup>
+                </Box>
+                <Box>
+                  <TextField
+                    name="age"
+                    label="Age"
+                    size="small"
+                    type="number"
+                    disabled={loading}
+                    value={formik?.values?.age}
+                    onChange={(e) => {
+                      formik.handleChange(e);
+                    }}
+                    onBlur={formik?.handleBlur}
+                    error={formik?.touched?.age && Boolean(formik?.errors?.age)}
+                    helperText={formik?.touched?.age && formik?.errors?.age}
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                  />
+                </Box>
+              </Box>
+
+              <Box>
                 <TextField
                   name="address"
                   label="Address"
@@ -459,7 +527,6 @@ export default function UpdateUserModal({
                   value={formik?.values?.address}
                   onChange={(e) => {
                     formik.handleChange(e);
-                    console.log("Updated address: ", e.target.value);
                   }}
                   onBlur={formik?.handleBlur}
                   error={
@@ -471,42 +538,58 @@ export default function UpdateUserModal({
                   variant="outlined"
                   fullWidth
                 />
-              </Grid>
-            </Grid>
+              </Box>
+              <Box>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <Typography>Status:</Typography>
+                  <Typography sx={{ ml: 1 }}>{formik.values.status}</Typography>
+                  <Switch
+                    checked={formik?.values?.status === "enabled"}
+                    onChange={(e) => {
+                      const newStatus = e.target.checked
+                        ? "enabled"
+                        : "disabled";
+                      formik.setFieldValue("status", newStatus);
+                      console.log("User Status: ", newStatus);
+                    }}
+                  />
+                </Box>
+              </Box>
+            </Box>
           </Box>
-        </Box>
 
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "end",
-            alignItems: "center",
-            p: 2,
-            zIndex: 10,
-          }}
-        >
-          <Button
-            disabled={disabled}
-            type="submit"
+          <Box
             sx={{
-              fontFamily: "Poppins",
               display: "flex",
+              justifyContent: "end",
               alignItems: "center",
-              backgroundColor: "#564ee2",
-              color: "white",
-              py: 1,
-              width: "10vw",
-              minWidth: "100px",
-              "&:hover": {
-                color: "black",
-                backgroundColor: "#11edd2",
-              },
+              p: 2,
+              zIndex: 10,
             }}
           >
-            Update
-          </Button>
+            <Button
+              disabled={disabled}
+              type="submit"
+              sx={{
+                fontFamily: "Poppins",
+                display: "flex",
+                alignItems: "center",
+                backgroundColor: "#564ee2",
+                color: "white",
+                py: 1,
+                width: "10vw",
+                minWidth: "100px",
+                "&:hover": {
+                  color: "black",
+                  backgroundColor: "#11edd2",
+                },
+              }}
+            >
+              Update
+            </Button>
+          </Box>
         </Box>
-      </Box>
-    </Modal>
+      </Modal>
+    </>
   );
 }

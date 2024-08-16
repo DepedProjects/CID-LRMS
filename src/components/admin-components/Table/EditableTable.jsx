@@ -5,6 +5,7 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import SaveIcon from "@mui/icons-material/Save";
+import { HiOutlineNoSymbol } from "react-icons/hi2";
 import CancelIcon from "@mui/icons-material/Close";
 import {
   GridRowModes,
@@ -225,10 +226,10 @@ export default function EditableTable({
             <div />
           ),
           remove ? (
-            <Tooltip title="Remove" placement="top">
+            <Tooltip title="Disable" placement="top">
               <GridActionsCellItem
-                icon={<DeleteIcon />}
-                label="Delete"
+                icon={<HiOutlineNoSymbol style={{ fontWeight: "bold", fontSize: 20 }} />}
+                label="Disable"
                 onClick={handleDeleteClick(id)}
                 color="inherit"
               />

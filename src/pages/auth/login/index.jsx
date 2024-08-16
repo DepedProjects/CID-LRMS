@@ -37,17 +37,23 @@ export default function LoginPage() {
       setError("");
 
       accountService
-        .authenticate(formik?.values)
+        .authenticate(formik.values)
         .then((res) => {
           if (res.valid) {
-            if (res?.data.role === "admin") {
-              navigate("/Admin");
-            } else if (res?.data.role === "superadmin") {
-              navigate("/Users");
+            if (res?.data.status === "disabled") {
+              // If the status is disabled, show the restricted message
+              setPromptMessage("Account Restricted. Contact Support");
+              setOpenPrompt(true);
             } else {
-              navigate("/Homepage");
+              if (res?.data.role === "admin") {
+                navigate("/Admin");
+              } else if (res?.data.role === "superadmin") {
+                navigate("/Users");
+              } else {
+                navigate("/Homepage");
+              }
+              setAuth(res?.data);
             }
-            setAuth(res?.data);
           } else {
             setPromptMessage(
               "You provided invalid credentials. Please try again"
@@ -59,6 +65,8 @@ export default function LoginPage() {
           let message = "";
           if (err?.response?.status === 404) {
             message = "You provided invalid credentials. Please try again";
+          } else if (err?.response?.status === 403) {
+            message = "Account Restricted. Contact Support";
           } else if (err?.response?.status === 401) {
             message = err?.response?.data?.error;
           } else {
@@ -283,7 +291,9 @@ export default function LoginPage() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClosePrompt} autoFocus>
-            TRY AGAIN
+            {promptMessage === "Account Restricted. Contact Support"
+              ? "CLOSE"
+              : "TRY AGAIN"}
           </Button>
         </DialogActions>
       </Dialog>

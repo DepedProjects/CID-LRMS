@@ -53,6 +53,11 @@ export default function UserTable({
   const columns = [
     // { field: "uid", headerName: "ID", width: 70 },
     {
+      field: "status",
+      headerName: "Status",
+      width: 200,
+    },
+    {
       field: "username",
       headerName: "User",
       width: 200,
@@ -141,7 +146,7 @@ export default function UserTable({
         setSubmit={setSubmit}
         submitKind={submitKind}
         promptDesc={promptDesc}
-       />
+      />
       <EditableTable
         data={data}
         columns={columns}
@@ -151,7 +156,6 @@ export default function UserTable({
         selectedData={setSelectedUser}
         rowToDelete={setRowToDelete}
         height="80vh"
-        remove
       />
     </Box>
   );
