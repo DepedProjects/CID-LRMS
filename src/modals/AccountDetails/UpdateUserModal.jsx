@@ -27,7 +27,7 @@ const style = {
   flexDirection: "column",
   justifyContent: "space-between",
   position: "absolute",
-  backgroundColor: "#e9e9e9",
+  backgroundColor: "white",
   boxShadow: "3px 2px 20px 3px rgba(0, 0, 0, 0.3)",
   borderRadius: "10px",
   top: "50%",

@@ -2,6 +2,7 @@
 import axios from "axios";
 
 const BASE_URL = "http://localhost:5000";
+// const BASE_URL = "http://172.16.0.26:8030";
 // const BASE_URL = "http://172.16.0.21:8021";
 const customError = new Error("Network error or no response");
 // const BASE_URL = "https://synergy.depedimuscity.com:8021";
