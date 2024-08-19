@@ -20,6 +20,7 @@ import { useStateContext } from "../../contexts/ContextProvider";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { FcSupport } from "react-icons/fc";
 import OnChangePasswordModal from "../../modals/AccountDetails/ChangePasswordModal";
 
 export default function Navbar() {
@@ -83,7 +84,7 @@ export default function Navbar() {
     },
     {
       text: "Change Password",
-      icon: <FcImport size={36} />,
+      icon: <FcSupport size={36} />,
       action: handleOpenModal,
     },
     {

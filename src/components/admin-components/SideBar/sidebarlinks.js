@@ -6,7 +6,7 @@ import BusinessIcon from "@mui/icons-material/Business";
 const links = [
   {
     title: "Resources",
-    role: "admin",
+    role: ["admin"],
     links: [
       {
         name: "Resources",
@@ -18,7 +18,7 @@ const links = [
 
   {
     title: "Users",
-    role: "superadmin",
+    role: ["superadmin"],
     links: [
       {
         name: "Users",
@@ -30,7 +30,7 @@ const links = [
 
   {
     title: "Logs",
-    role: "superadmin",
+    role: ["superadmin", "admin"],
     links: [
       {
         name: "Logs",

@@ -104,15 +104,20 @@ function SideBar({
   const navigate = useNavigate();
   const { auth } = useStateContext();
 
-  // Filter out "Users" and "Logs" if the role is "admin"
+  // Filter out "Users" if the role is "admin" and "Resources" if the role is "superadmin"
   const filteredLinks = links.filter((item) => {
-    if (auth.role === "admin" && ["Users", "Logs"].includes(item.title)) {
-      return false; // Exclude "Users" and "Logs" for "admin"
+    // Exclude "Users" for "admin" role
+    if (auth?.role === "admin" && item.title === "Users") {
+      return false;
     }
-    if (auth.role === "superadmin" && item.title === "Resources") {
-      return false; // Exclude "Resources" for "superadmin"
+
+    // Exclude "Resources" for "superadmin" role
+    if (auth?.role === "superadmin" && item.title === "Resources") {
+      return false;
     }
-    return true; // Include other links
+
+    // Include all other links, including "Logs" for both roles
+    return true;
   });
 
   const handleNavigate = (link) => {

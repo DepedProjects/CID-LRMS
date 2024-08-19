@@ -10,6 +10,11 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -71,7 +76,7 @@ export default function UpdateUserModal({
   const [disabled, setDisabled] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [gender, setGender] = useState(""); // State for gender toggle
+  const [openDialog, setOpenDialog] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -87,7 +92,7 @@ export default function UpdateUserModal({
       gender: data?.gender || "",
       age: null,
       address: data?.address || "",
-      status: data?.status ||"",
+      status: data?.status || "",
     },
 
     validationSchema: object().shape({
@@ -103,21 +108,22 @@ export default function UpdateUserModal({
       gender: string().nullable(),
       age: number().nullable(),
       address: string().nullable(),
-      status: string().nullable(), // Validation for status string
+      status: string().nullable(),
     }),
+
     onSubmit: (values) => {
       setLoading(true);
       setError("");
 
       const formikValues = {
         ...values,
-        newPassword: values.password ? values.password : undefined, // Only include newPassword if it has a value
-        status: values.status, // Include status
+        newPassword: values.password ? values.password : undefined,
+        status: values.status,
         editor: "superadmin",
       };
 
-      console.log("Submitting values:", formikValues); // Log before sending
-      console.log("User Status: ", values.status); // Log user status// Log before sending
+      console.log("Submitting values:", formikValues);
+      console.log("User Status: ", values.status);
 
       accountService
         .updateUser(data?.uid, formikValues)
@@ -135,6 +141,21 @@ export default function UpdateUserModal({
     },
   });
 
+  const handleStatusChange = (e) => {
+    if (e.target.checked === false) {
+      setOpenDialog(true);
+    } else {
+      formik.setFieldValue("status", "enabled");
+    }
+  };
+
+  const handleDialogClose = (confirm) => {
+    setOpenDialog(false);
+    if (confirm) {
+      formik.setFieldValue("status", "disabled");
+    }
+  };
+
   useEffect(() => {
     if (data) {
       const initialValues = {
@@ -150,7 +171,7 @@ export default function UpdateUserModal({
         email: data?.email || "",
         age: null,
         address: data?.address || "",
-        status: data?.status || "" , // Add status
+        status: data?.status || "",
       };
       console.log("Initial Formik Values: ", initialValues);
       formik.setValues(initialValues);
@@ -168,10 +189,6 @@ export default function UpdateUserModal({
     formik.values.lastName,
     formik.values.email,
   ]);
-
-  useEffect(() => {
-    console.log("Updated Formik Values: ", formik.values);
-  }, [formik.values]);
 
   useEffect(() => {
     if (formik.values.role.toLowerCase() === "teacher") {
@@ -230,7 +247,6 @@ export default function UpdateUserModal({
                   fontFamily: "Fira Sans Condensed",
                   fontWeight: "bold",
                   fontSize: 30,
-                  // paddingBottom: 5,
                 }}
               >
                 UPDATE USER
@@ -266,7 +282,6 @@ export default function UpdateUserModal({
                     formik?.touched?.username && formik?.errors?.username
                   }
                   variant="outlined"
-                  // sx={{ pr: 5 }}
                   fullWidth
                 />
                 <TextField
@@ -290,7 +305,6 @@ export default function UpdateUserModal({
                     formik?.touched?.password && formik?.errors?.password
                   }
                   fullWidth
-                  // sx={{ pr: 5 }}
                   InputProps={{
                     endAdornment: (
                       <IconButton
@@ -306,290 +320,281 @@ export default function UpdateUserModal({
                         )}
                       </IconButton>
                     ),
-                    sx: {
-                      borderRadius: "7px",
-                    },
                   }}
                 />
               </Box>
-              <Box>
+
+              <TextField
+                label="First Name"
+                name="firstName"
+                size="small"
+                disabled={loading}
+                value={formik?.values?.firstName}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                  console.log("Updated first name: ", e.target.value);
+                }}
+                onBlur={formik?.handleBlur}
+                error={
+                  formik?.touched?.firstName &&
+                  Boolean(formik?.errors?.firstName)
+                }
+                helperText={
+                  formik?.touched?.firstName && formik?.errors?.firstName
+                }
+                fullWidth
+              />
+
+              <TextField
+                label="Last Name"
+                name="lastName"
+                size="small"
+                disabled={loading}
+                value={formik?.values?.lastName}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                  console.log("Updated last name: ", e.target.value);
+                }}
+                onBlur={formik?.handleBlur}
+                error={
+                  formik?.touched?.lastName && Boolean(formik?.errors?.lastName)
+                }
+                helperText={
+                  formik?.touched?.lastName && formik?.errors?.lastName
+                }
+                fullWidth
+              />
+
+              <TextField
+                label="Middle Name"
+                name="middleName"
+                size="small"
+                disabled={loading}
+                value={formik?.values?.middleName}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                  console.log("Updated middle name: ", e.target.value);
+                }}
+                onBlur={formik?.handleBlur}
+                error={
+                  formik?.touched?.middleName &&
+                  Boolean(formik?.errors?.middleName)
+                }
+                helperText={
+                  formik?.touched?.middleName && formik?.errors?.middleName
+                }
+                fullWidth
+              />
+
+              <TextField
+                label="Email"
+                name="email"
+                size="small"
+                disabled={loading}
+                value={formik?.values?.email}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                  console.log("Updated email: ", e.target.value);
+                }}
+                onBlur={formik?.handleBlur}
+                error={formik?.touched?.email && Boolean(formik?.errors?.email)}
+                helperText={formik?.touched?.email && formik?.errors?.email}
+                fullWidth
+              />
+
+              <TextField
+                label="Address"
+                name="address"
+                size="small"
+                disabled={loading}
+                value={formik?.values?.address}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                  console.log("Updated address: ", e.target.value);
+                }}
+                onBlur={formik?.handleBlur}
+                error={
+                  formik?.touched?.address && Boolean(formik?.errors?.address)
+                }
+                helperText={formik?.touched?.address && formik?.errors?.address}
+                fullWidth
+              />
+
+              <Grid item xs={6}>
+                <TextField
+                  label="Age"
+                  name="age"
+                  size="small"
+                  type="number"
+                  disabled={loading}
+                  value={formik?.values?.age || ""}
+                  onChange={(e) => {
+                    formik.handleChange(e);
+                    console.log("Updated age: ", e.target.value);
+                  }}
+                  onBlur={formik?.handleBlur}
+                  error={formik?.touched?.age && Boolean(formik?.errors?.age)}
+                  helperText={formik?.touched?.age && formik?.errors?.age}
+                  fullWidth
+                />
+              </Grid>
+
+              <Grid item xs={6}>
+                <RadioGroup
+                  name="gender"
+                  value={formik?.values?.gender || ""}
+                  onChange={(e) => {
+                    formik.handleChange(e);
+                    console.log("Updated gender: ", e.target.value);
+                  }}
+                  onBlur={formik?.handleBlur}
+                  row
+                >
+                  <FormControlLabel
+                    value="male"
+                    control={<Radio />}
+                    label="Male"
+                    disabled={loading}
+                  />
+                  <FormControlLabel
+                    value="female"
+                    control={<Radio />}
+                    label="Female"
+                    disabled={loading}
+                  />
+                  <FormControlLabel
+                    value="other"
+                    control={<Radio />}
+                    label="Other"
+                    disabled={loading}
+                  />
+                </RadioGroup>
+              </Grid>
+
+              <Grid item xs={12}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                  <Typography>Status</Typography>
+                  <Switch
+                    checked={formik?.values?.status === "enabled"}
+                    onChange={handleStatusChange}
+                  />
+                  <Typography>
+                    {formik?.values?.status === "enabled"
+                      ? "Enabled"
+                      : "Disabled"}
+                  </Typography>
+                </Box>
+              </Grid>
+
+              <Grid item xs={12}>
                 <SelectRole
-                  label={`Role ${formik?.values?.role ? "" : "*"}`}
                   name="role"
-                  width="100%"
-                  value={formik?.values?.role}
-                  onChange={(fieldName, selectedValue) => {
-                    formik?.setFieldValue("role", selectedValue);
-                    console.log("Updated role: ", selectedValue);
+                  value={formik?.values?.role || ""}
+                  onChange={(e) => {
+                    formik.handleChange(e);
+                    console.log("Updated role: ", e.target.value);
                   }}
                   onBlur={formik?.handleBlur}
                   error={formik?.touched?.role && Boolean(formik?.errors?.role)}
                   helperText={formik?.touched?.role && formik?.errors?.role}
-                  sx={{
-                    width: "100%",
-                    pr: 1,
-                    "&:hover": {
-                      "& .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "black !important",
-                      },
-                    },
-                  }}
+                  disabled={loading}
                 />
-              </Box>
-              <Box>
-                <SelectOffice
-                  label={`Office ${formik?.values?.officeId ? "" : "*"}`}
-                  name="office"
-                  width="100%"
-                  variant="outlined"
-                  value={formik?.values?.officeId}
-                  onChange={(fieldName, selectedValue) => {
-                    formik?.setFieldValue("officeId", selectedValue);
-                    console.log("Updated officeId: ", selectedValue);
-                  }}
-                  onBlur={formik?.handleBlur}
-                  error={
-                    formik?.touched?.officeId &&
-                    Boolean(formik?.errors?.officeId)
-                  }
-                  helperText={
-                    formik?.touched?.officeId && formik?.errors?.officeId
-                  }
-                  disabled={formik.values.role.toLowerCase() === "teacher"}
-                  sx={{ width: "100%" }}
-                />
-              </Box>
+              </Grid>
 
-              <Box>
-                <SelectSchool
-                  label={`School ${formik?.values?.schoolId ? "" : "*"}`}
-                  name="school"
-                  width="100%"
-                  variant="outlined"
-                  value={formik?.values?.schoolId}
-                  onChange={(fieldName, selectedValue) => {
-                    formik?.setFieldValue("schoolId", selectedValue);
-                    console.log("Updated schoolId: ", selectedValue);
-                  }}
-                  onBlur={formik?.handleBlur}
-                  error={
-                    formik?.touched?.schoolId &&
-                    Boolean(formik?.errors?.schoolId)
-                  }
-                  helperText={
-                    formik?.touched?.schoolId && formik?.errors?.schoolId
-                  }
-                  disabled={formik.values.role.toLowerCase() === "admin"}
-                  sx={{ width: "100%" }}
-                />
-              </Box>
-              <Box>
-                <TextField
-                  name="email"
-                  label="Email"
-                  size="small"
-                  disabled={loading}
-                  value={formik?.values?.email}
-                  onChange={(e) => {
-                    formik.handleChange(e);
-                    console.log("Updated Email: ", e.target.value);
-                  }}
-                  onBlur={formik?.handleBlur}
-                  error={
-                    formik?.touched?.email && Boolean(formik?.errors?.email)
-                  }
-                  helperText={formik?.touched?.email && formik?.errors?.email}
-                  variant="outlined"
-                  fullWidth
-                />
-              </Box>
-              <Box>
-                <TextField
-                  name="firstName"
-                  label="First Name"
-                  size="small"
-                  disabled={loading}
-                  value={formik?.values?.firstName}
-                  onChange={(e) => {
-                    formik.handleChange(e);
-                    console.log("Updated firstName: ", e.target.value);
-                  }}
-                  onBlur={formik?.handleBlur}
-                  error={
-                    formik?.touched?.firstName &&
-                    Boolean(formik?.errors?.firstName)
-                  }
-                  helperText={
-                    formik?.touched?.firstName && formik?.errors?.firstName
-                  }
-                  variant="outlined"
-                  fullWidth
-                />
-              </Box>
-              <Box>
-                <TextField
-                  name="middleName"
-                  label="Middle Name"
-                  size="small"
-                  disabled={loading}
-                  value={formik?.values?.middleName}
-                  onChange={(e) => {
-                    formik.handleChange(e);
-                    console.log("Updated middleName: ", e.target.value);
-                  }}
-                  onBlur={formik?.handleBlur}
-                  error={
-                    formik?.touched?.middleName &&
-                    Boolean(formik?.errors?.middleName)
-                  }
-                  helperText={
-                    formik?.touched?.middleName && formik?.errors?.middleName
-                  }
-                  variant="outlined"
-                  fullWidth
-                />
-              </Box>
-              <Box>
-                <TextField
-                  name="lastName"
-                  label="Last Name"
-                  size="small"
-                  disabled={loading}
-                  value={formik?.values?.lastName}
-                  onChange={(e) => {
-                    formik.handleChange(e);
-                    console.log("Updated lastName: ", e.target.value);
-                  }}
-                  onBlur={formik?.handleBlur}
-                  error={
-                    formik?.touched?.lastName &&
-                    Boolean(formik?.errors?.lastName)
-                  }
-                  helperText={
-                    formik?.touched?.lastName && formik?.errors?.lastName
-                  }
-                  variant="outlined"
-                  fullWidth
-                />
-              </Box>
-              <Box sx={{ display: "flex", gap: 6 }}>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <Typography>Gender:</Typography>
-                  <RadioGroup
-                    sx={{ px: { lg: 5, xl: 5 } }}
-                    row
-                    value={gender}
-                    onChange={(e) => setGender(e.target.value)}
-                  >
-                    <FormControlLabel
-                      value="Female"
-                      control={<Radio />}
-                      label="Female"
-                    />
-                    <FormControlLabel
-                      value="Male"
-                      control={<Radio />}
-                      label="Male"
-                    />
-                    <FormControlLabel
-                      value="Prefer not to say"
-                      control={<Radio />}
-                      label="Prefer not to say"
-                    />
-                  </RadioGroup>
-                </Box>
-                <Box>
-                  <TextField
-                    name="age"
-                    label="Age"
-                    size="small"
-                    type="number"
-                    disabled={loading}
-                    value={formik?.values?.age}
+              {formik.values.role.toLowerCase() === "admin" && (
+                <Grid item xs={12}>
+                  <SelectOffice
+                    name="officeId"
+                    value={formik?.values?.officeId || ""}
                     onChange={(e) => {
                       formik.handleChange(e);
+                      console.log("Updated officeId: ", e.target.value);
                     }}
                     onBlur={formik?.handleBlur}
-                    error={formik?.touched?.age && Boolean(formik?.errors?.age)}
-                    helperText={formik?.touched?.age && formik?.errors?.age}
-                    variant="outlined"
-                    sx={{ width: "100%" }}
+                    error={
+                      formik?.touched?.officeId &&
+                      Boolean(formik?.errors?.officeId)
+                    }
+                    helperText={
+                      formik?.touched?.officeId && formik?.errors?.officeId
+                    }
+                    disabled={loading}
                   />
-                </Box>
-              </Box>
+                </Grid>
+              )}
 
-              <Box>
-                <TextField
-                  name="address"
-                  label="Address"
-                  size="small"
-                  disabled={loading}
-                  value={formik?.values?.address}
-                  onChange={(e) => {
-                    formik.handleChange(e);
-                  }}
-                  onBlur={formik?.handleBlur}
-                  error={
-                    formik?.touched?.address && Boolean(formik?.errors?.address)
-                  }
-                  helperText={
-                    formik?.touched?.address && formik?.errors?.address
-                  }
-                  variant="outlined"
-                  fullWidth
-                />
-              </Box>
-              <Box>
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Typography>Status:</Typography>
-                  <Typography sx={{ ml: 1 }}>{formik.values.status}</Typography>
-                  <Switch
-                    checked={formik?.values?.status === "enabled"}
+              {formik.values.role.toLowerCase() === "teacher" && (
+                <Grid item xs={12}>
+                  <SelectSchool
+                    name="schoolId"
+                    value={formik?.values?.schoolId || ""}
                     onChange={(e) => {
-                      const newStatus = e.target.checked
-                        ? "enabled"
-                        : "disabled";
-                      formik.setFieldValue("status", newStatus);
-                      console.log("User Status: ", newStatus);
+                      formik.handleChange(e);
+                      console.log("Updated schoolId: ", e.target.value);
                     }}
+                    onBlur={formik?.handleBlur}
+                    error={
+                      formik?.touched?.schoolId &&
+                      Boolean(formik?.errors?.schoolId)
+                    }
+                    helperText={
+                      formik?.touched?.schoolId && formik?.errors?.schoolId
+                    }
+                    disabled={loading}
                   />
-                </Box>
-              </Box>
+                </Grid>
+              )}
             </Box>
           </Box>
 
           <Box
             sx={{
               display: "flex",
-              justifyContent: "end",
-              alignItems: "center",
-              p: 2,
-              zIndex: 10,
+              justifyContent: "flex-end",
+              paddingX: 5,
+              paddingY: 2,
             }}
           >
             <Button
-              disabled={disabled}
+              variant="contained"
+              color="primary"
               type="submit"
-              sx={{
-                fontFamily: "Poppins",
-                display: "flex",
-                alignItems: "center",
-                backgroundColor: "#564ee2",
-                color: "white",
-                py: 1,
-                width: "10vw",
-                minWidth: "100px",
-                "&:hover": {
-                  color: "black",
-                  backgroundColor: "#11edd2",
-                },
-              }}
+              disabled={disabled || loading}
             >
-              Update
+              Update User
             </Button>
           </Box>
         </Box>
       </Modal>
+
+      <Dialog
+        open={openDialog}
+        onClose={() => handleDialogClose(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Disable User Account"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to disable this user's account? The user will
+            no longer have access to the system until re-enabled.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleDialogClose(false)} color="primary">
+            Cancel
+          </Button>
+          <Button
+            onClick={() => handleDialogClose(true)}
+            color="secondary"
+            autoFocus
+          >
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
