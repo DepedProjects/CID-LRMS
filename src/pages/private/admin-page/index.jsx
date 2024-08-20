@@ -1,30 +1,15 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  // CircularProgress,
-  Divider,
-  // Tooltip,
-  Typography,
-} from "@mui/material";
-
-// import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-// import CancelIcon from "@mui/icons-material/Cancel";
-// import { useStateContext } from "../../../contexts/ContextProvider";
-// import ilearnService from "../../../services/account-service";
+import { Box, Button, Divider, Typography } from "@mui/material";
 import ilearnDataService from "../../../services/iLearn-services";
-// import dayjs from "dayjs";
 import AdminTable from "./AdminTable";
 import PromptModal from "../../../modals/PromptModal";
-// import DatePickerComponent from "../../../components/Textfields/DatePicker";
-// import StatBox from "../../../components/Statbox";
+import { useStateContext } from "../../../contexts/ContextProvider";
 
 export default function Metadatas() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  // const [start, setStart] = useState(null);
-  // const [end, setEnd] = useState(null);
+  const { auth } = useStateContext();
 
   const [fileName, setFileName] = useState(""); // Correctly define state for fileName
   const [fileBlob, setFileBlob] = useState(null);
@@ -48,22 +33,15 @@ export default function Metadatas() {
     }
 
     const confirmed = window.confirm(
-      "Are you sure you want to upload melcs from this file?"
+      "Are you sure you want to upload metadata from this file?"
     );
 
-    // Proceed only if the user confirms
     if (confirmed) {
       setFileName(selectedFile.name);
-
-      // Read the file content as a Blob
-      const reader = new FileReader();
-      reader.onload = () => {
-        const blob = new Blob([reader.result], { type: selectedFile.type });
-        setFileBlob(blob);
-      };
-      reader.readAsArrayBuffer(selectedFile);
+      setFileBlob(selectedFile); // Directly set the File object
     }
-    fileInput.value = "";
+
+    fileInput.value = ""; // Reset file input value
   };
 
   const handleGetAllMetadata = () => {
@@ -87,44 +65,49 @@ export default function Metadatas() {
     handleGetAllMetadata();
   }, []);
 
+  const logFormData = (formData) => {
+    for (let pair of formData.entries()) {
+      console.log(`${pair[0]}:`, pair[1]);
+    }
+  };
+
   useEffect(() => {
     if (fileBlob) {
+      const formData = new FormData();
+      formData.append("file", fileBlob); // Directly append the File object
+      if (auth && auth.username) {
+        formData.append("username", auth?.username);
+      }
+
+      // Log FormData contents for debugging
+      console.log("File to upload:", fileBlob);
+      console.log("FormData contents:");
+      logFormData(formData);
+
       setLoading(true);
 
-      const formData = new FormData();
-
-      formData.append("file", fileBlob);
-
       ilearnDataService
-        .bulkUploadMetadata(formData)
+        .bulkUploadMetadata(formData) // Pass FormData directly
         .then((response) => {
+          console.log("Response from bulkUploadMetadata:", response);
           if (response?.message) {
             setOpenPromptModal(true);
             setPromptMssg(response.message);
             handleGetAllMetadata();
-            console.log(response.message);
           } else {
             setError("Unexpected response format");
           }
         })
         .catch((err) => {
-          setError(err?.message);
+          console.error("Error uploading metadata:", err);
+          setError(err?.message || "An unknown error occurred");
         })
         .finally(() => {
           setLoading(false);
-          setFileBlob(null);
+          setFileBlob(null); // Clear fileBlob after upload
         });
     }
-  }, [fileBlob]);
-
-  // const handleResetDateFilter = () => {
-  //   setStart(null);
-  //   setEnd(null);
-  // };
-
-  // useEffect(() => {
-  //   handleGetAll();
-  // }, [start, end]);
+  }, [fileBlob, auth]);
 
   return (
     <Box
