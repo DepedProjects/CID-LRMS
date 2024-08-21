@@ -18,7 +18,7 @@ export default function Metadatas() {
 
   const handleMetadataUpload = (event) => {
     const fileInput = event.target;
-    const files = fileInput.files;
+    const files = fileInput.files;  
 
     if (files.length === 0) {
       return;

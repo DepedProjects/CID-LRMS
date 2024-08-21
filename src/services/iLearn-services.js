@@ -51,10 +51,11 @@ function getFilteredMetadata(gradeLevel, learningArea, resourceType, search) {
     .then((res) => res.data);
 }
 
-// New function to upload files and log metadata
-function uploadFile(metadataId, file, progressCallback) {
+// Function to upload files and log metadata
+function uploadFile(metadataId, file, username, progressCallback) {
   const formData = new FormData();
   formData.append("file", file);
+  formData.append("username", username); // Add the username to the form data
 
   return axios
     .post(`${BASE_URL}/iLearn/admin/uploadFile/${metadataId}`, formData, {

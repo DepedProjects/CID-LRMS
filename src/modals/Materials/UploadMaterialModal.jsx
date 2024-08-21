@@ -15,6 +15,7 @@ import {
 import React, { useState } from "react";
 import iLearnServices from "../../services/iLearn-services";
 import CancelIcon from "@mui/icons-material/Close";
+import { useStateContext } from "../../contexts/ContextProvider";
 
 export default function UploadMaterialModal({
   open,
@@ -26,6 +27,7 @@ export default function UploadMaterialModal({
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const [uploading, setUploading] = useState(false);
+  const { auth } = useStateContext();
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   // const [statusDialogOpen, setStatusDialogOpen] = useState(false);
 
@@ -38,7 +40,12 @@ export default function UploadMaterialModal({
       setUploading(true);
       setDialogOpen(true);
       try {
-        const response = await iLearnServices.uploadFile(rowData.id, file);
+        const username = auth?.username;
+        const response = await iLearnServices.uploadFile(
+          rowData.id,
+          file,
+          username
+        );
 
         console.log("File uploaded successfully:", response);
         setDialogMessage("Successfully Uploaded");
