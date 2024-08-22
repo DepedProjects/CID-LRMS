@@ -12,6 +12,7 @@ import {
   AdminPage,
   Users,
   Logs,
+  ActivityLogs,
 } from "../src/pages";
 import { Route, Routes, useLocation } from "react-router-dom";
 import MaterialDetails from "../src/components/MaterialDetails";
@@ -24,7 +25,8 @@ function App() {
       {location.pathname !== "/login" &&
         location.pathname !== "/Admin" &&
         location.pathname !== "/Users" &&
-        location.pathname !== "/Logs" && <Navbar />}
+        location.pathname !== "/Logs" &&
+        location.pathname !== "/ActivityLogs" && <Navbar />}
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route element={<RequireAuth allowedRoles={["teacher"]} />}>
@@ -45,13 +47,15 @@ function App() {
           <Route path="/" element={<AdminLayout />}>
             <Route path="/Admin" element={<AdminPage />} />
             <Route path="/Logs" element={<Logs />} />
+            <Route path="/ActivityLogs" element={<ActivityLogs />} />
           </Route>
         </Route>
 
-        <Route element={<RequireAuth allowedRoles={["superadmin"]}  />}>
+        <Route element={<RequireAuth allowedRoles={["superadmin"]} />}>
           <Route path="/" element={<AdminLayout />}>
             <Route path="/Users" element={<Users />} />
             <Route path="/Logs" element={<Logs />} />
+            <Route path="/ActivityLogs" element={<ActivityLogs />} />
           </Route>
         </Route>
       </Routes>

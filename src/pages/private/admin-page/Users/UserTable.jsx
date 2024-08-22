@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Box } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import EditableTable from "../../../../components/admin-components/Table/EditableTable";
@@ -10,6 +11,13 @@ export default function UserTable({
   loadingState,
   updateTableFunction,
 }) {
+  const getRowClassName = (params) => {
+    if (params.row.status === "disabled") {
+      return "disabledRow";
+    }
+    return "";
+  };
+
   const [selectedUser, setSelectedUser] = useState();
   const [rowToDelete, setRowToDelete] = useState();
   const [open, setOpen] = useState(false);
@@ -137,6 +145,9 @@ export default function UserTable({
           backgroundColor: "#53FDFD",
         },
         marginTop: "5px",
+        "& .disabledRow": {
+          backgroundColor: "#fc3d69",
+        },
       }}
     >
       <ConfirmationModal
@@ -156,6 +167,7 @@ export default function UserTable({
         selectedData={setSelectedUser}
         rowToDelete={setRowToDelete}
         height="80vh"
+        getRowClassName={getRowClassName}
       />
     </Box>
   );

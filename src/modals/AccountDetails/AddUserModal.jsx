@@ -25,6 +25,7 @@ import SelectOffice from "../../components/admin-components/Textfields/SelectOff
 import SelectRole from "../../components/admin-components/Textfields/SelectRole";
 import SelectSchool from "../../components/admin-components/Textfields/SelectSchool";
 import accountService from "../../services/account-service";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const style = {
   display: "flex",
@@ -155,6 +156,10 @@ export default function AddUserModal({
   const handleModalClose = () => {
     formik.resetForm(); // Reset form values
     handleClose(); // Call the original handleClose
+  };
+
+  const handleCopyToClipboard = () => {
+    navigator.clipboard.writeText(password);
   };
 
   return (
@@ -301,7 +306,6 @@ export default function AddUserModal({
                 disabled={loading}
                 value={formik.values.firstName}
                 onChange={formik.handleChange}
-                // onBlur={formik.handleBlur}
                 error={
                   formik.touched.firstName && Boolean(formik.errors.firstName)
                 }
@@ -317,7 +321,6 @@ export default function AddUserModal({
                 disabled={loading}
                 value={formik.values.middleName}
                 onChange={formik.handleChange}
-                // onBlur={formik.handleBlur}
                 error={
                   formik.touched.middleName && Boolean(formik.errors.middleName)
                 }
@@ -335,7 +338,6 @@ export default function AddUserModal({
                 disabled={loading}
                 value={formik.values.lastName}
                 onChange={formik.handleChange}
-                // onBlur={formik.handleBlur}
                 error={
                   formik.touched.lastName && Boolean(formik.errors.lastName)
                 }
@@ -483,11 +485,26 @@ export default function AddUserModal({
             >
               {promptMessage}
             </Typography>
-            <Typography sx={{ mt: 2 }}>{passMessage}</Typography>
+            <Typography sx={{ mt: 2, fontSize: "15px" }}>
+              {passMessage}
+            </Typography>
             <Typography
-              sx={{ textAlign: "center", fontSize: 21, fontWeight: "bold" }}
+              sx={{
+                textAlign: "center",
+                fontSize: 21,
+                fontWeight: "bold",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
               {password}
+              <IconButton
+                onClick={handleCopyToClipboard}
+                sx={{ cursor: "pointer" }}
+              >
+                <ContentCopyIcon />
+              </IconButton>
             </Typography>
           </DialogContent>
           <DialogActions

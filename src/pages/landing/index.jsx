@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
 import firstImage from "../../assets/images/pngegg.png";
+import PasswordChangeModal from "../../modals/PasswordChangeModal";
 
 export default function Landing() {
+  const [showPasswordModal, setShowPasswordModal] = useState(true);
+  const handleCloseModal = () => {
+    setShowPasswordModal(false);
+  };
+
   const openFeedbackPage = () => {
     window.open("http://172.16.0.21/feedback", "_blank");
   };
@@ -18,6 +24,10 @@ export default function Landing() {
       }}
     >
       <Navbar />
+      <PasswordChangeModal
+        open={showPasswordModal}
+        onClose={handleCloseModal}
+      />
       <Box
         sx={{
           flex: 1,

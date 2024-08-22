@@ -26,6 +26,7 @@ import SelectOffice from "../../components/admin-components/Textfields/SelectOff
 import SelectRole from "../../components/admin-components/Textfields/SelectRole";
 import SelectSchool from "../../components/admin-components/Textfields/SelectSchool";
 import accountService from "../../services/account-service";
+import { useStateContext } from "../../contexts/ContextProvider"; 
 
 const style = {
   display: "flex",
@@ -72,6 +73,7 @@ export default function UpdateUserModal({
   data,
   updateTableFunction,
 }) {
+  const { auth } = useStateContext();
   const [showPassword, setShowPassword] = useState(false);
   const [disabled, setDisabled] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -402,25 +404,7 @@ export default function UpdateUserModal({
                 fullWidth
               />
 
-              <TextField
-                label="Address"
-                name="address"
-                size="small"
-                disabled={loading}
-                value={formik?.values?.address}
-                onChange={(e) => {
-                  formik.handleChange(e);
-                  console.log("Updated address: ", e.target.value);
-                }}
-                onBlur={formik?.handleBlur}
-                error={
-                  formik?.touched?.address && Boolean(formik?.errors?.address)
-                }
-                helperText={formik?.touched?.address && formik?.errors?.address}
-                fullWidth
-              />
-
-              <Grid item xs={6}>
+              <Box sx={{ display: "flex", gap: 3 }}>
                 <TextField
                   label="Age"
                   name="age"
@@ -435,11 +419,9 @@ export default function UpdateUserModal({
                   onBlur={formik?.handleBlur}
                   error={formik?.touched?.age && Boolean(formik?.errors?.age)}
                   helperText={formik?.touched?.age && formik?.errors?.age}
-                  fullWidth
+                  sx={{ width: "20%" }}
                 />
-              </Grid>
 
-              <Grid item xs={6}>
                 <RadioGroup
                   name="gender"
                   value={formik?.values?.gender || ""}
@@ -463,15 +445,110 @@ export default function UpdateUserModal({
                     disabled={loading}
                   />
                   <FormControlLabel
-                    value="other"
+                    value="prefer not to say"
                     control={<Radio />}
-                    label="Other"
+                    label="Prefer not to say"
                     disabled={loading}
                   />
                 </RadioGroup>
-              </Grid>
+              </Box>
 
-              <Grid item xs={12}>
+              <SelectRole
+                label={`Role ${formik?.values?.role ? "" : "*"}`}
+                name="role"
+                width="100%"
+                value={formik?.values?.role}
+                onChange={(fieldName, selectedValue) => {
+                  formik?.setFieldValue("role", selectedValue);
+                  console.log("Updated role: ", selectedValue);
+                }}
+                onBlur={formik?.handleBlur}
+                error={formik?.touched?.role && Boolean(formik?.errors?.role)}
+                helperText={formik?.touched?.role && formik?.errors?.role}
+                sx={{
+                  width: "50%",
+                  pr: 1,
+                  "&:hover": {
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "black !important",
+                    },
+                  },
+                }}
+              />
+
+              {formik.values.role.toLowerCase() === "admin" && (
+                <Grid item xs={12}>
+                  <SelectOffice
+                    label={`Office ${formik?.values?.officeId ? "" : "*"}`}
+                    name="office"
+                    width="100%"
+                    variant="outlined"
+                    value={formik?.values?.officeId}
+                    onChange={(fieldName, selectedValue) => {
+                      formik?.setFieldValue("officeId", selectedValue);
+                      console.log("Updated officeId: ", selectedValue);
+                    }}
+                    onBlur={formik?.handleBlur}
+                    error={
+                      formik?.touched?.officeId &&
+                      Boolean(formik?.errors?.officeId)
+                    }
+                    helperText={
+                      formik?.touched?.officeId && formik?.errors?.officeId
+                    }
+                    disabled={formik.values.role.toLowerCase() === "teacher"}
+                    sx={{ width: "100%" }}
+                  />
+                </Grid>
+              )}
+
+              {formik.values.role.toLowerCase() === "teacher" && (
+                <Grid item xs={12}>
+                  <SelectSchool
+                    label={`School ${formik?.values?.schoolId ? "" : "*"}`}
+                    name="school"
+                    width="100%"
+                    variant="outlined"
+                    value={formik?.values?.schoolId}
+                    onChange={(fieldName, selectedValue) => {
+                      formik?.setFieldValue("schoolId", selectedValue);
+                      console.log("Updated schoolId: ", selectedValue);
+                    }}
+                    onBlur={formik?.handleBlur}
+                    error={
+                      formik?.touched?.schoolId &&
+                      Boolean(formik?.errors?.schoolId)
+                    }
+                    helperText={
+                      formik?.touched?.schoolId && formik?.errors?.schoolId
+                    }
+                    disabled={formik.values.role.toLowerCase() === "admin"}
+                    sx={{ width: "100%" }}
+                  />
+                </Grid>
+              )}
+
+              <TextField
+                label="Address"
+                name="address"
+                size="small"
+                disabled={loading}
+                multiline
+                maxRows={4}
+                value={formik?.values?.address}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                  console.log("Updated address: ", e.target.value);
+                }}
+                onBlur={formik?.handleBlur}
+                error={
+                  formik?.touched?.address && Boolean(formik?.errors?.address)
+                }
+                helperText={formik?.touched?.address && formik?.errors?.address}
+                fullWidth
+              />
+
+             { auth?.role === "teacher" && (<Grid item xs={12}>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                   <Typography>Status</Typography>
                   <Switch
@@ -485,65 +562,10 @@ export default function UpdateUserModal({
                   </Typography>
                 </Box>
               </Grid>
-
-              <Grid item xs={12}>
-                <SelectRole
-                  name="role"
-                  value={formik?.values?.role || ""}
-                  onChange={(e) => {
-                    formik.handleChange(e);
-                    console.log("Updated role: ", e.target.value);
-                  }}
-                  onBlur={formik?.handleBlur}
-                  error={formik?.touched?.role && Boolean(formik?.errors?.role)}
-                  helperText={formik?.touched?.role && formik?.errors?.role}
-                  disabled={loading}
-                />
-              </Grid>
-
-              {formik.values.role.toLowerCase() === "admin" && (
-                <Grid item xs={12}>
-                  <SelectOffice
-                    name="officeId"
-                    value={formik?.values?.officeId || ""}
-                    onChange={(e) => {
-                      formik.handleChange(e);
-                      console.log("Updated officeId: ", e.target.value);
-                    }}
-                    onBlur={formik?.handleBlur}
-                    error={
-                      formik?.touched?.officeId &&
-                      Boolean(formik?.errors?.officeId)
-                    }
-                    helperText={
-                      formik?.touched?.officeId && formik?.errors?.officeId
-                    }
-                    disabled={loading}
-                  />
-                </Grid>
               )}
+              
 
-              {formik.values.role.toLowerCase() === "teacher" && (
-                <Grid item xs={12}>
-                  <SelectSchool
-                    name="schoolId"
-                    value={formik?.values?.schoolId || ""}
-                    onChange={(e) => {
-                      formik.handleChange(e);
-                      console.log("Updated schoolId: ", e.target.value);
-                    }}
-                    onBlur={formik?.handleBlur}
-                    error={
-                      formik?.touched?.schoolId &&
-                      Boolean(formik?.errors?.schoolId)
-                    }
-                    helperText={
-                      formik?.touched?.schoolId && formik?.errors?.schoolId
-                    }
-                    disabled={loading}
-                  />
-                </Grid>
-              )}
+
             </Box>
           </Box>
 

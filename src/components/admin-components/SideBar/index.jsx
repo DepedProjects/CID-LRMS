@@ -227,7 +227,7 @@ function SideBar({
                       >
                         <Typography
                           sx={{
-                            fontSize: "16px",
+                            fontSize: "24px",
                             color: "white",
                           }}
                         >

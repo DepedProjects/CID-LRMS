@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import SaveIcon from "@mui/icons-material/Save";
@@ -33,6 +32,7 @@ export default function EditableTable({
   remove,
   view,
   form,
+  getRowClassName,
 }) {
   const [rows, setRows] = useState(data);
   const [rowModesModel, setRowModesModel] = useState({});
@@ -228,7 +228,11 @@ export default function EditableTable({
           remove ? (
             <Tooltip title="Disable" placement="top">
               <GridActionsCellItem
-                icon={<HiOutlineNoSymbol style={{ fontWeight: "bold", fontSize: 20 }} />}
+                icon={
+                  <HiOutlineNoSymbol
+                    style={{ fontWeight: "bold", fontSize: 20 }}
+                  />
+                }
                 label="Disable"
                 onClick={handleDeleteClick(id)}
                 color="inherit"
@@ -318,6 +322,7 @@ export default function EditableTable({
         onRowSelectionModelChange={
           singleSelect ? handleSingleRowSelection : handleRowSelect
         }
+        getRowClassName={getRowClassName}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
         slots={{ toolbar: GridToolbar }}

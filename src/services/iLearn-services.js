@@ -33,6 +33,12 @@ function getAllOffices() {
   return axios.get(`${BASE_URL}/iLeaRN/getAllOffices`).then((res) => res.data);
 }
 
+function getAllActivity() {
+  return axios
+    .get(`${BASE_URL}/iLeaRN/getAllActivityLogs`)
+    .then((res) => res.data);
+}
+
 function getAllSchools() {
   return axios.get(`${BASE_URL}/iLeaRN/getAllSchools`).then((res) => res.data);
 }
@@ -134,6 +140,7 @@ export default {
   bulkUploadMetadata,
   getFilteredMetadata,
   getAllOffices,
+  getAllActivity,
   getAllSchools,
   updateMaterial,
 };

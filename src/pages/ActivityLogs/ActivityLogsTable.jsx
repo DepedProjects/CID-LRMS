@@ -2,9 +2,9 @@
 import { Box } from "@mui/material";
 import React, { useState } from "react";
 import dayjs from "dayjs";
-import EditableTable from "../../../../components/admin-components/Table/EditableTable";
+import EditableTable from "../../components/admin-components/Table/EditableTable";
 
-export default function UserTable({ data, loadingState, setOpenUpdateModal }) {
+export default function ActivityLogsTable({ data, loadingState, setOpenUpdateModal }) {
   const [loading] = useState(false);
 
 

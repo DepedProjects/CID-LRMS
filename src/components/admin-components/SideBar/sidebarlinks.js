@@ -2,6 +2,7 @@
 import DataIcon from "@mui/icons-material/Description";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import BusinessIcon from "@mui/icons-material/Business";
+import { CiBoxList } from "react-icons/ci";
 
 const links = [
   {
@@ -36,6 +37,17 @@ const links = [
         name: "Logs",
         path: "Logs",
         icon: <BusinessIcon />,
+      },
+    ],
+  },
+  {
+    title: "Activity Logs",
+    role: ["superadmin", "admin"],
+    links: [
+      {
+        name: "Activity Logs",
+        path: "ActivityLogs",
+        icon: <CiBoxList />,
       },
     ],
   },

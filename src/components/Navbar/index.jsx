@@ -54,6 +54,8 @@ export default function Navbar() {
     navigate("/ALS");
   };
 
+  console.log(auth?.schoolName);
+
   const portalOptions = [
     { text: "ALS", action: handleopenALS },
     { text: "K TO 12", action: handleopenKTO12 },
@@ -327,6 +329,8 @@ export default function Navbar() {
                       />
                     </>
                   ) : auth?.role === "teacher" ? (
+                   
+                    
                     <>
                       <ListItemText
                         primary={auth?.schoolName}
