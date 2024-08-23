@@ -31,12 +31,6 @@ export default function Users() {
     }
   };
 
-  const handleCloseSuccess = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpenSuccess(false);
-  };
 
   const handleGetAll = () => {
     setLoading(true);

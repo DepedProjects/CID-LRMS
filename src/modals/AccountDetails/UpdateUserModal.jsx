@@ -26,7 +26,7 @@ import SelectOffice from "../../components/admin-components/Textfields/SelectOff
 import SelectRole from "../../components/admin-components/Textfields/SelectRole";
 import SelectSchool from "../../components/admin-components/Textfields/SelectSchool";
 import accountService from "../../services/account-service";
-import { useStateContext } from "../../contexts/ContextProvider"; 
+import { useStateContext } from "../../contexts/ContextProvider";
 
 const style = {
   display: "flex",
@@ -548,7 +548,7 @@ export default function UpdateUserModal({
                 fullWidth
               />
 
-             { auth?.role === "teacher" && (<Grid item xs={12}>
+              <Grid item xs={12}>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                   <Typography>Status</Typography>
                   <Switch
@@ -562,10 +562,6 @@ export default function UpdateUserModal({
                   </Typography>
                 </Box>
               </Grid>
-              )}
-              
-
-
             </Box>
           </Box>
 

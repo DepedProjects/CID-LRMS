@@ -7,21 +7,18 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
-  Dialog,
-  DialogTitle,
-  Button,
-  DialogActions,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import depedLogo from "../../assets/images/deped_logo.png";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { FcApproval, FcImport, FcReading } from "react-icons/fc";
+import { FcImport, FcReading } from "react-icons/fc";
 import { useStateContext } from "../../contexts/ContextProvider";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { FcSupport } from "react-icons/fc";
-import OnChangePasswordModal from "../../modals/AccountDetails/ChangePasswordModal";
+import ChangePasswordModal from "../../modals/AccountDetails/ChangePasswordModal";
+import accountService from "../../services/account-service";
 
 export default function Navbar() {
   const [openMenu, setOpenMenu] = useState(false);
@@ -29,22 +26,59 @@ export default function Navbar() {
   const [openPortalMenu, setOpenPortalMenu] = useState(false);
   const [openPrompt, setOpenPrompt] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const [promptMessage, setPromptMessage] = useState("");
+  const [passwordChange, setPasswordChange] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isMediumScreen = useMediaQuery("(max-width: 1366px)");
   const { auth, setAuth } = useStateContext();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    setOpenProfileMenu(false);
-    setAuth(null);
-    // Perform redirection manually
-    navigate("/"); // Replace with your desired path
+  const handleLogout = async () => {
+    if (auth?.uid) {
+      try {
+        await accountService.logout(auth.uid, auth.username);
+        setOpenProfileMenu(false);
+        setAuth(null);
+        navigate("/");
+        console.log("handleLogout");
+      } catch (error) {
+        console.error("Logout failed:", error);
+      }
+    } else {
+      console.error("No UID found");
+    }
   };
+
+  const notChangedLogOut = async () => {
+    try {
+      await accountService.logout(auth.uid, auth.username);
+      setOpenModal(false);
+      setAuth(null);
+      navigate("/");
+      console.log("notChangedLogOut");
+    } catch (error) {
+      console.error("Logout failed:", error);
+      setOpenPrompt(true);
+    }
+  };
+
+  // useEffect(() => {
+  //   if (auth?.changedPass === 0 && passwordChange) {
+  //     notChangedLogOut();
+  //   } else {
+  //     setOpenModal(false);
+  //   }
+  // }, [passwordChange]);
 
   const handleOpenModal = () => {
     setOpenModal(true);
   };
+
+  useEffect(() => {
+    if (auth && auth?.changedPass === 0) {
+      console.log(auth, auth?.changedPass);
+      setOpenModal(true);
+    }
+  }, [auth]);
 
   const handleopenKTO12 = () => {
     navigate("/Portal");
@@ -53,8 +87,6 @@ export default function Navbar() {
   const handleopenALS = () => {
     navigate("/ALS");
   };
-
-  console.log(auth?.schoolName);
 
   const portalOptions = [
     { text: "ALS", action: handleopenALS },
@@ -329,8 +361,6 @@ export default function Navbar() {
                       />
                     </>
                   ) : auth?.role === "teacher" ? (
-                   
-                    
                     <>
                       <ListItemText
                         primary={auth?.schoolName}
@@ -375,66 +405,11 @@ export default function Navbar() {
             </Drawer>
           </Box>
         )}
-        <OnChangePasswordModal
-          handleClose={() => setOpenModal(false)}
-          open={openModal}
-          onSuccess={() => setOpenPrompt(true)}
-        />
       </Box>
-
-      <Dialog open={openPrompt} onClose={() => setOpenPrompt(false)}>
-        <Box sx={{ display: "flex", flexDirection: "column", py: 2 }}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <FcApproval
-              style={{
-                fontSize: 64,
-              }}
-            />
-          </Box>
-
-          <DialogTitle
-            sx={{
-              width: "20rem",
-              fontSize: "1rem",
-              paddingTop: -100,
-              textAlign: "center",
-            }}
-          >
-            Password Change Successful
-          </DialogTitle>
-          <DialogActions
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              textAlign: "center",
-              alignItems: "center",
-            }}
-          >
-            <Button
-              variant="contained"
-              onClick={() => setOpenPrompt(false)}
-              sx={{
-                borderRadius: "16px", // Adjust the value as needed
-                width: "50%",
-                backgroundColor: "#51f559",
-                boxShadow: "0 0 20px rgba(0, 255, 0, 0.6)", // Green glowing effect
-                "&:hover": {
-                  backgroundColor: "#51f559", // Stronger background color on hover
-                  boxShadow: "0 0 20px rgba(0, 255, 0, 1)", // Stronger green glow on hover
-                },
-              }}
-            >
-              Ok
-            </Button>
-          </DialogActions>
-        </Box>
-      </Dialog>
+      <ChangePasswordModal
+        open={openModal}
+        handleClose={(() => setOpenModal(false))}
+      />
     </>
   );
 }

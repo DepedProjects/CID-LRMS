@@ -16,8 +16,6 @@ export default function RequireAuth({ allowedRoles }) {
     }
   }
 
-  console.log("Auth role:", auth?.role);
-  console.log("Allowed roles:", allowedRoles);
 
   // eslint-disable-next-line no-nested-ternary
   return hasAllowedRole ? (
