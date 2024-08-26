@@ -288,7 +288,7 @@ export default function Portal() {
                                       }}
                                     >
                                       {`${resourceType}`}
-                                      <Typography sx={{ pl: 10}}>
+                                      <Typography sx={{ pl: 10 }}>
                                         {`${materialsData[gradeLevel][learningArea][resourceType]}`}
                                       </Typography>
                                     </Typography>

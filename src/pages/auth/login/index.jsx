@@ -53,6 +53,7 @@ export default function LoginPage() {
                 navigate("/Homepage");
               }
               setAuth(res?.data);
+              localStorage.setItem("auth", JSON.stringify(res?.data));
             }
           } else {
             setPromptMessage(

@@ -1,9 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useLocation } from "react-router-dom";
 import { FcDocument } from "react-icons/fc";
 import { AiFillDatabase } from "react-icons/ai";
 import { CiSearch } from "react-icons/ci";
+import { useStateContext } from "../../contexts/ContextProvider";
 import {
   Box,
   Typography,
@@ -25,11 +27,11 @@ import DataNotFound from "../../pages/miscelleaneous/NoData";
 import iLearnService from "../../../src/services/iLearn-services";
 import ViewMaterialsModal from "../../modals/Materials/viewMaterialsModal";
 
-
 export default function Materials() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const [downloading, setDownloading] = useState(false);
+  const { auth } = useStateContext();
 
   const [modalOpen, setModalOpen] = useState(false); // State for controlling modal open/close
   const [selectedMaterial, setSelectedMaterial] = useState(null);
@@ -42,8 +44,6 @@ export default function Materials() {
   const [result, setResult] = useState(materials);
 
   useEffect(() => {
-    console.log("Received Materials Data:", materials); // Log received materials data
-
     const searchTerm = search.trim().toLowerCase();
 
     if (searchTerm) {
@@ -72,11 +72,13 @@ export default function Materials() {
   };
 
   const handleDownloadMaterial = async (metadataId, title) => {
+    const username = auth?.username; // Retrieve the username from auth, if available
+
     handleDialogOpen("Downloading...");
     setDownloading(true);
 
     try {
-      await iLearnService.downloadFile(metadataId, title);
+      await iLearnService.downloadFile(metadataId, title, username);
       setDialogMessage("Download completed successfully!");
     } catch (error) {
       console.error("Failed to download material:", error);
@@ -98,6 +100,28 @@ export default function Materials() {
   const handleCloseModal = () => {
     setModalOpen(false); // Close the modal
     setSelectedMaterial(null); // Clear the selected material details
+  };
+
+  function getPreviewUrl(fileId) {
+    try {
+      // Google Drive's preview link format
+      const previewUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+      return previewUrl;
+    } catch (error) {
+      console.error("Error generating preview URL:", error);
+      throw error;
+    }
+  }
+
+  // Function to handle preview action
+  const handlePreview = (fileId) => {
+    if (!fileId) {
+      console.error("No file ID provided for preview.");
+      return;
+    }
+
+    const previewUrl = getPreviewUrl(fileId);
+    window.open(previewUrl, "_blank"); // Open the preview URL in a new browser tab
   };
 
   return (
@@ -124,7 +148,14 @@ export default function Materials() {
             >
               Materials
             </Typography>
-            <Box sx={{ display: "flex", gap: { lg: 1, xl: 2 } }}>
+            <Box
+              sx={{
+                display: "flex",
+                ml: -20,
+                width: { lg: "400px", xl: "500px" },
+                gap: { lg: 1, xl: 2 },
+              }}
+            >
               <Button onClick={handleResetSearch}>
                 <Typography
                   sx={{ color: "white", fontFamily: "Fira Sans Condensed" }}
@@ -165,13 +196,12 @@ export default function Materials() {
             </Box>
           </Box>
         </Box>
-        <Box sx={{ marginTop: 1 }}>
+        <Box sx={{ marginTop: -1 }}>
           {result.length === 0 ? (
             <DataNotFound />
           ) : (
             <List>
               {result.map((material) => {
-                console.log("Material Object:", material);
                 const formattedDate = dayjs(material.uploaded_at).format(
                   "YYYY-MM-DD hh:mm A"
                 );
@@ -241,14 +271,19 @@ export default function Materials() {
                             fontWeight: "bold",
                           }}
                         >
-                          VIEW DETAILS
+                          DETAILS
                         </Typography>
                       </Button>
                       <Button
                         onClick={() => {
                           handleDownloadMaterial(material.id, material.title);
                         }}
-                        sx={{ backgroundColor: "#8cfab0" }}
+                        sx={{
+                          backgroundColor: material.fileId
+                            ? "#8cfab0"
+                            : "#d3d3d3",
+                        }}
+                        disabled={!material.fileId} // Disable the button if no fileId is present
                       >
                         <Typography
                           sx={{
@@ -259,6 +294,26 @@ export default function Materials() {
                           }}
                         >
                           DOWNLOAD
+                        </Typography>
+                      </Button>
+                      <Button
+                        onClick={() => handlePreview(material.fileId)}
+                        sx={{
+                          backgroundColor: material.fileId
+                            ? "#8cfab0"
+                            : "#d3d3d3",
+                        }}
+                        disabled={!material.fileId} // Disable the button if no fileId is present
+                      >
+                        <Typography
+                          sx={{
+                            fontSize: 12,
+                            color: "black",
+                            fontFamily: "Fira Sans Condensed",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          PREVIEW
                         </Typography>
                       </Button>
                     </Box>
@@ -279,7 +334,7 @@ export default function Materials() {
             px: 10,
           }}
         >
-          {"Upload Status"}
+          {"Download Status"}
         </DialogTitle>
         <DialogContent
           sx={{

@@ -108,6 +108,7 @@ export default function ChangePasswordModal({ open, handleClose }) {
         setAuth(response?.data?.data);
         handleClose();
         setOpenPrompt(true);
+        localStorage.setItem("auth", JSON.stringify(response?.data?.data))
       })
       .catch((err) => {
         console.log("API call failed:", err);

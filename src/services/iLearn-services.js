@@ -7,6 +7,17 @@ const BASE_URL = "http://localhost:5000";
 // const customError = new Error("Network error or no response");
 // // const BASE_URL = "https://synergy.depedimuscity.com:8021";
 
+function getPreviewUrl(fileId) {
+  try {
+    // Google Drive's preview link format
+    const previewUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+    return previewUrl;
+  } catch (error) {
+    console.error("Error generating preview URL:", error);
+    throw error;
+  }
+}
+
 function getAllMetadata() {
   return axios.get(`${BASE_URL}/iLeaRN/getAllMetadata`).then((res) => res.data);
 }
@@ -84,10 +95,9 @@ function uploadFile(metadataId, file, username, progressCallback) {
     });
 }
 
-function downloadFile(metadataId, title) {
-  console.log("Title:", title); // Debugging: check if title is passed correctly
+function downloadFile(metadataId, title, username) {
   return axios({
-    url: `${BASE_URL}/iLeaRN/admin/downloadFile/${metadataId}`,
+    url: `${BASE_URL}/iLeaRN/admin/downloadFile/${metadataId}?username=${username}`,
     method: "GET",
     responseType: "blob", // Important for handling binary data
   })
@@ -112,10 +122,12 @@ function downloadFile(metadataId, title) {
 }
 
 // New function to update material details and handle file upload
-function updateMaterial(metadataId, formData, file) {
+function updateMaterial(metadataId, formData, file, username) {
   const data = new FormData();
   Object.keys(formData).forEach((key) => data.append(key, formData[key]));
   if (file) data.append("file", file);
+
+  data.append("username", username);
 
   return axios
     .put(`${BASE_URL}/iLearn/admin/update-material/${metadataId}`, data, {
@@ -143,4 +155,5 @@ export default {
   getAllActivity,
   getAllSchools,
   updateMaterial,
+  getPreviewUrl,
 };

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-
+import { useStateContext } from "../../contexts/ContextProvider";
 import {
   Modal,
   TextField,
@@ -23,6 +23,7 @@ export default function UpdateMaterialModal({ open, onClose, material = {} }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const [updating, setUpdating] = useState(false);
+  const { auth } = useStateContext();
 
   const [formData, setFormData] = useState({
     title: material?.title || "",
@@ -40,7 +41,6 @@ export default function UpdateMaterialModal({ open, onClose, material = {} }) {
 
   useEffect(() => {
     if (material) {
-      console.log("Material received in useEffect:", material); // Log the material received
       setFormData({
         title: material.title || "",
         description: material.description || "",
@@ -67,21 +67,18 @@ export default function UpdateMaterialModal({ open, onClose, material = {} }) {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    console.log("Selected File:", file); // Log the selected file
     setSelectedFile(file);
   };
 
   const handleSubmit = async (e) => {
-    console.log("Form submission event:", e); // Log the form submission event
     e.preventDefault(); // Prevent the default form submission behavior
-    console.log("Form Data to be submitted:", formData); // Log the form data
-    console.log("Selected File for upload:", selectedFile); // Log the selected file
-
     try {
       if (material?.id) {
         const data = new FormData();
         Object.keys(formData).forEach((key) => data.append(key, formData[key]));
         if (selectedFile) data.append("file", selectedFile);
+
+        data.append("username", auth?.username);
         setUpdating(true);
         setDialogOpen(true);
         axios
@@ -95,7 +92,6 @@ export default function UpdateMaterialModal({ open, onClose, material = {} }) {
             }
           )
           .then((response) => {
-            console.log("Material updated successfully:", response?.data); // Log the 'data' object
             setDialogMessage("Successfully Updated");
             setUpdating(false);
             return response?.data; // Return the data object

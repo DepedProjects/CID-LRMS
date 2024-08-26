@@ -4,7 +4,9 @@ import PropTypes from "prop-types";
 const StateContext = createContext();
 
 export function ContextProvider({ children }) {
-  const [auth, setAuth] = useState(null);
+  const storedAuth = localStorage.getItem("auth");
+
+  const [auth, setAuth] = useState(JSON.parse(storedAuth) || null);
 
   const [page, setPage] = useState("");
 
