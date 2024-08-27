@@ -13,6 +13,8 @@ import {
   Users,
   Logs,
   ActivityLogs,
+  AboutUsNav,
+  CitizenCharterinNav,
 } from "../src/pages";
 import { Route, Routes, useLocation } from "react-router-dom";
 import MaterialDetails from "../src/components/MaterialDetails";
@@ -26,9 +28,14 @@ function App() {
         location.pathname !== "/Admin" &&
         location.pathname !== "/Users" &&
         location.pathname !== "/Logs" &&
-        location.pathname !== "/ActivityLogs" && <Navbar />}
+        location.pathname !== "/ActivityLogs" &&
+        location.pathname !== "/AboutUsNav" &&
+        location.pathname !== "/CitizenCharterinNav" && <Navbar />}
       <Routes>
         <Route path="/" element={<LoginPage />} />
+        <Route path="/AboutUsNav" element={<AboutUsNav />} />
+        <Route path="/CitizenCharterinNav" element={<CitizenCharterinNav />} />
+
         <Route element={<RequireAuth allowedRoles={["teacher"]} />}>
           <Route path="/AboutUs" element={<AboutUs />} />
           <Route path="/Portal" element={<Portal />}>

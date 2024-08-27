@@ -61,13 +61,6 @@ export default function Navbar() {
     }
   };
 
-  // useEffect(() => {
-  //   if (auth?.changedPass === 0 && passwordChange) {
-  //     notChangedLogOut();
-  //   } else {
-  //     setOpenModal(false);
-  //   }
-  // }, [passwordChange]);
 
   const handleOpenModal = () => {
     setOpenModal(true);

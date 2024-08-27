@@ -1,0 +1,152 @@
+import React from "react";
+import Footer from "../../components/Footer";
+import aboutUs1 from "../../assets/images/aboutus1.jpg";
+import sirHomer from "../../assets/images/Sir Homer2.jpg";
+import msGlenda from "../../assets/images/Ms. Glenda.jpg";
+import msLuna from "../../assets/images/MaamLuna.jpg";
+import cidlrmds from "../../assets/images/CID-LRMS.jpg";
+import { useNavigate } from "react-router-dom";
+import { Box, Typography } from "@mui/material";
+import DepedLogo from "../../assets/images/deped_logo.png";
+
+export default function AboutUsNav() {
+  const navigate = useNavigate();
+
+  const handleHome = () => {
+    navigate("/");
+  };
+
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
+      }}
+    >
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: { xs: 2, sm: 3, md: 4, lg: 5 },
+          paddingTop: { xs: 15, sm: 10, md: 12, lg: 15, xl: 15 },
+          paddingBottom: { xs: 3, sm: 3, md: 4, lg: 5, xl: 4 },
+          backgroundImage: `url(${aboutUs1})`,
+        }}
+      >
+        <Box sx={{ display: "flex", mt: { lg: -10, xl: -10 }, gap: 3 }}>
+          <img
+            src={DepedLogo}
+            alt="DepedLogo"
+            style={{ width: "auto", height: "100px", cursor: "pointer" }}
+            onClick={handleHome}
+          />
+
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <Typography
+              variant="h1"
+              color="primary"
+              sx={{
+                fontFamily: "Fira Sans Condensed",
+                color: "white",
+                fontWeight: "semi-bold",
+                fontSize: {
+                  xs: "1.7rem",
+                  sm: "2rem",
+                  md: "2.5rem",
+                  lg: "1rem",
+                  xl: "1.5rem",
+                },
+
+                textAlign: "center",
+              }}
+            >
+              The DepEd SDO Imus City
+            </Typography>
+            <Typography
+              sx={{
+                color: "white",
+                fontWeight: "bold",
+                fontFamily: "Fira Sans Condensed",
+                fontSize: {
+                  xs: "1.7rem",
+                  sm: "2rem",
+                  md: "2.5rem",
+                  lg: "2.5rem",
+                  xl: "2rem",
+                },
+                textAlign: "center",
+              }}
+            >
+              LEARNING RESOURCES
+            </Typography>
+            <Typography
+              sx={{
+                color: "white",
+                fontFamily: "Fira Sans Condensed",
+                fontSize: {
+                  xs: "1.7rem",
+                  sm: "2rem",
+                  md: "2.5rem",
+                  lg: "1.5rem",
+                  xl: "1rem",
+                },
+                textAlign: "center",
+              }}
+            >
+              Management Team
+            </Typography>
+          </Box>
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          // px: { xs: 2, sm: 3, md: 4, lg: 5, xl: 1 },
+          // width: "auto",
+          display: "flex",
+          justifyContent: "center",
+          backgroundImage: `url(${sirHomer})`,
+        }}
+      >
+        <img src={sirHomer} alt="sirHomer" style={{ width: "100%" }} />
+      </Box>
+      <Box
+        sx={{
+          // px: { xs: 2, sm: 3, md: 4, lg: 5, xl: 1 },
+          // width: "auto",
+          display: "flex",
+          justifyContent: "center",
+          backgroundImage: `url(${msLuna})`,
+        }}
+      >
+        <img src={msLuna} alt="msLuna" style={{ width: "100%" }} />
+      </Box>
+      <Box
+        sx={{
+          // px: { xs: 2, sm: 3, md: 4, lg: 5, xl: 1 },
+          // width: "auto",
+          display: "flex",
+          justifyContent: "center",
+          backgroundImage: `url(${msGlenda})`,
+        }}
+      >
+        <img src={msGlenda} alt="msGlenda" style={{ width: "100%" }} />
+      </Box>
+      <Box
+        sx={{
+          // px: { xs: 2, sm: 3, md: 4, lg: 5, xl: 1 },
+          // width: "auto",
+          display: "flex",
+          justifyContent: "center",
+          backgroundImage: `url(${cidlrmds})`,
+        }}
+      >
+        <img src={cidlrmds} alt="cidlrmds" style={{ width: "100%" }} />
+      </Box>
+      <Footer />
+    </Box>
+  );
+}

@@ -10,13 +10,24 @@ import {
 import React, { useState } from "react";
 import logo from "../../assets/images/deped_logo.png";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useNavigate } from "react-router-dom"; // Import the useNavigate hook
 import { useMediaQuery } from "@mui/material";
 
 export default function LoginHeader() {
   const [openMenu, setOpenMenu] = useState(false);
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isMediumScreen = useMediaQuery("(max-width: 1366px)");
-  const menuOptions = ["About Us", "Citizen's Charter"];
+  const navigate = useNavigate();
+
+  const menuOptions = [
+    { label: "About Us", route: "/AboutUsNav" },
+    { label: "Citizen's Charter", route: "/CitizenCharterinNav" },
+  ];
+
+  // const handleNavigation = (route) => {
+  //   navigate(route); // Navigate to the desired route
+  //   handleDrawerClose(); // Close the drawer after navigation
+  // };
 
   const handleDrawerOpen = () => {
     setOpenMenu(true);
@@ -89,9 +100,16 @@ export default function LoginHeader() {
             sx={{ height: "100%", "& .MuiDrawer-paper": { height: "100%" } }}
           >
             <List sx={{ width: 250 }}>
-              {menuOptions.map((text, index) => (
-                <ListItem button key={index} onClick={handleDrawerClose}>
-                  <ListItemText primary={text} />
+              {menuOptions.map((option, index) => (
+                <ListItem
+                  button
+                  key={index}
+                  onClick={() => {
+                    handleDrawerClose();
+                    navigate(option.route);  // Use navigate here
+                  }}
+                >
+                  <ListItemText primary={option.label} />
                 </ListItem>
               ))}
               <ListItem button onClick={handleDrawerClose}></ListItem>
@@ -112,6 +130,7 @@ export default function LoginHeader() {
           {menuOptions.map((option, index) => (
             <Typography
               key={index}
+              onClick={() => navigate(option.route)}  // Use navigate here
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -124,7 +143,7 @@ export default function LoginHeader() {
                 },
               }}
             >
-              {option}
+              {option.label}
             </Typography>
           ))}
         </Box>

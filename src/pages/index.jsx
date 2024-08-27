@@ -2,6 +2,10 @@ export { default as Landing } from "./landing";
 
 export { default as AboutUs } from "./about";
 
+export { default as AboutUsNav } from "./aboutInNav";
+
+export { default as CitizenCharterinNav } from "./charterInNav";
+
 export { default as CitizenCharter } from "./citizencharter";
 
 export { default as Library } from "./library";
