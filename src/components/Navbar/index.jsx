@@ -24,9 +24,9 @@ export default function Navbar() {
   const [openMenu, setOpenMenu] = useState(false);
   const [openProfileMenu, setOpenProfileMenu] = useState(false);
   const [openPortalMenu, setOpenPortalMenu] = useState(false);
-  const [openPrompt, setOpenPrompt] = useState(false);
+
   const [openModal, setOpenModal] = useState(false);
-  const [passwordChange, setPasswordChange] = useState(false);
+
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isMediumScreen = useMediaQuery("(max-width: 1366px)");
   const { auth, setAuth } = useStateContext();
@@ -48,30 +48,9 @@ export default function Navbar() {
     }
   };
 
-  const notChangedLogOut = async () => {
-    try {
-      await accountService.logout(auth.uid, auth.username);
-      setOpenModal(false);
-      setAuth(null);
-      navigate("/");
-      console.log("notChangedLogOut");
-    } catch (error) {
-      console.error("Logout failed:", error);
-      setOpenPrompt(true);
-    }
-  };
-
-
   const handleOpenModal = () => {
     setOpenModal(true);
   };
-
-  useEffect(() => {
-    if (auth && auth?.changedPass === 0) {
-      console.log(auth, auth?.changedPass);
-      setOpenModal(true);
-    }
-  }, [auth]);
 
   const handleopenKTO12 = () => {
     navigate("/Portal");
@@ -401,7 +380,7 @@ export default function Navbar() {
       </Box>
       <ChangePasswordModal
         open={openModal}
-        handleClose={(() => setOpenModal(false))}
+        handleClose={() => setOpenModal(false)}
       />
     </>
   );

@@ -28,7 +28,7 @@ const validatePassword = (password) => {
   return { hasUpperCase, hasLowerCase, hasNumber, hasSpecialChar };
 };
 
-export default function ChangePasswordModal({ open, handleClose }) {
+export default function ChangePasswordModalLanding({ open, handleClose }) {
   const { auth, setAuth } = useStateContext();
   const [openPrompt, setOpenPrompt] = useState(false);
   const [showPassword, setShowPassword] = useState(false);

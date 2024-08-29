@@ -35,7 +35,7 @@ export default function Portal() {
         const response = await iLeaRNService.getFilteredMetadata();
         const fetchedGradeLevels = [
           ...new Set(response.data.map((item) => item.gradeLevel)),
-        ];
+        ].sort((a, b) => a - b);
         const fetchedMaterialsData = {};
 
         response.data.forEach((item) => {

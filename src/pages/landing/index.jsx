@@ -1,10 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
 import firstImage from "../../assets/images/pngegg.png";
+import PasswordChangeModal from "../../modals/AccountDetails/ChangePasswordModalLanding";
+import { useStateContext } from "../../contexts/ContextProvider";
 
 export default function Landing() {
+  const { auth, setAuth } = useStateContext();
+  const [openModal, setOpenModal] = useState(false);
+
+  useEffect(() => {
+    if (auth?.changedPass === 0) {
+      setOpenModal(true);
+    }
+  }, [auth]);
+
+  const closeModal = () => {
+    setOpenModal(false);
+  };
+
   const openFeedbackPage = () => {
     window.open("http://172.16.0.21/feedback", "_blank");
   };
@@ -182,6 +197,7 @@ export default function Landing() {
       </Box>
 
       <Footer />
+      <PasswordChangeModal open={openModal} handleClose={closeModal} />
     </Box>
   );
 }
