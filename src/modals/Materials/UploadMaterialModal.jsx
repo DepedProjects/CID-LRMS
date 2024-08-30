@@ -119,7 +119,7 @@ export default function UploadMaterialModal({
                   justifyContent: "center",
                 }}
               >
-                <Box sx={{ pr: 6 }}>
+                <Box sx={{ pr: 2 }}>
                   <Typography
                     variant="body1"
                     sx={{

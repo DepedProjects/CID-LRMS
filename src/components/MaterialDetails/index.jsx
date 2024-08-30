@@ -59,7 +59,7 @@ export default function Materials() {
 
   const handleResetSearch = () => {
     setSearch("");
-    setResult(materials); // Reset to show all materials
+    setResult(allMaterials); // Reset to show all materials
   };
 
   const handleDialogOpen = (message) => {
@@ -126,7 +126,7 @@ export default function Materials() {
 
   return (
     <>
-      <Box sx={{ overflow: "auto" }}>
+      <Box sx={{ overflow: "auto", height: "100vh" }}>
         <Box
           sx={{
             display: "flex",
@@ -152,17 +152,10 @@ export default function Materials() {
               sx={{
                 display: "flex",
                 ml: -20,
-                width: { lg: "400px", xl: "500px" },
+                width: { lg: "315px", xl: "370px" },
                 gap: { lg: 1, xl: 2 },
               }}
             >
-              <Button onClick={handleResetSearch}>
-                <Typography
-                  sx={{ color: "white", fontFamily: "Fira Sans Condensed" }}
-                >
-                  Reset
-                </Typography>
-              </Button>
               <TextField
                 variant="outlined"
                 InputProps={{

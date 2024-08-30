@@ -1,8 +1,8 @@
 /* eslint-disable import/no-anonymous-default-export */
 import axios from "axios";
 
-// const BASE_URL = "http://localhost:5000";
-const BASE_URL = "http://172.16.0.26:8030";
+const BASE_URL = "http://localhost:5000";
+// const BASE_URL = "http://172.16.0.26:8030";
 // const BASE_URL = "http://172.16.0.21:8021";
 // const customError = new Error("Network error or no response");
 // // const BASE_URL = "https://synergy.depedimuscity.com:8021";
@@ -54,11 +54,12 @@ function getAllSchools() {
   return axios.get(`${BASE_URL}/iLeaRN/getAllSchools`).then((res) => res.data);
 }
 
-function getFilteredMetadata(gradeLevel, learningArea, resourceType, search) {
+function getFilteredMetadata(gradeLevel, learningArea, resourceType, component, search) {
   const params = {
     ...(gradeLevel && { gradeLevel }),
     ...(learningArea && { learningArea }),
     ...(resourceType && { resourceType }),
+    ...(component && { component }),
     ...(search && { search }),
   };
 

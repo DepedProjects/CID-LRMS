@@ -10,21 +10,27 @@ import {
   ListItemText,
   ListItemAvatar,
   Collapse,
+  MenuItem,
+  Select,
+  IconButton,
 } from "@mui/material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+import { RiAlignItemLeftFill } from "react-icons/ri";
+import { SiSololearn } from "react-icons/si";
 import { FaBook } from "react-icons/fa";
-
+import { FcList } from "react-icons/fc";
 import iLeaRNService from "../../services/iLearn-services"; // Adjust the import path based on your structure
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-
-import { FcList } from "react-icons/fc";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 export default function Portal() {
   const [openGrades, setOpenGrades] = useState({});
   const [openLearningAreas, setOpenLearningAreas] = useState({});
   const [gradeLevels, setGradeLevels] = useState([]);
   const [materialsData, setMaterialsData] = useState({});
+  const [components, setComponents] = useState([]);
+  const [selectedComponent, setSelectedComponent] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
@@ -36,7 +42,9 @@ export default function Portal() {
         const fetchedGradeLevels = [
           ...new Set(response.data.map((item) => item.gradeLevel)),
         ].sort((a, b) => a - b);
+
         const fetchedMaterialsData = {};
+        const fetchedComponents = new Set();
 
         response.data.forEach((item) => {
           if (!fetchedMaterialsData[item.gradeLevel]) {
@@ -52,9 +60,14 @@ export default function Portal() {
             (fetchedMaterialsData[item.gradeLevel][item.learningArea][
               resourceType
             ] || 0) + 1;
+
+          if (item.component) {
+            fetchedComponents.add(item.component);
+          }
         });
 
-        // Filter out any grade levels, learning areas, or resource types with no data
+        const componentList = Array.from(fetchedComponents);
+
         const filteredGradeLevels = fetchedGradeLevels.filter((gradeLevel) => {
           return (
             fetchedMaterialsData[gradeLevel] &&
@@ -86,6 +99,7 @@ export default function Portal() {
 
         setGradeLevels(filteredGradeLevels);
         setMaterialsData(filteredMaterialsData);
+        setComponents(componentList);
       } catch (error) {
         console.error("Error fetching data", error);
       } finally {
@@ -95,6 +109,10 @@ export default function Portal() {
 
     fetchData();
   }, []);
+
+  const handleComponentChange = (event) => {
+    setSelectedComponent(event.target.value);
+  };
 
   const handleGradeClick = (gradeLevel) => {
     setOpenGrades((prevState) => ({
@@ -119,7 +137,8 @@ export default function Portal() {
       const response = await iLeaRNService.getFilteredMetadata(
         gradeLevel || undefined,
         learningArea || undefined,
-        resourceType || undefined
+        resourceType || undefined,
+        selectedComponent || undefined
       );
       const allMaterials = response.data || []; // Ensure there's data
       console.log("Fetched Materials:", allMaterials); // Log fetched materials
@@ -129,6 +148,7 @@ export default function Portal() {
           gradeLevel,
           learningArea,
           resourceType,
+          component: selectedComponent || null,
           allMaterials,
         },
       });
@@ -139,8 +159,56 @@ export default function Portal() {
     }
   };
 
+  const handleResetFilters = async () => {
+    setSelectedComponent(null);
+    setOpenGrades({});
+    setOpenLearningAreas({});
+
+    try {
+      const response = await iLeaRNService.getFilteredMetadata();
+      const allMaterials = response.data || [];
+      console.log("Fetched All Materials:", allMaterials);
+
+      const fetchedGradeLevels = [
+        ...new Set(allMaterials.map((item) => item.gradeLevel)),
+      ].sort((a, b) => a - b);
+
+      const fetchedMaterialsData = {};
+      allMaterials.forEach((item) => {
+        if (!fetchedMaterialsData[item.gradeLevel]) {
+          fetchedMaterialsData[item.gradeLevel] = {};
+        }
+        if (!fetchedMaterialsData[item.gradeLevel][item.learningArea]) {
+          fetchedMaterialsData[item.gradeLevel][item.learningArea] = {};
+        }
+        const resourceType = item.resourceType || "Other";
+        fetchedMaterialsData[item.gradeLevel][item.learningArea][resourceType] =
+          (fetchedMaterialsData[item.gradeLevel][item.learningArea][
+            resourceType
+          ] || 0) + 1;
+      });
+
+      // Set the states for the UI
+      setGradeLevels(fetchedGradeLevels);
+      setMaterialsData(fetchedMaterialsData);
+      setComponents([...new Set(allMaterials.map((item) => item.component))]);
+
+      // Navigate to the materials page, displaying all materials
+      navigate(`/Portal/materials`, {
+        state: {
+          gradeLevel: null,
+          learningArea: null,
+          resourceType: null,
+          component: null,
+          allMaterials,
+        },
+      });
+    } catch (error) {
+      console.error("Error resetting filters", error);
+    }
+  };
+
   useEffect(() => {
-    // Extract parameters from location state
     const { gradeLevel, learningArea, resourceType } = location.state || {};
     if (gradeLevel || learningArea || resourceType) {
       handleMaterialClick(gradeLevel, learningArea, resourceType);
@@ -165,8 +233,6 @@ export default function Portal() {
     >
       <Navbar />
 
-      {/* Materials Header with Search */}
-
       <Box
         sx={{
           display: "flex",
@@ -180,7 +246,7 @@ export default function Portal() {
           sx={{
             display: "flex",
             flexDirection: "column",
-            width: "30%",
+            width: "40%",
             height: "100vh",
             overflow: "auto",
             borderRight: "solid 1px black",
@@ -201,10 +267,54 @@ export default function Portal() {
                 display: "flex",
                 alignItems: "center",
                 color: "white",
+                fontFamily: "Fira Sans Condensed",
               }}
             >
-              <FcList style={{ paddingRight: 10, color: "white" }} />K to 12
+              <FcList style={{ paddingRight: 10, color: "white" }} />
+              Elementary and Junior Highschool
             </Typography>
+          </Box>
+
+          <Typography
+            sx={{
+              fontSize: { lg: 18, xl: 11 },
+              // padding: 2,
+              pl: 2,
+              pt: 2,
+              fontWeight: "bold",
+              fontFamily: "Fira Sans Condensed",
+            }}
+          >
+            Select Component
+            <Typography sx={{ fontSize: { lg: 15, xl: 11 } }}>
+              (for learning areas applied)
+            </Typography>
+          </Typography>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Select
+              value={selectedComponent || ""}
+              onChange={handleComponentChange}
+              displayEmpty
+              size="small"
+              sx={{ ml: 2, mb: 2, mt: 2, width: "70%" }}
+            >
+              <MenuItem value="">All Components</MenuItem>
+              {components.map((component) => (
+                <MenuItem key={component} value={component}>
+                  {component}
+                </MenuItem>
+              ))}
+              {!components.length && (
+                <MenuItem value="">No Components Available</MenuItem>
+              )}
+            </Select>
+            <IconButton
+              onClick={handleResetFilters}
+              sx={{ ml: 2 }}
+              aria-label="reset filters"
+            >
+              <RefreshIcon />
+            </IconButton>
           </Box>
 
           <List>
@@ -217,7 +327,12 @@ export default function Portal() {
                     />
                   </ListItemAvatar>
                   <ListItemText>
-                    <Typography sx={{ fontFamily: "Fira Sans Condensed" }}>
+                    <Typography
+                      sx={{
+                        fontFamily: "Fira Sans Condensed",
+                        fontWeight: "bold",
+                      }}
+                    >
                       {`Grade ${gradeLevel}`}
                     </Typography>
                   </ListItemText>
@@ -238,6 +353,15 @@ export default function Portal() {
                               handleLearningAreaClick(learningArea)
                             }
                           >
+                            <ListItemAvatar>
+                              <SiSololearn
+                                style={{
+                                  color: "#027ebd",
+                                  fontSize: 21,
+                                  paddingLeft: 7,
+                                }}
+                              />
+                            </ListItemAvatar>
                             <ListItemText>
                               <Typography
                                 sx={{ fontFamily: "Fira Sans Condensed" }}
@@ -262,7 +386,7 @@ export default function Portal() {
                               ).map((resourceType) => (
                                 <ListItemButton
                                   key={resourceType}
-                                  sx={{ pl: 8 }}
+                                  sx={{ pl: 10 }}
                                   onClick={() =>
                                     handleMaterialClick(
                                       gradeLevel,
@@ -272,25 +396,22 @@ export default function Portal() {
                                   }
                                 >
                                   <ListItemAvatar>
-                                    <FaBook
+                                    <RiAlignItemLeftFill
                                       style={{
-                                        color: "#820318",
-                                        fontSize: 18,
-                                        paddingRight: 8,
+                                        color: "#027ebd",
+                                        fontSize: 21,
+                                        paddingLeft: 7,
                                       }}
                                     />
                                   </ListItemAvatar>
-                                  <ListItemText sx={{ display: "flex" }}>
+                                  <ListItemText>
                                     <Typography
                                       sx={{
                                         fontFamily: "Fira Sans Condensed",
-                                        display: "flex",
+                                        fontSize: 13,
                                       }}
                                     >
-                                      {`${resourceType}`}
-                                      <Typography sx={{ pl: 10 }}>
-                                        {`${materialsData[gradeLevel][learningArea][resourceType]}`}
-                                      </Typography>
+                                      {`${resourceType} (${materialsData[gradeLevel][learningArea][resourceType]})`}
                                     </Typography>
                                   </ListItemText>
                                 </ListItemButton>
@@ -306,14 +427,12 @@ export default function Portal() {
             ))}
           </List>
         </Box>
-
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
             width: "70%",
             overflow: "auto",
-            height: "100vh",
           }}
         >
           <Outlet />
