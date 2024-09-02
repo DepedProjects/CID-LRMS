@@ -7,6 +7,47 @@ const BASE_URL = "http://172.16.0.26:8030";
 // const customError = new Error("Network error or no response");
 // // const BASE_URL = "https://synergy.depedimuscity.com:8021";
 
+function deleteFile(metadataId, username) {
+  return axios
+    .delete(`${BASE_URL}/iLeaRN/admin/deleteFile/${parseInt(metadataId, 10)}`, {
+      data: { username },
+    })
+    .then((response) => {
+      console.log("File deleted successfully:", response?.data?.message);
+      return response?.data?.message; // Return the success message
+    })
+    .catch((error) => {
+      console.error("Error deleting file:", error);
+      throw error;
+    });
+}
+
+// New function to view file details
+function viewFile(metadataId) {
+  return axios
+    .get(`${BASE_URL}/iLeaRN/admin/viewFile/${metadataId}`)
+    .then((response) => {
+      const { viewLink } = response?.data; // Extract viewLink from the response
+
+      if (!viewLink) {
+        throw new Error("View link is missing from the response");
+      }
+
+      console.log("File details retrieved successfully:", response?.data); // Log the response data
+      console.log("Generated view URL:", viewLink); // Log the view URL
+
+      // Return an object containing file details and the view URL
+      return {
+        fileDetails: response?.data,
+        viewUrl: viewLink,
+      };
+    })
+    .catch((error) => {
+      console.error("Error viewing file details:", error);
+      throw error;
+    });
+}
+
 function getPreviewUrl(fileId) {
   try {
     // Google Drive's preview link format
@@ -54,7 +95,13 @@ function getAllSchools() {
   return axios.get(`${BASE_URL}/iLeaRN/getAllSchools`).then((res) => res.data);
 }
 
-function getFilteredMetadata(gradeLevel, learningArea, resourceType, component, search) {
+function getFilteredMetadata(
+  gradeLevel,
+  learningArea,
+  resourceType,
+  component,
+  search
+) {
   const params = {
     ...(gradeLevel && { gradeLevel }),
     ...(learningArea && { learningArea }),
@@ -147,6 +194,8 @@ function updateMaterial(metadataId, formData, file, username) {
 }
 
 export default {
+  viewFile,
+  deleteFile,
   uploadFile,
   downloadFile,
   getAllMetadata,
