@@ -39,7 +39,6 @@ export default function Navbar() {
         setOpenProfileMenu(false);
         setAuth(null);
         navigate("/");
-        console.log("handleLogout");
       } catch (error) {
         console.error("Logout failed:", error);
       }

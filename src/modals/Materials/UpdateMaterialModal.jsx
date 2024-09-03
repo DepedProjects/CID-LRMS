@@ -19,8 +19,8 @@ import {
 import { Close as CloseIcon } from "@mui/icons-material";
 
 export default function UpdateMaterialModal({ open, onClose, material = {} }) {
-  // const BASE_URL = "http://localhost:5000";
-  const BASE_URL = "http://172.16.0.26:8030";
+  const BASE_URL = "http://localhost:5000";
+  // const BASE_URL = "http://172.16.0.26:8030";
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
   const [updating, setUpdating] = useState(false);

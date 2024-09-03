@@ -100,8 +100,6 @@ export default function ChangePasswordModal({ open, handleClose }) {
     accountService
       .updateUser(auth?.uid, userData)
       .then((response) => {
-        console.log("API call successful:", response);
-        console.log("AUTH:", response?.data?.data);
         setValues({
           password: "",
           newPassword: "",
@@ -113,7 +111,6 @@ export default function ChangePasswordModal({ open, handleClose }) {
         localStorage.setItem("auth", JSON.stringify(response?.data?.data));
       })
       .catch((err) => {
-        console.log("API call failed:", err);
         setError(err?.response?.data?.error);
       })
       .finally(() => {

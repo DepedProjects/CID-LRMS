@@ -33,7 +33,6 @@ export default function AdminTable({ data, loadingState }) {
   const { auth } = useStateContext();
 
   const handleOpenModal = (rowData, isUpdate = false) => {
-    console.log("Opening modal with data:", rowData, "isUpdate:", isUpdate);
     setSelectedRowData(rowData);
     if (isUpdate) {
       setOpenUpdateModal(true);
@@ -87,8 +86,6 @@ export default function AdminTable({ data, loadingState }) {
         const { fileSize, fileId, folderId, id } = params.row;
         const isUploaded = !!fileSize;
 
-        console.log("Params Row Data:", params.row); // Debugging log
-        console.log("File ID:", fileId); // Ensure the correct ID is used
 
         return (
           <Box sx={{ display: "flex", gap: 1 }}>

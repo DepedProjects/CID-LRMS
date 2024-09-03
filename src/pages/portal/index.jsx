@@ -141,7 +141,6 @@ export default function Portal() {
         selectedComponent || undefined
       );
       const allMaterials = response.data || []; // Ensure there's data
-      console.log("Fetched Materials:", allMaterials); // Log fetched materials
 
       navigate(`/Portal/materials`, {
         state: {
@@ -167,7 +166,6 @@ export default function Portal() {
     try {
       const response = await iLeaRNService.getFilteredMetadata();
       const allMaterials = response.data || [];
-      console.log("Fetched All Materials:", allMaterials);
 
       const fetchedGradeLevels = [
         ...new Set(allMaterials.map((item) => item.gradeLevel)),

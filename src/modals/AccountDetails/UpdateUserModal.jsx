@@ -124,9 +124,6 @@ export default function UpdateUserModal({
         editor: "superadmin",
       };
 
-      console.log("Submitting values:", formikValues);
-      console.log("User Status: ", values.status);
-
       accountService
         .updateUser(data?.uid, formikValues)
         .then(() => {
@@ -175,7 +172,6 @@ export default function UpdateUserModal({
         address: data?.address || "",
         status: data?.status || "",
       };
-      console.log("Initial Formik Values: ", initialValues);
       formik.setValues(initialValues);
     }
   }, [data]);
@@ -273,7 +269,6 @@ export default function UpdateUserModal({
                   value={formik?.values?.username}
                   onChange={(e) => {
                     formik.handleChange(e);
-                    console.log("Updated username: ", e.target.value);
                   }}
                   onBlur={formik?.handleBlur}
                   error={
@@ -296,7 +291,6 @@ export default function UpdateUserModal({
                   value={formik?.values?.password}
                   onChange={(e) => {
                     formik.handleChange(e);
-                    console.log("Updated password: ", e.target.value);
                   }}
                   onBlur={formik?.handleBlur}
                   error={
@@ -334,7 +328,6 @@ export default function UpdateUserModal({
                 value={formik?.values?.firstName}
                 onChange={(e) => {
                   formik.handleChange(e);
-                  console.log("Updated first name: ", e.target.value);
                 }}
                 onBlur={formik?.handleBlur}
                 error={
@@ -355,7 +348,6 @@ export default function UpdateUserModal({
                 value={formik?.values?.lastName}
                 onChange={(e) => {
                   formik.handleChange(e);
-                  console.log("Updated last name: ", e.target.value);
                 }}
                 onBlur={formik?.handleBlur}
                 error={
@@ -375,7 +367,6 @@ export default function UpdateUserModal({
                 value={formik?.values?.middleName}
                 onChange={(e) => {
                   formik.handleChange(e);
-                  console.log("Updated middle name: ", e.target.value);
                 }}
                 onBlur={formik?.handleBlur}
                 error={
@@ -396,7 +387,6 @@ export default function UpdateUserModal({
                 value={formik?.values?.email}
                 onChange={(e) => {
                   formik.handleChange(e);
-                  console.log("Updated email: ", e.target.value);
                 }}
                 onBlur={formik?.handleBlur}
                 error={formik?.touched?.email && Boolean(formik?.errors?.email)}
@@ -414,7 +404,6 @@ export default function UpdateUserModal({
                   value={formik?.values?.age || ""}
                   onChange={(e) => {
                     formik.handleChange(e);
-                    console.log("Updated age: ", e.target.value);
                   }}
                   onBlur={formik?.handleBlur}
                   error={formik?.touched?.age && Boolean(formik?.errors?.age)}
@@ -427,7 +416,6 @@ export default function UpdateUserModal({
                   value={formik?.values?.gender || ""}
                   onChange={(e) => {
                     formik.handleChange(e);
-                    console.log("Updated gender: ", e.target.value);
                   }}
                   onBlur={formik?.handleBlur}
                   row
@@ -460,7 +448,6 @@ export default function UpdateUserModal({
                 value={formik?.values?.role}
                 onChange={(fieldName, selectedValue) => {
                   formik?.setFieldValue("role", selectedValue);
-                  console.log("Updated role: ", selectedValue);
                 }}
                 onBlur={formik?.handleBlur}
                 error={formik?.touched?.role && Boolean(formik?.errors?.role)}
@@ -486,7 +473,6 @@ export default function UpdateUserModal({
                     value={formik?.values?.officeId}
                     onChange={(fieldName, selectedValue) => {
                       formik?.setFieldValue("officeId", selectedValue);
-                      console.log("Updated officeId: ", selectedValue);
                     }}
                     onBlur={formik?.handleBlur}
                     error={
@@ -512,7 +498,6 @@ export default function UpdateUserModal({
                     value={formik?.values?.schoolId}
                     onChange={(fieldName, selectedValue) => {
                       formik?.setFieldValue("schoolId", selectedValue);
-                      console.log("Updated schoolId: ", selectedValue);
                     }}
                     onBlur={formik?.handleBlur}
                     error={
@@ -538,7 +523,6 @@ export default function UpdateUserModal({
                 value={formik?.values?.address}
                 onChange={(e) => {
                   formik.handleChange(e);
-                  console.log("Updated address: ", e.target.value);
                 }}
                 onBlur={formik?.handleBlur}
                 error={

@@ -18,7 +18,7 @@ export default function Metadatas() {
 
   const handleMetadataUpload = (event) => {
     const fileInput = event.target;
-    const files = fileInput.files;  
+    const files = fileInput.files;
 
     if (files.length === 0) {
       return;
@@ -65,12 +65,6 @@ export default function Metadatas() {
     handleGetAllMetadata();
   }, []);
 
-  const logFormData = (formData) => {
-    for (let pair of formData.entries()) {
-      console.log(`${pair[0]}:`, pair[1]);
-    }
-  };
-
   useEffect(() => {
     if (fileBlob) {
       const formData = new FormData();
@@ -79,17 +73,11 @@ export default function Metadatas() {
         formData.append("username", auth?.username);
       }
 
-      // Log FormData contents for debugging
-      console.log("File to upload:", fileBlob);
-      console.log("FormData contents:");
-      logFormData(formData);
-
       setLoading(true);
 
       ilearnDataService
         .bulkUploadMetadata(formData) // Pass FormData directly
         .then((response) => {
-          console.log("Response from bulkUploadMetadata:", response);
           if (response?.message) {
             setOpenPromptModal(true);
             setPromptMssg(response.message);

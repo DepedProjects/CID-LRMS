@@ -75,7 +75,6 @@ export default function LoginPage() {
           }
           setPromptMessage(message || err?.message);
           setOpenPrompt(true);
-          console.log(err);
         })
         .finally(() => {
           setLoading(false);
@@ -89,9 +88,6 @@ export default function LoginPage() {
     setOpenPrompt(false);
   };
 
-  // useEffect(() => {
-  //   console.log("Auth schoolName on render:", auth?.schoolName); // Log schoolName on component render
-  // }, [auth]);
 
   return (
     <Box

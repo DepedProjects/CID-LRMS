@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState, useEffect } from "react";
 import CancelIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -100,8 +101,6 @@ export default function ChangePasswordModalLanding({ open, handleClose }) {
     accountService
       .updateUser(auth?.uid, userData)
       .then((response) => {
-        console.log("API call successful:", response);
-        console.log("AUTH:", response?.data?.data);
         setValues({
           password: "",
           newPassword: "",
@@ -113,7 +112,6 @@ export default function ChangePasswordModalLanding({ open, handleClose }) {
         localStorage.setItem("auth", JSON.stringify(response?.data?.data));
       })
       .catch((err) => {
-        console.log("API call failed:", err);
         setError(err?.response?.data?.error);
       })
       .finally(() => {
@@ -131,11 +129,19 @@ export default function ChangePasswordModalLanding({ open, handleClose }) {
     setPasswordValidation(validatePassword(values.newPassword));
   }, [values.newPassword]);
 
-  
+  const handleCloseModal = () => {
+
+    if (auth?.changedPass === 0) {
+      // Redirect to homepage
+      navigate("/");
+    } else {
+      handleClose();
+    }
+  };
 
   return (
     <>
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={open} onClose={handleCloseModal}>
         <Box
           sx={{
             position: "absolute",
