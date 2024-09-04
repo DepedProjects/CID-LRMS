@@ -1,8 +1,8 @@
 /* eslint-disable import/no-anonymous-default-export */
 import axios from "axios";
 
-// const BASE_URL = "http://localhost:5000";
-const BASE_URL = "http://172.16.0.26:8030";
+const BASE_URL = "http://localhost:5000";
+// const BASE_URL = "http://172.16.0.26:8030";
 // const BASE_URL = "http://172.16.0.21:8021";
 // const customError = new Error("Network error or no response");
 // // const BASE_URL = "https://synergy.depedimuscity.com:8021";
@@ -13,7 +13,6 @@ function deleteFile(metadataId, username) {
       data: { username },
     })
     .then((response) => {
-      console.log("File deleted successfully:", response?.data?.message);
       return response?.data?.message; // Return the success message
     })
     .catch((error) => {
@@ -32,9 +31,6 @@ function viewFile(metadataId) {
       if (!viewLink) {
         throw new Error("View link is missing from the response");
       }
-
-      console.log("File details retrieved successfully:", response?.data); // Log the response data
-      console.log("Generated view URL:", viewLink); // Log the view URL
 
       // Return an object containing file details and the view URL
       return {
@@ -110,7 +106,6 @@ function getFilteredMetadata(
     ...(search && { search }),
   };
 
-  console.log(params);
   return axios
     .get(`${BASE_URL}/iLeaRN/getFilteredMetadata`, { params })
     .then((res) => res.data);
@@ -134,7 +129,6 @@ function uploadFile(metadataId, file, username, progressCallback) {
       },
     })
     .then((response) => {
-      console.log("File uploaded successfully:", response.data.data); // Log the 'data' object
       return response.data.data; // Return the data object
     })
     .catch((error) => {
@@ -184,7 +178,6 @@ function updateMaterial(metadataId, formData, file, username) {
       },
     })
     .then((response) => {
-      console.log("Material updated successfully:", response.data.data); // Log the 'data' object
       return response.data.data; // Return the data object
     })
     .catch((error) => {

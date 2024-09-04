@@ -60,8 +60,8 @@ export default function Navbar() {
   };
 
   const portalOptions = [
-    { text: "ALS", action: handleopenALS },
-    { text: "K TO 12", action: handleopenKTO12 },
+    { text: "Elementary and Junior High School", action: handleopenKTO12 },
+    // { text: "Senior High School", action: handleopenALS },
   ];
 
   const menuOptions = [
@@ -203,7 +203,11 @@ export default function Navbar() {
                             }}
                             sx={{ pl: 4 }}
                           >
-                            <ListItemText primary={portalOption.text} />
+                            <ListItemText
+                              sx={{ fontSize: 11, fontFamily: "Fira Sans" }}
+                            >
+                              {portalOption.text}
+                            </ListItemText>
                           </ListItem>
                         ))}
                       </List>
@@ -270,7 +274,8 @@ export default function Navbar() {
                         sx={{
                           padding: "8px 16px",
                           color: "black",
-                          width: "100px",
+                          width: "200px",
+                          fontSize: 11,
                           "&:hover": {
                             backgroundColor: "lightgray",
                             cursor: "pointer",

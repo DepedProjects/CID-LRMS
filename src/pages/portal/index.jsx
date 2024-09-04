@@ -417,8 +417,7 @@ export default function Portal() {
                             </List>
                           </Collapse>
                         </React.Fragment>
-                      )
-                    )}
+                      ))}
                   </List>
                 </Collapse>
               </React.Fragment>
