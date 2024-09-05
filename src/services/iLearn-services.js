@@ -111,6 +111,27 @@ function getFilteredMetadata(
     .then((res) => res.data);
 }
 
+function getFilteredMetadataSHS(
+  subjectGroup,
+  track,
+  strand,
+  learningArea,
+  resourceType
+) {
+  const params = {
+    ...(subjectGroup && { subjectGroup }),
+    ...(track && { track }),
+    ...(strand && { strand }),
+    ...(learningArea && { learningArea }),
+    ...(resourceType && { resourceType }),
+    
+  };
+
+  return axios
+    .get(`${BASE_URL}/iLeaRN/getFilteredMetadataForSHS`, { params })
+    .then((res) => res.data);
+}
+
 // Function to upload files and log metadata
 function uploadFile(metadataId, file, username, progressCallback) {
   const formData = new FormData();
@@ -199,4 +220,5 @@ export default {
   getAllSchools,
   updateMaterial,
   getPreviewUrl,
+  getFilteredMetadataSHS,
 };
