@@ -12,7 +12,7 @@ export { default as Library } from "./library";
 
 export { default as Portal } from "./portal";
 
-export { default as PortalSHS } from "./portalSHS";
+// export { default as PortalSHS } from "./portalSHS";
 
 export { default as ProjectAndActivities } from "./projectandactvities";
 

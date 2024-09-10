@@ -8,7 +8,7 @@ import {
   CitizenCharter,
   Library,
   Portal,
-  PortalSHS,
+  // PortalSHS,
   ProjectAndActivities,
   AdminPage,
   Users,
@@ -19,7 +19,7 @@ import {
 } from "../src/pages";
 import { Route, Routes, useLocation } from "react-router-dom";
 import MaterialDetails from "../src/components/MaterialDetails";
-import MaterialDetailsSHS from "../src/components/MaterialDetailsSHS";
+// import MaterialDetailsSHS from "../src/components/MaterialDetailsSHS";
 import RequireAuth from "./contexts/RequireAuth";
 
 function App() {
@@ -43,9 +43,9 @@ function App() {
           <Route path="/Portal" element={<Portal />}>
             <Route path="materials" element={<MaterialDetails />} />
           </Route>
-          <Route path="/PortalSHS" element={<PortalSHS />}>
+          {/* <Route path="/PortalSHS" element={<PortalSHS />}>
             <Route path="materials" element={<MaterialDetailsSHS />} />
-          </Route>
+          </Route> */}
           <Route
             path="/ProjectAndActivities"
             element={<ProjectAndActivities />}

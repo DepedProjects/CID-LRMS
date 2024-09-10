@@ -55,13 +55,13 @@ export default function Navbar() {
     navigate("/Portal");
   };
 
-  const handleopenSHS = () => {
-    navigate("/PortalSHS");
-  };
+  // const handleopenSHS = () => {
+    // navigate("/PortalSHS");
+  // };
 
   const portalOptions = [
     { text: "Elementary and Junior High School", action: handleopenKTO12 },
-    { text: "Senior High School", action: handleopenSHS },
+    // { text: "Senior High School", action: handleopenSHS },
   ];
 
   const menuOptions = [

@@ -39,42 +39,66 @@ export default function Portal() {
     const fetchData = async () => {
       try {
         const response = await iLeaRNService.getFilteredMetadata();
-        const fetchedGradeLevels = [
-          ...new Set(response.data.map((item) => item.gradeLevel)),
-        ].sort((a, b) => a - b);
-
+  
+        // Extract and deduplicate grade levels, filtering out null or undefined values
+        const gradeLevels = [
+          ...new Set(response.data
+            .map((item) => item.gradeLevel)
+            .filter((level) => level != null)) // Filter out null or undefined values
+        ];
+  
+        // Separate numeric and non-numeric grade levels
+        const numericGradeLevels = gradeLevels.filter(level => !isNaN(parseInt(level.match(/\d+/))));
+        const nonNumericGradeLevels = gradeLevels.filter(level => isNaN(parseInt(level.match(/\d+/))));
+  
+        // Sort numeric grade levels numerically
+        const sortedNumericGradeLevels = numericGradeLevels.sort((a, b) => {
+          const numA = parseInt(a.match(/\d+/));
+          const numB = parseInt(b.match(/\d+/));
+          return numA - numB;
+        });
+  
+        // Sort non-numeric grade levels alphabetically
+        const sortedNonNumericGradeLevels = nonNumericGradeLevels.sort((a, b) => a.localeCompare(b));
+  
+        // Combine sorted non-numeric and numeric grade levels
+        const sortedGradeLevels = [...sortedNonNumericGradeLevels, ...sortedNumericGradeLevels];
+  
         const fetchedMaterialsData = {};
         const fetchedComponents = new Set();
-
+  
         response.data.forEach((item) => {
-          if (!fetchedMaterialsData[item.gradeLevel]) {
-            fetchedMaterialsData[item.gradeLevel] = {};
-          }
-          if (!fetchedMaterialsData[item.gradeLevel][item.learningArea]) {
-            fetchedMaterialsData[item.gradeLevel][item.learningArea] = {};
-          }
-          const resourceType = item.resourceType || "Other";
-          fetchedMaterialsData[item.gradeLevel][item.learningArea][
-            resourceType
-          ] =
-            (fetchedMaterialsData[item.gradeLevel][item.learningArea][
+          // Ensure that items with null or undefined gradeLevel are excluded
+          if (item.gradeLevel) {
+            if (!fetchedMaterialsData[item.gradeLevel]) {
+              fetchedMaterialsData[item.gradeLevel] = {};
+            }
+            if (!fetchedMaterialsData[item.gradeLevel][item.learningArea]) {
+              fetchedMaterialsData[item.gradeLevel][item.learningArea] = {};
+            }
+            const resourceType = item.resourceType || "Other";
+            fetchedMaterialsData[item.gradeLevel][item.learningArea][
               resourceType
-            ] || 0) + 1;
-
-          if (item.component) {
-            fetchedComponents.add(item.component);
+            ] =
+              (fetchedMaterialsData[item.gradeLevel][item.learningArea][
+                resourceType
+              ] || 0) + 1;
+  
+            if (item.component) {
+              fetchedComponents.add(item.component);
+            }
           }
         });
-
+  
         const componentList = Array.from(fetchedComponents);
-
-        const filteredGradeLevels = fetchedGradeLevels.filter((gradeLevel) => {
+  
+        const filteredGradeLevels = sortedGradeLevels.filter((gradeLevel) => {
           return (
             fetchedMaterialsData[gradeLevel] &&
             Object.keys(fetchedMaterialsData[gradeLevel] || {}).length > 0
           );
         });
-
+  
         const filteredMaterialsData = {};
         filteredGradeLevels.forEach((gradeLevel) => {
           const filteredLearningAreas = {};
@@ -83,7 +107,7 @@ export default function Portal() {
               const filteredResourceTypes = Object.entries(
                 resourceTypes || {}
               ).filter(([resourceType, count]) => count > 0);
-
+  
               if (filteredResourceTypes.length > 0) {
                 filteredLearningAreas[learningArea] = Object.fromEntries(
                   filteredResourceTypes
@@ -91,12 +115,12 @@ export default function Portal() {
               }
             }
           );
-
+  
           if (Object.keys(filteredLearningAreas).length > 0) {
             filteredMaterialsData[gradeLevel] = filteredLearningAreas;
           }
         });
-
+  
         setGradeLevels(filteredGradeLevels);
         setMaterialsData(filteredMaterialsData);
         setComponents(componentList);
@@ -106,7 +130,7 @@ export default function Portal() {
         setLoading(false);
       }
     };
-
+  
     fetchData();
   }, []);
 
@@ -162,35 +186,58 @@ export default function Portal() {
     setSelectedComponent(null);
     setOpenGrades({});
     setOpenLearningAreas({});
-
+  
     try {
       const response = await iLeaRNService.getFilteredMetadata();
       const allMaterials = response.data || [];
-
-      const fetchedGradeLevels = [
-        ...new Set(allMaterials.map((item) => item.gradeLevel)),
-      ].sort((a, b) => a - b);
-
+  
+      // Extract and deduplicate grade levels, filtering out null or undefined values
+      const gradeLevels = [
+        ...new Set(allMaterials
+          .map((item) => item.gradeLevel)
+          .filter((level) => level != null)) // Filter out null or undefined values
+      ];
+  
+      // Separate numeric and non-numeric grade levels
+      const numericGradeLevels = gradeLevels.filter(level => !isNaN(parseInt(level.match(/\d+/))));
+      const nonNumericGradeLevels = gradeLevels.filter(level => isNaN(parseInt(level.match(/\d+/))));
+  
+      // Sort numeric grade levels numerically
+      const sortedNumericGradeLevels = numericGradeLevels.sort((a, b) => {
+        const numA = parseInt(a.match(/\d+/));
+        const numB = parseInt(b.match(/\d+/));
+        return numA - numB;
+      });
+  
+      // Sort non-numeric grade levels alphabetically
+      const sortedNonNumericGradeLevels = nonNumericGradeLevels.sort((a, b) => a.localeCompare(b));
+  
+      // Combine sorted non-numeric and numeric grade levels
+      const sortedGradeLevels = [...sortedNonNumericGradeLevels, ...sortedNumericGradeLevels];
+  
+      // Process materials data
       const fetchedMaterialsData = {};
       allMaterials.forEach((item) => {
-        if (!fetchedMaterialsData[item.gradeLevel]) {
-          fetchedMaterialsData[item.gradeLevel] = {};
+        if (item.gradeLevel) { // Ensure that item.gradeLevel is not null or undefined
+          if (!fetchedMaterialsData[item.gradeLevel]) {
+            fetchedMaterialsData[item.gradeLevel] = {};
+          }
+          if (!fetchedMaterialsData[item.gradeLevel][item.learningArea]) {
+            fetchedMaterialsData[item.gradeLevel][item.learningArea] = {};
+          }
+          const resourceType = item.resourceType || "Other";
+          fetchedMaterialsData[item.gradeLevel][item.learningArea][resourceType] =
+            (fetchedMaterialsData[item.gradeLevel][item.learningArea][
+              resourceType
+            ] || 0) + 1;
         }
-        if (!fetchedMaterialsData[item.gradeLevel][item.learningArea]) {
-          fetchedMaterialsData[item.gradeLevel][item.learningArea] = {};
-        }
-        const resourceType = item.resourceType || "Other";
-        fetchedMaterialsData[item.gradeLevel][item.learningArea][resourceType] =
-          (fetchedMaterialsData[item.gradeLevel][item.learningArea][
-            resourceType
-          ] || 0) + 1;
       });
-
+  
       // Set the states for the UI
-      setGradeLevels(fetchedGradeLevels);
+      setGradeLevels(sortedGradeLevels);
       setMaterialsData(fetchedMaterialsData);
       setComponents([...new Set(allMaterials.map((item) => item.component))]);
-
+  
       // Navigate to the materials page, displaying all materials
       navigate(`/Portal/materials`, {
         state: {
@@ -331,7 +378,7 @@ export default function Portal() {
                         fontWeight: "bold",
                       }}
                     >
-                      {`Grade ${gradeLevel}`}
+                      {`${gradeLevel}`}
                     </Typography>
                   </ListItemText>
                   {openGrades[gradeLevel] ? <ExpandLess /> : <ExpandMore />}

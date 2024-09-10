@@ -204,7 +204,7 @@ export default function Materials() {
                     key={material.id}
                     sx={{ borderBottom: "solid 1px black" }}
                   >
-                    <FcDocument style={{ fontSize: 40, paddingRight: 10 }} />
+                   
                     <ListItemText>
                       <Typography
                         sx={{
