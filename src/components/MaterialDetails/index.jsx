@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useLocation } from "react-router-dom";
-import { FcDocument } from "react-icons/fc";
+import CloseIcon from "@mui/icons-material/Close";
 import { AiFillDatabase } from "react-icons/ai";
 import { CiSearch } from "react-icons/ci";
 import { useStateContext } from "../../contexts/ContextProvider";
@@ -21,6 +21,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  IconButton,
 } from "@mui/material";
 
 import DataNotFound from "../../pages/miscelleaneous/NoData";
@@ -35,6 +36,10 @@ export default function Materials() {
 
   const [modalOpen, setModalOpen] = useState(false); // State for controlling modal open/close
   const [selectedMaterial, setSelectedMaterial] = useState(null);
+
+  const [previewUrl, setPreviewUrl] = useState(""); // State for storing the file preview URL
+  const [previewTitle, setPreviewTitle] = useState(""); // Store material title for the modal
+  const [previewModalOpen, setPreviewModalOpen] = useState(false); // Modal state for preview
 
   const location = useLocation();
   const { allMaterials } = location.state || {};
@@ -114,14 +119,23 @@ export default function Materials() {
   }
 
   // Function to handle preview action
-  const handlePreview = (fileId) => {
+  // Function to handle preview action
+  const handlePreview = (fileId, title) => {
     if (!fileId) {
       console.error("No file ID provided for preview.");
       return;
     }
 
     const previewUrl = getPreviewUrl(fileId);
-    window.open(previewUrl, "_blank"); // Open the preview URL in a new browser tab
+    setPreviewUrl(previewUrl); // Set the preview URL to state
+    setPreviewTitle(title); // Set the material title to state
+    setPreviewModalOpen(true); // Open the preview modal
+  };
+
+  const handleClosePreviewModal = () => {
+    setPreviewModalOpen(false); // Close the preview modal
+    setPreviewUrl(""); // Clear the preview URL
+    setPreviewTitle(""); // Clear material title
   };
 
   return (
@@ -204,7 +218,6 @@ export default function Materials() {
                     key={material.id}
                     sx={{ borderBottom: "solid 1px black" }}
                   >
-                   
                     <ListItemText>
                       <Typography
                         sx={{
@@ -290,7 +303,9 @@ export default function Materials() {
                         </Typography>
                       </Button>
                       <Button
-                        onClick={() => handlePreview(material.fileId)}
+                        onClick={() =>
+                          handlePreview(material.fileId, material.title)
+                        }
                         sx={{
                           backgroundColor: material.fileId
                             ? "#8cfab0"
@@ -318,6 +333,54 @@ export default function Materials() {
         </Box>
       </Box>
 
+      <Dialog
+        open={previewModalOpen}
+        onClose={handleClosePreviewModal}
+        maxWidth="lg"
+        fullWidth
+      >
+        <DialogTitle
+          sx={{
+            alignItems: "center",
+            display: "flex",
+            justifyContent: "space-between", // Change to space-between
+            background: "#02690c",
+            color: "white",
+            padding: "16px", // Adjust padding if needed
+          }}
+        >
+          <span style={{ flexGrow: 1, textAlign: "center" }}>
+            {previewTitle ? `${previewTitle}` : "File Preview"}
+          </span>
+
+          <IconButton
+            edge="end"
+            color="inherit"
+            onClick={handleClosePreviewModal}
+            sx={{
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#005300", // Change the background color on hover if needed
+              },
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <iframe
+            src={previewUrl}
+            width="100%"
+            height="800px"
+            title="File Preview"
+            frameBorder="0"
+          ></iframe>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClosePreviewModal}>Close</Button>
+        </DialogActions>
+      </Dialog>
+
       <Dialog open={dialogOpen} onClose={handleDialogClose}>
         <DialogTitle
           sx={{
@@ -336,8 +399,6 @@ export default function Materials() {
             textAlign: "center",
             alignItems: "center",
             flexDirection: "column",
-            // py: 10,
-            // paddingBottom: 5,
           }}
         >
           {downloading ? (
