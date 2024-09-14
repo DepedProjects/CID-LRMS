@@ -30,6 +30,7 @@ export default function SelectRole({
   const roles = [
     { id: 1, type: "Teacher" },
     { id: 2, type: "Admin" },
+    // { id: 2, type: "Super Admin" },
   ];
 
   useEffect(() => {

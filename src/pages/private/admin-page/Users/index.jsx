@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from "react";
 // import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
-import { Box, Button, Divider, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Divider,
+  Typography,
+} from "@mui/material";
 import accountService from "../../../../services/account-service";
 import AddUserModal from "../../../../modals/AccountDetails/AddUserModal";
 // import UpdateUserModal from "modals/users/UpdateUserModal";
@@ -23,6 +33,10 @@ export default function Users() {
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [openSuccess, setOpenSuccess] = useState(false);
 
+  const [openDialog, setOpenDialog] = useState(false); // State for Dialog visibility
+  const [generatedPassword, setGeneratedPassword] = useState(""); // State for new password
+  const [username, setUsername] = useState(""); // State for username
+
   const handleOpen = (type) => {
     if (type === "add") {
       setOpenAddModal(true);
@@ -30,7 +44,6 @@ export default function Users() {
       setOpenUpdateModal(true);
     }
   };
-
 
   const handleGetAll = () => {
     setLoading(true);
@@ -47,6 +60,29 @@ export default function Users() {
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  const handleResetPassword = () => {
+    if (selectedUser.length) {
+      const { uid, username } = selectedUser[0];
+      accountService
+        .resetPassword(uid, username)
+        .then((response) => {
+          console.log(response);  // Check the response in the console
+  
+          const newGeneratedPassword = response.newPassword; // Assuming the response contains the new password
+          setGeneratedPassword(newGeneratedPassword);  // Set the password in state
+          setUsername(username);  // Set the username in state
+          setOpenDialog(true);  // Open the dialog
+        })
+        .catch((err) => {
+          setError(err.message);
+        });
+    }
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false); // Close the success dialog
   };
 
   useEffect(() => {
@@ -130,58 +166,103 @@ export default function Users() {
             p: 2,
           }}
         >
-          {auth.role === "superadmin" && (
-            <Box>
-              <Button
-                onClick={() => handleOpen("add")}
-                sx={{
-                  fontFamily: "Poppins",
-                  backgroundColor: "#1c1948",
-                  color: "white",
-                  width: "10rem",
-                  "&:hover": {
-                    color: "black",
-                    backgroundColor: "#11edd2",
-                  },
-                  fontSize: "14px",
-                  fontWeight: "bold",
-                  padding: "10px 20px",
-                  borderRadius: "5px",
-                  boxShadow: "1px 1px 5px rgba(0, 0, 0, 0.5)",
-                }}
-              >
-                Add
-              </Button>
-            </Box>
-          )}
+          <Box sx={{ display: "flex", gap: 1 }}>
+            {auth.role === "superadmin" && (
+              <Box>
+                <Button
+                  onClick={() => handleOpen("add")}
+                  sx={{
+                    fontFamily: "Poppins",
+                    backgroundColor: "#1c1948",
+                    color: "white",
+                    width: "10rem",
+                    "&:hover": {
+                      color: "black",
+                      backgroundColor: "#11edd2",
+                    },
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    padding: "10px 20px",
+                    borderRadius: "5px",
+                    boxShadow: "1px 1px 5px rgba(0, 0, 0, 0.5)",
+                  }}
+                >
+                  Add
+                </Button>
+              </Box>
+            )}
 
-          {auth.role === "superadmin" && (
-            <Box>
-              <Button
-                onClick={() => handleOpen("update")}
-                disabled={disabled}
-                sx={{
-                  width: "10rem",
-                  fontFamily: "Poppins",
-                  backgroundColor: "#564ee2",
-                  color: "white",
-                  "&:hover": {
-                    color: "black",
-                    backgroundColor: "#11edd2",
-                  },
-                  fontSize: "14px",
-                  fontWeight: "bold",
-                  padding: "10px 20px",
-                  borderRadius: "5px",
-                  boxShadow: "1px 1px 5px rgba(0, 0, 0, 0.5)",
-                }}
-              >
-                Update
-              </Button>
-            </Box>
-          )}
+            {auth.role === "superadmin" && (
+              <Box>
+                <Button
+                  onClick={handleResetPassword}
+                  disabled={disabled}
+                  sx={{
+                    width: "12rem",
+                    fontFamily: "Poppins",
+                    backgroundColor: "#564ee2",
+                    color: "white",
+                    "&:hover": {
+                      color: "black",
+                      backgroundColor: "#11edd2",
+                    },
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    padding: "10px 20px",
+                    borderRadius: "5px",
+                    boxShadow: "1px 1px 5px rgba(0, 0, 0, 0.5)",
+                  }}
+                >
+                  Reset Password
+                </Button>
+              </Box>
+            )}
+
+            {auth.role === "superadmin" && (
+              <Box>
+                <Button
+                  onClick={() => handleOpen("update")}
+                  disabled={disabled}
+                  sx={{
+                    width: "10rem",
+                    fontFamily: "Poppins",
+                    backgroundColor: "#564ee2",
+                    color: "white",
+                    "&:hover": {
+                      color: "black",
+                      backgroundColor: "#11edd2",
+                    },
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    padding: "10px 20px",
+                    borderRadius: "5px",
+                    boxShadow: "1px 1px 5px rgba(0, 0, 0, 0.5)",
+                  }}
+                >
+                  Update
+                </Button>
+              </Box>
+            )}
+          </Box>
         </Box>
       </Box>
+
+      {/* Success Dialog */}
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>Password Reset Successful</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Password reset for <strong>{username}</strong> was successful.
+            <br />
+            New password: <strong>{generatedPassword}</strong>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
       {/* <SnackbarComponent
         open={openSuccess}
         onClose={handleCloseSuccess}

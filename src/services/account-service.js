@@ -1,17 +1,36 @@
 /* eslint-disable import/no-anonymous-default-export */
 import axios from "axios";
 
-const BASE_URL = "http://localhost:5000";
+// const BASE_URL = "http://localhost:5000";
 // const BASE_URL = "http://172.16.0.26:8030";
 // const BASE_URL = "http://172.16.0.21:8021";
 const customError = new Error("Network error or no response");
-// const BASE_URL = "https://synergy.depedimuscity.com:8021";
+const BASE_URL = "https://lrms.depedimuscity.com:8030";
 
 async function logout(uid, username) {
   try {
     const response = await axios.post(
       `${BASE_URL}/user/logout`,
       { uid, username },
+      {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      }
+    );
+    return response.data;
+  } catch (err) {
+    if (err.response) {
+      throw err;
+    }
+    throw customError;
+  }
+}
+
+async function resetPassword(uid, username) {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/user/reset-password/${uid}`,
+      { username },
       {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
@@ -78,6 +97,7 @@ function getAllLogs() {
 }
 
 export default {
+  resetPassword,
   authenticate,
   register,
   getUserById,
